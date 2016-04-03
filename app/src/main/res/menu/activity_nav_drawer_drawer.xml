@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/current_trip_button"
+            android:icon="@drawable/vector_drawable_ic_place_black___px"
+            android:title="Current trip" />
+        <item
+            android:id="@+id/my_trips_button"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="My trips" />
+        <item
+            android:id="@+id/map_button"
+            android:icon="@drawable/vector_drawable_ic_map_black___px"
+            android:title="Map" />
+    </group>
+
+    <item android:title="Actions">
+        <menu>
+            <item
+                android:id="@+id/end_trip_button"
+                android:icon="@drawable/vector_drawable_ic_cancel_black___px"
+                android:title="End trip" />
+        </menu>
+    </item>
+
+</menu>
