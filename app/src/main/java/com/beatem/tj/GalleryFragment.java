@@ -1,6 +1,8 @@
 package com.beatem.tj;
 
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.Fragment;
@@ -16,8 +18,7 @@ import java.io.File;
  */
 public class GalleryFragment extends Fragment {
 
-    static final String MEDIA_DIRECTORY = "TravelJournal";
-    private static final int READ_REQUEST_CODE = 42;
+    private static int RESULT_LOAD_IMAGE = 1;
 
     public GalleryFragment() {
         // Required empty public constructor
@@ -27,12 +28,10 @@ public class GalleryFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Intent i = new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(i, RESULT_LOAD_IMAGE);
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_gallery, container, false);
-    }
-
-    private void readPictureDirectory(){
-        File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
     }
 
 }
