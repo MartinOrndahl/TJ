@@ -1,54 +1,61 @@
 package com.beatem.tj;
 
 import android.content.Context;
+import android.media.Image;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
+
+import java.util.ArrayList;
 
 /**
  * Created by Ludvig on 2016-04-12.
  */
 public class ImageAdapter extends BaseAdapter {
-    private Context mContext;
+    Context c;
+    ArrayList<Images>images;
 
-    public ImageAdapter(Context c) {
-        mContext = c;
+    public ImageAdapter(Context c, ArrayList<Images> images){
+
+        this.c =c;
+        this.images=images;
+
     }
 
+    @Override
     public int getCount() {
-        return mThumbIds.length;
+        return images.size();
     }
 
+    @Override
     public Object getItem(int position) {
-        return null;
+        return images.get(position);
     }
 
+    @Override
     public long getItemId(int position) {
         return 0;
     }
 
-    // create a new ImageView for each item referenced by the Adapter
+    @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        ImageView imageView;
-        if (convertView == null) {
-            // if it's not recycled, initialize some attributes
-            imageView = new ImageView(mContext);
-            imageView.setLayoutParams(new GridView.LayoutParams(85, 85));
-            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            imageView.setPadding(8, 8, 8, 8);
-        } else {
-            imageView = (ImageView) convertView;
+
+        LayoutInflater infaltor = (LayoutInflater) c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        if(convertView == null){
+            convertView=infaltor.inflate(R.layout.gallery_model, parent, false);
+
         }
 
-        imageView.setImageResource(mThumbIds[position]);
-        return imageView;
+        ImageView img = (ImageView)convertView.findViewById(R.id.image_model);
+        img.setImageResource(images.get(position).getImage());
+
+
+        return convertView;
     }
-
-    // references to our images
-    private Integer[] mThumbIds = {
-            R.drawable.vector_drawable_ic_cancel_black___px, R.drawable.vector_drawable_ic_map_black___px
-
-    };
 }
