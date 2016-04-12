@@ -99,6 +99,7 @@ public class NavDrawer extends AppCompatActivity
             fragmentTransaction.commit();
 
         } else if (id == R.id.my_trips_button) {
+
             GalleryFragment galleryFragment = new GalleryFragment();
             android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.fragment_container, galleryFragment);

@@ -31,7 +31,7 @@ public class GalleryFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_gallery, container, false);
         GridView gridView = (GridView) view.findViewById(R.id.view_gallery);
-        gridView.setAdapter(new ImageAdapter(this));
+        gridView.setAdapter(new ImageAdapter(getActivity()));
 
         // Inflate the layout for this fragment
         return view;
