@@ -1,62 +1,56 @@
 package com.beatem.tj;
 
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.widget.ProgressBar;
+import android.view.Menu;
+import android.view.MenuItem;
 
-/**
- * Created by Ludvig on 2016-04-12.
- */
 public class WelcomeScreen extends AppCompatActivity {
 
-   protected static final int TIMER_RUNTIME = 10000;
-   protected ProgressBar pb;
-    protected boolean mbActive;
+   // PlaneLoadingView mView;
+    CatLoadingView mView2;
 
-    protected void onCreate(Bundle savedInstanceState){
+    @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.welcome_screen);
 
-        pb= (ProgressBar)findViewById(R.id.progressBar);
+        mView2 = new CatLoadingView();
+        mView2.show(getSupportFragmentManager(), "");
 
-        final Thread timeThread = new Thread(){
-            @Override
-            public void run(){
-                mbActive = true;
-                try{
-                    int waited = 0;
-                    while(mbActive && (waited<TIMER_RUNTIME)){
-                        sleep(200);
-                        if(mbActive){
-                            waited+=200;
-                            updateProgress(waited);
-                        }
-
+        /**
+        findViewById(R.id.button).setOnClickListener(
+                new View.OnClickListener() {
+                    @Override public void onClick(View v) {
+                        mView.show(getSupportFragmentManager(), "");
                     }
-                }catch (InterruptedException e){
-
-                }finally {
-                    onContinue();
-                }
-            }
-        };
-        timeThread.start();
-
-
+                });
+         **/
     }
 
-    public void updateProgress(final int timePassed){
-        if(null!=pb){
-            final int progress = pb.getMax()*timePassed/TIMER_RUNTIME;
-            pb.setProgress(progress);
+
+    public void showDialog() {
+        mView2.show(getSupportFragmentManager(), "");
+    }
+
+
+    @Override public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.nav_drawer, menu);
+        return true;
+    }
+
+
+    @Override public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
         }
+
+        return super.onOptionsItemSelected(item);
     }
-
-    public void onContinue(){
-        Log.d("hejhopp", "lololol");
-    }
-
-
 }
