@@ -29,7 +29,7 @@ import java.util.ArrayList;
 public class GalleryFragment extends Fragment {
 
     private static GridView gridView;
-    private int[]imageIDs={R.mipmap.ic_launcher, R.mipmap.ic_launcher, R.mipmap.ic_launcher};
+    private int[]imageIDs={R.mipmap.ic_launcher, R.mipmap.ic_launcher, R.mipmap.ic_launcher,R.mipmap.ic_launcher,R.mipmap.ic_launcher,R.mipmap.ic_launcher,R.mipmap.ic_launcher,R.mipmap.ic_launcher,R.mipmap.ic_launcher};
 
     public GalleryFragment() {
         // Required empty public constructor
@@ -89,7 +89,7 @@ public class GalleryFragment extends Fragment {
                 imageView = new ImageView(context);
                 imageView.setLayoutParams(new GridView.LayoutParams(185, 185));
                 imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                imageView.setPadding(5, 5, 5, 5);
+                imageView.setPadding(16, 16, 16, 16);
             } else {
                 imageView = (ImageView) convertView;
             }

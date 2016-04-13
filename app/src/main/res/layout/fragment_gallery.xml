@@ -2,15 +2,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.beatem.tj.GalleryFragment">
+    tools:context="com.beatem.tj.GalleryFragment"
+    android:paddingTop="16dp">
 
     <!-- TODO: Update blank fragment layout -->
     <GridView
         android:id="@+id/view_gallery"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:verticalSpacing="2dp"
-        android:horizontalSpacing="2dp"
+        android:verticalSpacing="16dp"
+        android:horizontalSpacing="16dp"
         android:stretchMode="columnWidth"
         android:numColumns="3"
         android:gravity="center"
