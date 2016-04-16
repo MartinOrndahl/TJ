@@ -446,12 +446,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
              **/
 
         } else if (id == R.id.my_trips_button) {
-            /**
+
             GalleryFragment galleryFragment = new GalleryFragment();
             android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.fragment_container, galleryFragment);
+            fragmentTransaction.replace(R.id.map, galleryFragment);
             fragmentTransaction.commit();
-             **/
+
 
         } else if (id == R.id.map_button) {
             worldMapmode();

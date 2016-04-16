@@ -3,11 +3,11 @@
     android:layout_width="170dp"
     android:layout_height="200dp"
     android:background="#000"
-    tools:context=".WelcomeScreen">
+    >
 
     <ImageView
         android:layout_centerInParent="true"
-        android:src="@drawable/mouse"
+
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="#000"
@@ -20,7 +20,7 @@
 
         <ImageView
             android:layout_centerInParent="true"
-            android:src="@drawable/globe"
+
             android:background="@null"
             android:layout_width="100dp"
             android:layout_height="100dp"
@@ -29,7 +29,7 @@
         <ImageView
             android:layout_marginLeft="3.5dp"
             android:layout_marginTop="12.5dp"
-            android:src="@drawable/eyes"
+
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/eye_left"/>
@@ -37,7 +37,7 @@
         <com.beatem.tj.EyelidView
             android:layout_marginLeft="3.5dp"
             android:layout_marginTop="12.5dp"
-            android:src="@drawable/eyes"
+
             android:layout_width="24dp"
             android:layout_height="15dp"
             android:id="@+id/eyelid_left"/>
@@ -45,7 +45,7 @@
         <ImageView
             android:layout_marginLeft="28dp"
             android:layout_marginTop="12.5dp"
-            android:src="@drawable/eyes"
+
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/eye_right"/>
@@ -53,7 +53,7 @@
         <com.beatem.tj.EyelidView
             android:layout_marginLeft="28dp"
             android:layout_marginTop="12.5dp"
-            android:src="@drawable/eyes"
+
             android:layout_width="24dp"
             android:layout_height="15dp"
             android:id="@+id/eyelid_right"/>
