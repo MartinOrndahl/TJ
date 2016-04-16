@@ -3,6 +3,7 @@ package com.beatem.tj;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentManager;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -25,6 +26,7 @@ public class NavDrawer extends AppCompatActivity
         setContentView(R.layout.activity_nav_drawer);
 
         //Initierar main fragment
+
         MapFragment mapFragment = new MapFragment();
         android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.fragment_container, mapFragment);
@@ -93,7 +95,9 @@ public class NavDrawer extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.current_trip_button) {
+
             MapFragment mapFragment = new MapFragment();
+            FragmentManager m = getSupportFragmentManager();
             android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.fragment_container, mapFragment);
             fragmentTransaction.commit();
