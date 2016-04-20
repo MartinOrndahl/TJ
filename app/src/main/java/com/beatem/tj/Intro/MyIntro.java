@@ -39,6 +39,7 @@ public class MyIntro extends AppIntro {
         addSlide(new IntroSlide(R.layout.intro1));
         addSlide(new IntroSlide(R.layout.intro2));
         addSlide(new VideoSlide(R.layout.intro3));
+        addSlide(new IntroSlide(R.layout.intro4));
         /*
 
         addSlide(third_fragment);
