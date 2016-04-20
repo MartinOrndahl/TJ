@@ -1,4 +1,4 @@
-package com.beatem.tj;
+package com.beatem.tj.Camera;
 
 import android.Manifest;
 import android.content.Context;
@@ -23,6 +23,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.beatem.tj.ImageViewingActivity;
+import com.beatem.tj.R;
 import com.melnykov.fab.FloatingActionButton;
 
 import java.io.File;
@@ -134,7 +136,7 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
 
 
         outputStream = null;
-        intent = new Intent(getApplicationContext(), MainActivity.class);
+        intent = new Intent(getApplicationContext(), ImageViewingActivity.class);
         intent2 = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
 
         cityName = getCityName();

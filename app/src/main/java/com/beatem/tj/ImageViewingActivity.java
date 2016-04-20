@@ -23,6 +23,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.beatem.tj.Camera.CameraActivity;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 
@@ -32,7 +33,7 @@ import java.util.ArrayList;
 /**
  * Created by JoelBuhrman on 16-04-05.
  */
-public class MainActivity extends Activity implements View.OnClickListener {
+public class ImageViewingActivity extends Activity implements View.OnClickListener {
     private static int mode;
     private static final int FILTER_MODE = 0;
     private static final int REGULAR_MODE = 1;
@@ -231,7 +232,7 @@ ställer in vilket mode vi befinner oss i
         /*
         Custom dialogerna
          */
-        cdcc = new CustomDialogCommandsClass(MainActivity.this);
+        cdcc = new CustomDialogCommandsClass(ImageViewingActivity.this);
 
         /*
         Komponenterna i Descriptiondelen
@@ -281,7 +282,7 @@ ställer in vilket mode vi befinner oss i
             public void run() {
 
                 if (!isFinishing()) {
-                    new AlertDialog.Builder(MainActivity.this)
+                    new AlertDialog.Builder(ImageViewingActivity.this)
                             .setTitle("Delete Image?")
                             .setMessage("Are you sure you want to delete this image?")
                             .setCancelable(false)

@@ -1,4 +1,4 @@
-package com.beatem.tj;
+package com.beatem.tj.Camera;
 
 import android.content.Context;
 import android.hardware.Sensor;
