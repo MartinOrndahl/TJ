@@ -51,7 +51,7 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
     private SurfaceHolder surfaceHolder;
     private Camera.PictureCallback jpegCallback;
     private Camera.ShutterCallback shutterCallback;
-    private String takenImagePath, date, photoFile, file_name, cityName;
+    private String takenImagePath, date, photoFile, file_name, cityName, cameraType= "back";
     private SimpleDateFormat simpleDateFormat;
     private File picfile;
     private ImageView flip, flash, flashShadow;
@@ -64,6 +64,7 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
     private TextView direction;
     private Compass compass;
     private ProgressBar progressBar;
+
 
 
     @Override
@@ -147,6 +148,12 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
 
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         progressBar.setVisibility(View.GONE);
+
+
+        if(getIntent().getStringExtra("camType")!=null){
+            cameraType=getIntent().getStringExtra("camType");
+        }
+
 
     }
 
@@ -238,6 +245,11 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        if(cameraType.equals("front")){
+            flipCamera();
+        }
+
 
     }
 
