@@ -39,4 +39,5 @@ dependencies {
     compile 'com.google.android.gms:play-services-appindexing:8.1.0'
 
 
+    compile 'jp.co.cyberagent.android.gpuimage:gpuimage-library:+@aar'
 }

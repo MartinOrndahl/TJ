@@ -26,7 +26,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
 
-import com.beatem.tj.Camera.CameraActivity;
+import com.beatem.tj.CameraAlt2.ActivityCamera;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -467,7 +467,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
     public void startCameraActivity(View view){
-        startActivity(new Intent(this, CameraActivity.class));
+        startActivity(new Intent(this, ActivityCamera.class));
+        Toast.makeText(getApplicationContext(), "Kör rätt", Toast.LENGTH_SHORT).show();
     }
 }
 

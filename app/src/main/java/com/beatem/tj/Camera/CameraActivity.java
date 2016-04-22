@@ -51,7 +51,7 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
     private SurfaceHolder surfaceHolder;
     private Camera.PictureCallback jpegCallback;
     private Camera.ShutterCallback shutterCallback;
-    private String takenImagePath, date, photoFile, file_name, cityName, cameraType= "back";
+    private String takenImagePath, date, photoFile, file_name, cityName, cameraType = "back";
     private SimpleDateFormat simpleDateFormat;
     private File picfile;
     private ImageView flip, flash, flashShadow;
@@ -64,7 +64,7 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
     private TextView direction;
     private Compass compass;
     private ProgressBar progressBar;
-
+    File dics = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM);
 
 
     @Override
@@ -96,7 +96,8 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
             @Override
             public void onClick(View view) {
 
-                cameraImage();
+                progressBar.setVisibility(View.VISIBLE);
+                camera.takePicture(null, null, jpegCallback);
 
             }
         });
@@ -150,8 +151,8 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
         progressBar.setVisibility(View.GONE);
 
 
-        if(getIntent().getStringExtra("camType")!=null){
-            cameraType=getIntent().getStringExtra("camType");
+        if (getIntent().getStringExtra("camType") != null) {
+            cameraType = getIntent().getStringExtra("camType");
         }
 
 
@@ -194,19 +195,9 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
      */
     private File getDirc() {
 
-        File dics = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM);
-
         return new File(dics, "Travel Journey");
     }
 
-    /*
-    Helt enkelt ta bild
-     */
-    public void cameraImage() {
-        progressBar.setVisibility(View.VISIBLE);
-        camera.takePicture(null, null, jpegCallback);
-
-    }
 
     /*
     Sätt inställningar till vår surfaceview (previewskärmen)
@@ -246,7 +237,7 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
             e.printStackTrace();
         }
 
-        if(cameraType.equals("front")){
+        if (cameraType.equals("front")) {
             flipCamera();
         }
 
@@ -277,7 +268,9 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
     skapa filen osv
      */
     public Camera.PictureCallback getJpegCallback() {
+
         return new Camera.PictureCallback() {
+
 
             @Override
             public void onPictureTaken(byte[] bytes, Camera camera) {
@@ -300,8 +293,10 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
                     outputStream.write(bytes);
                     outputStream.close();
                 } catch (FileNotFoundException e) {
+                    System.out.println(Toast.makeText(getApplicationContext(), "File error", Toast.LENGTH_SHORT));
                     e.printStackTrace();
                 } catch (IOException e) {
+                    System.out.println(Toast.makeText(getApplicationContext(), "Camera error", Toast.LENGTH_SHORT));
                     e.printStackTrace();
                 } finally {
 
@@ -319,6 +314,10 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
                 refreshGallery(picfile);
                 finish();
 
+
+                startActivity(intent);
+                //refreshGallery(picfile);
+                finish();
 
             }
         };
