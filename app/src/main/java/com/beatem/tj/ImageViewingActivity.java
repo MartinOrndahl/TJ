@@ -37,6 +37,7 @@ public class ImageViewingActivity extends Activity implements View.OnClickListen
     private static int mode;
     private static final int FILTER_MODE = 0;
     private static final int REGULAR_MODE = 1;
+    RelativeLayout.LayoutParams imageParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
 
 
     CustomDialogCommandsClass cdcc;
@@ -46,11 +47,11 @@ public class ImageViewingActivity extends Activity implements View.OnClickListen
     private String dateValue, cityNameValue, directionValue;
     private TextView date, cityName, hide, direction;
     File imgFile;
-    private String path;
+    private String path, cameraType="back";
 
 
     private ImageView filter;
-    int[] filters = {R.drawable.filter1, R.drawable.filter2, R.drawable.filter3,R.drawable.filter4, R.drawable.filter5,R.drawable.filter8, R.drawable.filter9, R.drawable.filter11, R.drawable.filter12};
+    int[] filters = {R.drawable.filter1, R.drawable.filter2, R.drawable.filter3, R.drawable.filter4, R.drawable.filter5, R.drawable.filter8, R.drawable.filter9, R.drawable.filter11, R.drawable.filter12};
 
 
     private FloatingActionsMenu menuMultipleActions;
@@ -65,7 +66,6 @@ public class ImageViewingActivity extends Activity implements View.OnClickListen
     ResizeAnimation expandAnimation, collapsAnimation;
 
     protected static final int RESULT_SPEECH = 1;
-
 
 
     @Override
@@ -85,10 +85,6 @@ public class ImageViewingActivity extends Activity implements View.OnClickListen
     public void onClick(View view) {
         switch (view.getId()) {
 
-            case R.id.image:
-                Toast.makeText(getApplicationContext(), "ajajajaja", Toast.LENGTH_SHORT).show();
-
-                break;
 
             /*
             FloatingactionButtons
@@ -141,7 +137,7 @@ public class ImageViewingActivity extends Activity implements View.OnClickListen
     }
 
     private void activateClickListeners() {
-        image.setOnClickListener(this);
+
 
         /*
         FloatingActionButtons
@@ -184,7 +180,7 @@ ställer in vilket mode vi befinner oss i
         direction = (TextView) findViewById(R.id.main_direction);
         filter = (ImageView) findViewById(R.id.filter);
         filterLayout = (RelativeLayout) findViewById(R.id.filterLayout);
-        topRelLayout= (RelativeLayout)findViewById(R.id.topRelLayout);
+        topRelLayout = (RelativeLayout) findViewById(R.id.topRelLayout);
 
 
 
@@ -204,16 +200,23 @@ ställer in vilket mode vi befinner oss i
             if (imgFile.exists()) {
                 path = imgFile.getAbsolutePath();
                 Bitmap myBitmap = BitmapFactory.decodeFile(path);
+                cameraType=getIntent().getStringExtra("camera_type").toString();
 
-                if (getIntent().getStringExtra("camera_type").toString().equals("front")) {
+                if (cameraType.equals("front")) {
 
-
+                    imageParams.setMargins(-140, 0, -140, 0);
+                    image.setLayoutParams(imageParams);
                     image.setImageBitmap(RotateBitmap(myBitmap, 270)); //Blir spegelvänd..
                     image.setScaleX(-1);//Fulfix, rättvänd i appen atm
+                    imageParams.setMargins(-140, 0, -140, 0);
+                    image.setLayoutParams(imageParams);
 
 
                 } else {
+
                     image.setImageBitmap(RotateBitmap(myBitmap, 90));
+                    imageParams.setMargins(0, 0, 0, 0);
+                    image.setLayoutParams(imageParams);
                 }
                 String[] info = path.split("%");
                 date.setText(handleDate(info[1]));
@@ -271,8 +274,6 @@ ställer in vilket mode vi befinner oss i
 
 
     }
-
-
 
 
     private void deleteImageAction() {
@@ -360,10 +361,7 @@ ställer in vilket mode vi befinner oss i
         filterLayout.setLayoutParams(rel_btn);
 
 
-
     }
-
-
 
 
     private void promptSpeechInput() {
@@ -457,8 +455,6 @@ ställer in vilket mode vi befinner oss i
     }
 
 
-
-
     private void performExpandOrCollapseAction() {
 
         if (expanded) {
@@ -501,8 +497,6 @@ ställer in vilket mode vi befinner oss i
     }
 
 
-
-
     public static Bitmap RotateBitmap(Bitmap source, float angle) {
         Matrix matrix = new Matrix();
         matrix.postRotate(angle);
@@ -537,8 +531,6 @@ ställer in vilket mode vi befinner oss i
                 break;
 
 
-
-
             case R.id.none:
                 filter.setImageResource(android.R.color.transparent);
                 break;
@@ -549,7 +541,6 @@ ställer in vilket mode vi befinner oss i
         }
 
     }
-
 
 
     private String handleDate(String formattedDate) {
@@ -581,14 +572,9 @@ ställer in vilket mode vi befinner oss i
     }
 
 
-
     public void startCamera() {
-        startActivity(new Intent(this, CameraActivity.class));
+        startActivity(new Intent(this, CameraActivity.class).putExtra("camType", cameraType));
     }
-
-
-
-
 
 
     @Override
