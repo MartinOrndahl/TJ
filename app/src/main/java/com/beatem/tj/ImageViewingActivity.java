@@ -23,7 +23,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.beatem.tj.Camera.CameraActivity;
+import com.beatem.tj.CameraAlt2.ActivityCamera;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 
@@ -164,6 +164,7 @@ public class ImageViewingActivity extends Activity implements View.OnClickListen
     }
 
     private void init() {
+
 /*
 ställer in vilket mode vi befinner oss i
  */
@@ -203,7 +204,6 @@ ställer in vilket mode vi befinner oss i
                 cameraType=getIntent().getStringExtra("camera_type").toString();
 
                 if (cameraType.equals("front")) {
-
                     imageParams.setMargins(-140, 0, -140, 0);
                     image.setLayoutParams(imageParams);
                     image.setImageBitmap(RotateBitmap(myBitmap, 270)); //Blir spegelvänd..
@@ -218,13 +218,13 @@ ställer in vilket mode vi befinner oss i
                     imageParams.setMargins(0, 0, 0, 0);
                     image.setLayoutParams(imageParams);
                 }
-                String[] info = path.split("%");
+               /* String[] info = path.split("%");
                 date.setText(handleDate(info[1]));
                 dateValue = handleDate(info[1]);
                 cityName.setText(info[2]);
                 cityNameValue = info[2];
                 direction.setText(info[3]);
-                directionValue = info[3];
+                directionValue = info[3];*/
 
             } else {
                 Toast.makeText(this, "Couldn't find image", Toast.LENGTH_SHORT).show();
@@ -573,7 +573,7 @@ ställer in vilket mode vi befinner oss i
 
 
     public void startCamera() {
-        startActivity(new Intent(this, CameraActivity.class).putExtra("camType", cameraType));
+        startActivity(new Intent(this, ActivityCamera.class).putExtra("camType", cameraType));
     }
 
 

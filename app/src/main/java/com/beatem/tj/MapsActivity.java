@@ -467,8 +467,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
     public void startCameraActivity(View view){
-        startActivity(new Intent(this, ActivityCamera.class));
-        Toast.makeText(getApplicationContext(), "Kör rätt", Toast.LENGTH_SHORT).show();
+        startActivity(new Intent(this, ActivityCamera.class).putExtra("camType", "back"));
+
     }
 }
 

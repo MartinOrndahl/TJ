@@ -5,7 +5,6 @@ package com.beatem.tj.CameraAlt2;
  */
 
 import android.app.Activity;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.hardware.Camera;
@@ -20,12 +19,11 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.ImageView;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 
-import com.beatem.tj.ImageViewingActivity;
 import com.beatem.tj.R;
 
 import java.io.File;
@@ -35,59 +33,61 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 import jp.co.cyberagent.android.gpuimage.GPUImage;
 import jp.co.cyberagent.android.gpuimage.GPUImage.OnPictureSavedListener;
 import jp.co.cyberagent.android.gpuimage.GPUImageFilter;
+import jp.co.cyberagent.android.gpuimage.GPUImageGrayscaleFilter;
 
 
-public class ActivityCamera extends Activity implements OnSeekBarChangeListener, OnClickListener {
+public class ActivityCameraReal extends Activity implements OnSeekBarChangeListener, OnClickListener {
 
-    boolean frontCamera = false, autoFlashActivated = true;
     private GPUImage mGPUImage;
     private CameraHelper mCameraHelper;
     private CameraLoader mCamera;
     private GPUImageFilter mFilter;
     private GPUImageFilterTools.FilterAdjuster mFilterAdjuster;
-    HashMap<String, Integer> buttons = new HashMap<>();
-    LinearLayout ll;
-    ViewGroup.LayoutParams lp;
-    View cameraSwitchView;
-    private ImageView flash, flashShadow;
-
+    HashMap<String,Integer> buttons = new HashMap<>();
+    final FilterList filters = new FilterList();
+    private String cameraType= "back";
     @Override
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.custom_camera2);
+
+        setContentView(R.layout.activity_camera);
+        ((SeekBar) findViewById(R.id.seekBar)).setOnSeekBarChangeListener(this);
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        init();
-        activateClickListener();
+        filters.addFilter("Contrast", FilterType.CONTRAST);
+        filters.addFilter("Invert", FilterType.INVERT);
+        filters.addFilter("Pixelation", FilterType.PIXELATION);
+        filters.addFilter("Hue", FilterType.HUE);
+        filters.addFilter("Gamma", FilterType.GAMMA);
+        filters.addFilter("Brightness", FilterType.BRIGHTNESS);
+        filters.addFilter("Sepia", FilterType.SEPIA);
+        filters.addFilter("Grayscale", FilterType.GRAYSCALE);
+        filters.addFilter("Sharpness", FilterType.SHARPEN);
+
+        findViewById(R.id.button_choose_filter).setOnClickListener(this);
+        findViewById(R.id.button_capture).setOnClickListener(this);
+        // findViewById(R.id.button1).setOnClickListener(this);
+
+        LinearLayout ll = (LinearLayout) findViewById(R.id.button_list);
+        ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams(300,300);
 
 
-    }
-
-    private void activateClickListener() {
-        findViewById(R.id.flash_icon).setOnClickListener(this);
-    }
-
-    private void init() {
-        if (getIntent().getStringExtra("camType").equals("front")) {
-            frontCamera = true;
+        for (String name:filters.names) {
+            Button b = new Button(this);
+            b.setText(name);
+            b.setId(View.generateViewId());
+            buttons.put(name,b.getId());
+            ll.addView(b, lp);
+            b.setOnClickListener(this);
         }
 
-        flash = (ImageView) findViewById(R.id.flash_icon);
-        flashShadow = (ImageView) findViewById(R.id.flash_shadow);
-
-
-        ll = (LinearLayout) findViewById(R.id.button_list);
-
-        lp = new ViewGroup.LayoutParams(300, 300);
-
-
-        findViewById(R.id.button_capture).setOnClickListener(this);
 
         mGPUImage = new GPUImage(this);
         mGPUImage.setGLSurfaceView((GLSurfaceView) findViewById(R.id.surfaceView));
@@ -95,22 +95,17 @@ public class ActivityCamera extends Activity implements OnSeekBarChangeListener,
         mCameraHelper = new CameraHelper(this);
         mCamera = new CameraLoader();
 
-
-        cameraSwitchView = findViewById(R.id.img_switch_camera);
+        View cameraSwitchView = findViewById(R.id.img_switch_camera);
         cameraSwitchView.setOnClickListener(this);
         if (!mCameraHelper.hasFrontCamera() || !mCameraHelper.hasBackCamera()) {
             cameraSwitchView.setVisibility(View.GONE);
         }
-
-
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         mCamera.onResume();
-
-
     }
 
     @Override
@@ -118,26 +113,56 @@ public class ActivityCamera extends Activity implements OnSeekBarChangeListener,
         mCamera.onPause();
         super.onPause();
     }
+    private enum FilterType {
+        CONTRAST, GRAYSCALE, SHARPEN, SEPIA, SOBEL_EDGE_DETECTION, THREE_X_THREE_CONVOLUTION, FILTER_GROUP, EMBOSS, POSTERIZE, GAMMA, BRIGHTNESS, INVERT, HUE, PIXELATION,
+        SATURATION, EXPOSURE, HIGHLIGHT_SHADOW, MONOCHROME, OPACITY, RGB, WHITE_BALANCE, VIGNETTE, TONE_CURVE, BLEND_COLOR_BURN, BLEND_COLOR_DODGE, BLEND_DARKEN, BLEND_DIFFERENCE,
+        BLEND_DISSOLVE, BLEND_EXCLUSION, BLEND_SOURCE_OVER, BLEND_HARD_LIGHT, BLEND_LIGHTEN, BLEND_ADD, BLEND_DIVIDE, BLEND_MULTIPLY, BLEND_OVERLAY, BLEND_SCREEN, BLEND_ALPHA,
+        BLEND_COLOR, BLEND_HUE, BLEND_SATURATION, BLEND_LUMINOSITY, BLEND_LINEAR_BURN, BLEND_SOFT_LIGHT, BLEND_SUBTRACT, BLEND_CHROMA_KEY, BLEND_NORMAL, LOOKUP_AMATORKA,
+        GAUSSIAN_BLUR, CROSSHATCH, BOX_BLUR, CGA_COLORSPACE, DILATION, KUWAHARA, RGB_DILATION, SKETCH, TOON, SMOOTH_TOON, BULGE_DISTORTION, GLASS_SPHERE, HAZE, LAPLACIAN, NON_MAXIMUM_SUPPRESSION,
+        SPHERE_REFRACTION, SWIRL, WEAK_PIXEL_INCLUSION, FALSE_COLOR, COLOR_BALANCE, LEVELS_FILTER_MIN
+    }
+    private static class FilterList {
+        public List<String> names = new LinkedList<String>();
+        public List<FilterType> filters = new LinkedList<FilterType>();
 
+        public void addFilter(final String name, final FilterType filter) {
+            names.add(name);
+            filters.add(filter);
+        }
+    }
     @Override
     public void onClick(final View v) {
+
+        if (v.getId() == buttons.get("Grayscale")) {
+            switchFilterTo(new GPUImageGrayscaleFilter());
+        }
 
         switch (v.getId()) {
 
 
+            case R.id.button_choose_filter:
 
 
+                GPUImageFilterTools.showDialog(this, new GPUImageFilterTools.OnGpuImageFilterChosenListener() {
+
+                    @Override
+                    public void onGpuImageFilterChosenListener(final GPUImageFilter filter) {
+                        switchFilterTo(filter);
+                    }
+                });
+                break;
+            // case R.id.button1:
+            //   switchFilterTo(new GPUImageContrastFilter(2.0f));
+            // break;
             case R.id.button_capture:
                 if (mCamera.mCameraInstance.getParameters().getFocusMode().equals(
                         Parameters.FOCUS_MODE_CONTINUOUS_PICTURE)) {
-
                     takePicture();
                 } else {
                     mCamera.mCameraInstance.autoFocus(new Camera.AutoFocusCallback() {
 
                         @Override
                         public void onAutoFocus(final boolean success, final Camera camera) {
-
                             takePicture();
                         }
                     });
@@ -145,31 +170,15 @@ public class ActivityCamera extends Activity implements OnSeekBarChangeListener,
                 break;
 
             case R.id.img_switch_camera:
-
                 mCamera.switchCamera();
 
-
-                if (frontCamera) {
-                    frontCamera = false;
-                    flash.setImageResource(R.drawable.vector_drawable_ic_flash_auto_white___px);
-                    flashShadow.setImageResource(R.drawable.vector_drawable_ic_flash_auto_black___px);
-                } else {
-                    frontCamera = true;
-                    flash.setImageResource(0);
-                    flashShadow.setImageResource(0);
-                }
-
-                break;
-
-            case R.id.flash_icon:
-                mCamera.changeFlashMode();
                 break;
         }
     }
 
     private void takePicture() {
         // TODO get a size that is about the size of the screen
-        Camera.Parameters params = mCamera.mCameraInstance.getParameters();
+        Parameters params = mCamera.mCameraInstance.getParameters();
         params.setRotation(90);
         mCamera.mCameraInstance.setParameters(params);
         for (Camera.Size size : params.getSupportedPictureSizes()) {
@@ -203,38 +212,21 @@ public class ActivityCamera extends Activity implements OnSeekBarChangeListener,
                         // mGPUImage.setImage(bitmap);
                         final GLSurfaceView view = (GLSurfaceView) findViewById(R.id.surfaceView);
                         view.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
-
-
-                        /*
-                        Filnamnet
-                         */
-                        mGPUImage.saveToPictures(bitmap, "TJ",
-                                System.currentTimeMillis() + "%" + "Bildnamn" + ".jpg",
+                        mGPUImage.saveToPictures(bitmap, "GPUImage",
+                                System.currentTimeMillis() + ".jpg",
                                 new OnPictureSavedListener() {
 
                                     @Override
                                     public void onPictureSaved(final Uri
                                                                        uri) {
                                         pictureFile.delete();
+                                        camera.startPreview();
                                         view.setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
                                     }
                                 });
-
-
-                        Intent intent = new Intent(getApplicationContext(), ImageViewingActivity.class);
-                        intent.putExtra("file_name", pictureFile.getAbsolutePath());
-                        if (frontCamera) {
-                            intent.putExtra("camera_type", "front");
-                        } else {
-                            intent.putExtra("camera_type", "back");
-                        }
-
-                        startActivity(intent);
-                        finish();
                     }
                 });
     }
-
 
     public static final int MEDIA_TYPE_IMAGE = 1;
     public static final int MEDIA_TYPE_VIDEO = 2;
@@ -313,9 +305,7 @@ public class ActivityCamera extends Activity implements OnSeekBarChangeListener,
         public void switchCamera() {
             releaseCamera();
             mCurrentCameraId = (mCurrentCameraId + 1) % mCameraHelper.getNumberOfCameras();
-
             setUpCamera(mCurrentCameraId);
-
         }
 
         private void setUpCamera(final int id) {
@@ -324,23 +314,20 @@ public class ActivityCamera extends Activity implements OnSeekBarChangeListener,
             // TODO adjust by getting supportedPreviewSizes and then choosing
             // the best one for screen size (best fill screen)
             if (parameters.getSupportedFocusModes().contains(
-                    Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE)) {
+                    Parameters.FOCUS_MODE_CONTINUOUS_PICTURE)) {
                 parameters.setFocusMode(Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
             }
-
             mCameraInstance.setParameters(parameters);
 
             int orientation = mCameraHelper.getCameraDisplayOrientation(
-                    ActivityCamera.this, mCurrentCameraId);
+                    ActivityCameraReal.this, mCurrentCameraId);
             CameraHelper.CameraInfo2 cameraInfo = new CameraHelper.CameraInfo2();
             mCameraHelper.getCameraInfo(mCurrentCameraId, cameraInfo);
             boolean flipHorizontal = cameraInfo.facing == CameraInfo.CAMERA_FACING_FRONT;
             mGPUImage.setUpCamera(mCameraInstance, orientation, flipHorizontal, false);
         }
 
-        /**
-         * A safe way to get an instance of the Camera object.
-         */
+        /** A safe way to get an instance of the Camera object. */
         private Camera getCameraInstance(final int id) {
             Camera c = null;
             try {
@@ -355,33 +342,6 @@ public class ActivityCamera extends Activity implements OnSeekBarChangeListener,
             mCameraInstance.setPreviewCallback(null);
             mCameraInstance.release();
             mCameraInstance = null;
-        }
-
-        public void changeFlashMode() {
-            List<String> mSupportedFlashModes = mCameraInstance.getParameters().getSupportedFlashModes();
-
-            if (autoFlashActivated) {
-                if (mSupportedFlashModes != null && mSupportedFlashModes.contains(Camera.Parameters.FLASH_MODE_AUTO)) {
-                    Camera.Parameters parameters = mCameraInstance.getParameters();
-                    parameters.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
-                    mCameraInstance.setParameters(parameters);
-                    autoFlashActivated = false;
-
-                    flash.setImageResource(R.drawable.vector_drawable_ic_flash_off_white___px);
-                    flashShadow.setImageResource(R.drawable.vector_drawable_ic_flash_off_black___px);
-                }
-            } else {
-
-                if (mSupportedFlashModes != null && mSupportedFlashModes.contains(Camera.Parameters.FLASH_MODE_AUTO)) {
-                    Camera.Parameters parameters = mCameraInstance.getParameters();
-                    parameters.setFlashMode(Camera.Parameters.FLASH_MODE_AUTO);
-                    mCameraInstance.setParameters(parameters);
-                    autoFlashActivated = true;
-                    flash.setImageResource(R.drawable.vector_drawable_ic_flash_auto_white___px);
-                    flashShadow.setImageResource(R.drawable.vector_drawable_ic_flash_auto_black___px);
-                }
-
-            }
         }
     }
 }

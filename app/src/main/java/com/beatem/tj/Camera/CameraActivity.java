@@ -315,9 +315,6 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
                 finish();
 
 
-                startActivity(intent);
-                //refreshGallery(picfile);
-                finish();
 
             }
         };
