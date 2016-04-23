@@ -47,13 +47,16 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private GoogleMap mMap;
     private LocationManager locationManager;
     private LatLng currentlocation;
-    private boolean mMapready, permission, zoomEnabled;
+    private boolean mMapready, permission, zoomEnabled, galleryCreated;
     private final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 36;
     private PolygonOptions polygon;
     private ArrayList<LatLng> locations;
     private LocationListener locationListener;
     private SensorManager mSensorManager;
     private boolean moveWithSensor = true;
+    private GalleryFragment galleryFragment;
+    private SupportMapFragment mapFragment;
+    private MapFragment mapFragment1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,11 +81,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
         setContentView(R.layout.activity_nav_drawer);
 
-
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-
-
-        //setContentView(R.layout.activity_nav_drawer);
+        mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
 
         // Acquire a reference to the system Location Manager
         LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
@@ -125,32 +127,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         currentlocation = new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
         GpsListniner(true);
 
-        //Initierar main fragment
-        /**
-        MapFragment mapFragment1 = new MapFragment();
-        android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_container, mapFragment1);
-        fragmentTransaction.commit();
-         **/
-
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
-
-
-
-
-
-        /**
-         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-         fab.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-        Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-        .setAction("Action", null).show();
-        }
-        });
-         **/
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -161,6 +137,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+       galleryFragment = new GalleryFragment();
 
 
 
@@ -398,7 +375,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+
         }
     }
 
@@ -431,30 +408,38 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         int id = item.getItemId();
 
 
-        if (id == R.id.current_trip_button) {
-            currentTripMode();
 
-            MapFragment mapFragment = new MapFragment();
-            android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.fragment_container, mapFragment);
-            fragmentTransaction.commit();
+        if (id == R.id.current_trip_button) {
+
+            if(galleryCreated) {
+                android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.remove(galleryFragment);
+                fragmentTransaction.commit();
+                galleryCreated = false;
+            }
+            currentTripMode();
 
 
         } else if (id == R.id.my_trips_button) {
 
-            GalleryFragment galleryFragment = new GalleryFragment();
+            galleryCreated = true;
             android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.fragment_container, galleryFragment);
+            fragmentTransaction.add(R.id.fragment_container, galleryFragment);
             fragmentTransaction.commit();
+
 
 
         } else if (id == R.id.map_button) {
-            worldMapmode();
 
-            MapFragment mapFragment = new MapFragment();
-            android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.fragment_container, mapFragment);
-            fragmentTransaction.commit();
+            worldMapmode();
+            if(galleryCreated) {
+                android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.remove(galleryFragment);
+                fragmentTransaction.commit();
+                galleryCreated = false;
+            }
+
+
 
         } else if (id == R.id.end_trip_button) {
             //Implementera end tripp
