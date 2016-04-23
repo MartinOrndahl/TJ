@@ -58,12 +58,7 @@
             android:name=".ImageViewingActivity"
             android:theme="@style/AppTheme.NoActionBar"></activity>
 
-        <activity
-            android:name=".NavDrawer"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
 
-        </activity>
 
         <activity android:name=".CameraAlt2.ActivityGallery" />
         <activity
@@ -86,7 +81,7 @@
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps"
             android:theme="@style/AppTheme.NoActionBar">
-           
+
 
         </activity>
     </application>

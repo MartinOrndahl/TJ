@@ -429,21 +429,20 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-        GalleryFragment galleryFragment = new GalleryFragment();
+
 
         if (id == R.id.current_trip_button) {
             currentTripMode();
-            /**
+
             MapFragment mapFragment = new MapFragment();
-            FragmentManager m = getSupportFragmentManager();
             android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.fragment_container, mapFragment);
             fragmentTransaction.commit();
-             **/
+
 
         } else if (id == R.id.my_trips_button) {
 
-
+            GalleryFragment galleryFragment = new GalleryFragment();
             android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.fragment_container, galleryFragment);
             fragmentTransaction.commit();
@@ -452,8 +451,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         } else if (id == R.id.map_button) {
             worldMapmode();
 
+            MapFragment mapFragment = new MapFragment();
             android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.detach(galleryFragment);
+            fragmentTransaction.replace(R.id.fragment_container, mapFragment);
             fragmentTransaction.commit();
 
         } else if (id == R.id.end_trip_button) {
