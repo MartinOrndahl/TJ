@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -220,6 +221,7 @@ public class CameraActivity extends AppCompatActivity implements SurfaceHolder.C
                 autoFlashActivated = true;
             }
         } catch (RuntimeException e) {
+            Log.i("camera","allt är fel critical error");
 
         }
         Camera.Parameters parameters;

@@ -5,13 +5,14 @@ package com.beatem.tj;
  */
 public class Location {
     private float longditude,latitude;
-    private String text,picpath;
+    private String text,picpath,trip;
 
-    public Location(float londitude ,float latitude,String text,String picpath){
+    public Location(float londitude ,float latitude,String trip,String text, String picpath){
         this.latitude = latitude;
         this.longditude = londitude;
         this.text =text;
         this.picpath = picpath;
+        this.trip = trip;
 
     }
     public float getLongditude() {
@@ -28,5 +29,9 @@ public class Location {
 
     public float getLatitude() {
         return latitude;
+    }
+
+    public String getTrip() {
+        return trip;
     }
 }

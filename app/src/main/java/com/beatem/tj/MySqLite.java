@@ -19,6 +19,7 @@ public class MySqLite extends SQLiteOpenHelper {
     private static final String CREATE_LOCATIONS_TABLE= "create table Location(\n" +
             "longditud float not null,\n" +
             "latitude float not null,\n" +
+            "trip varchar(50) not null,\n" +
             "text varchar(300),\n" +
             "picturepath varchar(300) not null,\n" +
             "primary key(landitude,latitude)\n" +
@@ -28,6 +29,7 @@ public class MySqLite extends SQLiteOpenHelper {
     private static final String KEY_LATITUDE = "latitude";
     private static final String KEY_LONGDITUDE = "longditude";
     private static final String VAR_PICTUREPATH = "picturepath";
+    private static final String VAR_TRIP = "trip";
     private static final String VAR_TEXT = "text";
     private static final String[] LOCATION_COLUMNS = {KEY_LONGDITUDE,KEY_LATITUDE,VAR_PICTUREPATH,VAR_TEXT};
 
@@ -60,6 +62,7 @@ public class MySqLite extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(KEY_LONGDITUDE, location.getLongditude());
         values.put(KEY_LATITUDE, location.getLatitude());
+        values.put(VAR_TRIP, location.getTrip());
         values.put(VAR_PICTUREPATH, location.getPicpath());
         values.put(VAR_TEXT, location.getText());
         Boolean inserted = db.insert(TABLE_LOCATIONS, null, values) > 0;
@@ -82,7 +85,7 @@ public class MySqLite extends SQLiteOpenHelper {
         if(cursor != null) {
             cursor.moveToFirst();
         }
-        Location location = new Location(Float.valueOf(cursor.getString(0)), Float.valueOf(cursor.getString(1)), cursor.getString(2), cursor.getString(3));
+        Location location = new Location(Float.valueOf(cursor.getString(0)), Float.valueOf(cursor.getString(1)), cursor.getString(2), cursor.getString(3),cursor.getString(4));
         db.close();
         cursor.close();
 
@@ -104,7 +107,7 @@ public class MySqLite extends SQLiteOpenHelper {
 
         if(cursor.moveToFirst()){
             do{
-                Location location = new Location(Float.valueOf(cursor.getString(0)), Float.valueOf(cursor.getString(1)), cursor.getString(2), cursor.getString(3));
+                Location location = new Location(Float.valueOf(cursor.getString(0)), Float.valueOf(cursor.getString(1)), cursor.getString(2), cursor.getString(3),cursor.getString(4));
                 locations.add(location);
             } while(cursor.moveToNext());
         }
