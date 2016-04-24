@@ -1,12 +1,7 @@
 package com.beatem.tj;
 
-/**
- * Created by Martin on 2016-04-13.
- */
-
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.view.Gravity;
@@ -42,48 +37,50 @@ public class CatLoadingView extends DialogFragment {
             mDialog.setCanceledOnTouchOutside(true);
             mDialog.getWindow().setGravity(Gravity.CENTER);
 
+
             operatingAnim = new RotateAnimation(360f, 0f,
                     Animation.RELATIVE_TO_SELF, 0.5f,
                     Animation.RELATIVE_TO_SELF, 0.5f);
             operatingAnim.setRepeatCount(Animation.INFINITE);
             operatingAnim.setDuration(2000);
 
-            eye_left_Anim = new RotateAnimation(360f, 0f,
-                    Animation.RELATIVE_TO_SELF, 0.5f,
-                    Animation.RELATIVE_TO_SELF, 0.5f);
-            eye_left_Anim.setRepeatCount(Animation.INFINITE);
-            eye_left_Anim.setDuration(2000);
+            //eye_left_Anim = new RotateAnimation(360f, 0f,
+            //      Animation.RELATIVE_TO_SELF, 0.5f,
+            //    Animation.RELATIVE_TO_SELF, 0.5f);
+            //eye_left_Anim.setRepeatCount(Animation.INFINITE);
+            //eye_left_Anim.setDuration(2000);
 
-            eye_right_Anim = new RotateAnimation(360f, 0f,
-                    Animation.RELATIVE_TO_SELF, 0.5f,
-                    Animation.RELATIVE_TO_SELF, 0.5f);
-            eye_right_Anim.setRepeatCount(Animation.INFINITE);
-            eye_right_Anim.setDuration(2000);
+            // eye_right_Anim = new RotateAnimation(360f, 0f,
+            //Animation.RELATIVE_TO_SELF, 0.5f,
+            //Animation.RELATIVE_TO_SELF, 0.5f);
+            //eye_right_Anim.setRepeatCount(Animation.INFINITE);
+            //eye_right_Anim.setDuration(2000);
 
             LinearInterpolator lin = new LinearInterpolator();
             operatingAnim.setInterpolator(lin);
-            eye_left_Anim.setInterpolator(lin);
-            eye_right_Anim.setInterpolator(lin);
+            //eye_left_Anim.setInterpolator(lin);
+            //eye_right_Anim.setInterpolator(lin);
 
             View view = mDialog.getWindow().getDecorView();
 
             mouse = view.findViewById(R.id.mouse);
+/**
+ eye_left = view.findViewById(R.id.eye_left);
 
-            eye_left = view.findViewById(R.id.eye_left);
+ eye_right = view.findViewById(R.id.eye_right);
 
-            eye_right = view.findViewById(R.id.eye_right);
+ eyelid_left = (EyelidView) view.findViewById(R.id.eyelid_left);
 
-            eyelid_left = (EyelidView) view.findViewById(R.id.eyelid_left);
+ eyelid_left.setColor(Color.parseColor("#d0ced1"));
 
-            eyelid_left.setColor(Color.parseColor("#d0ced1"));
+ eyelid_left.setFromFull(true);
 
-            eyelid_left.setFromFull(true);
+ eyelid_right = (EyelidView) view.findViewById(R.id.eyelid_right);
 
-            eyelid_right = (EyelidView) view.findViewById(R.id.eyelid_right);
+ eyelid_right.setColor(Color.parseColor("#d0ced1"));
 
-            eyelid_right.setColor(Color.parseColor("#d0ced1"));
-
-            eyelid_right.setFromFull(true);
+ eyelid_right.setFromFull(true);
+ **/
 
             mGraduallyTextView = (GraduallyTextView) view.findViewById(
                     R.id.graduallyTextView);
@@ -102,8 +99,8 @@ public class CatLoadingView extends DialogFragment {
 
                         @Override
                         public void onAnimationRepeat(Animation animation) {
-                            eyelid_left.resetAnimator();
-                            eyelid_right.resetAnimator();
+                            // eyelid_left.resetAnimator();
+                            // eyelid_right.resetAnimator();
                         }
                     });
         }
@@ -114,10 +111,10 @@ public class CatLoadingView extends DialogFragment {
     @Override public void onResume() {
         super.onResume();
         mouse.setAnimation(operatingAnim);
-        eye_left.setAnimation(eye_left_Anim);
-        eye_right.setAnimation(eye_right_Anim);
-        eyelid_left.startLoading();
-        eyelid_right.startLoading();
+        // eye_left.setAnimation(eye_left_Anim);
+        //eye_right.setAnimation(eye_right_Anim);
+        //eyelid_left.startLoading();
+        //eyelid_right.startLoading();
         mGraduallyTextView.startLoading();
     }
 
@@ -126,15 +123,15 @@ public class CatLoadingView extends DialogFragment {
         super.onPause();
 
         operatingAnim.reset();
-        eye_left_Anim.reset();
-        eye_right_Anim.reset();
+        //eye_left_Anim.reset();
+        //eye_right_Anim.reset();
 
         mouse.clearAnimation();
-        eye_left.clearAnimation();
-        eye_right.clearAnimation();
+        // eye_left.clearAnimation();
+        //eye_right.clearAnimation();
 
-        eyelid_left.stopLoading();
-        eyelid_right.stopLoading();
+        //eyelid_left.stopLoading();
+        //eyelid_right.stopLoading();
         mGraduallyTextView.stopLoading();
     }
 

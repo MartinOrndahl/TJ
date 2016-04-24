@@ -1,17 +1,16 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="170dp"
-    android:layout_height="200dp"
-    android:background="#000"
-    >
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/transparent"
+    tools:context=".MainActivity">
 
     <ImageView
         android:layout_centerInParent="true"
-
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="#000"
-        android:id="@+id/mouse"/>
+        android:src="@drawable/plane"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:id="@+id/mouse" />
 
     <RelativeLayout
         android:layout_centerInParent="true"
@@ -20,54 +19,24 @@
 
         <ImageView
             android:layout_centerInParent="true"
-
-            android:background="@null"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:id="@+id/cat"/>
-
-        <ImageView
-            android:layout_marginLeft="3.5dp"
-            android:layout_marginTop="12.5dp"
-
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/eye_left"/>
+            android:src="@drawable/globe1"
+            android:id="@+id/cat" />
 
-        <com.beatem.tj.EyelidView
-            android:layout_marginLeft="3.5dp"
-            android:layout_marginTop="12.5dp"
-
-            android:layout_width="24dp"
-            android:layout_height="15dp"
-            android:id="@+id/eyelid_left"/>
-
-        <ImageView
-            android:layout_marginLeft="28dp"
-            android:layout_marginTop="12.5dp"
-
-            android:layout_width="wrap_content"
+        <com.example.ludvig.catloadingview.GraduallyTextView
+            android:id="@+id/graduallyTextView"
+            android:textSize="15sp"
+            android:textColor="#000000"
+            android:text="L O A D I N G ..."
+            android:layout_width="110dp"
             android:layout_height="wrap_content"
-            android:id="@+id/eye_right"/>
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true" />
 
-        <com.beatem.tj.EyelidView
-            android:layout_marginLeft="28dp"
-            android:layout_marginTop="12.5dp"
 
-            android:layout_width="24dp"
-            android:layout_height="15dp"
-            android:id="@+id/eyelid_right"/>
+
+
     </RelativeLayout>
-
-    <com.beatem.tj.GraduallyTextView
-        android:id="@+id/graduallyTextView"
-        android:layout_marginBottom="10dp"
-        android:textSize="15sp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:textColor="#ffffff"
-        android:text="L O A D I N G ..."
-        android:layout_width="110dp"
-        android:layout_height="wrap_content"/>
 
 </RelativeLayout>

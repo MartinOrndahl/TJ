@@ -84,6 +84,11 @@
 
 
         </activity>
+        <activity android:name=".MainActivity"
+            android:label="mainActivity"
+            android:screenOrientation="portrait">
+
+        </activity>
     </application>
 
 
