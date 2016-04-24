@@ -2,6 +2,7 @@ package com.beatem.tj;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.hardware.Sensor;
@@ -17,6 +18,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -166,6 +168,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
 
+
             } catch (SecurityException e) {
                 e.printStackTrace();
 
@@ -185,8 +188,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     public synchronized void addLocationMarker(LatLng pos) {
-    //TODO:fixa
-        //locations.add(pos);
+    //TODO:fixa, alternativt ta bort.
+        getTrips();
     mMap.addMarker(new MarkerOptions().position(pos));
 
 
@@ -257,7 +260,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         double smalestLong = 0;
         int log = 0;
         double largestlog;
-        if (locations.size()>0) {
+        if (locations!=null&&locations.size()>0) {
             largestLat = locations.get(0).getLatitude();
             smalestLat = locations.get(0).getLatitude();
             smalestLong = locations.get(0).getLongditude();
@@ -296,7 +299,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
+        mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
         mMap.getUiSettings().setAllGesturesEnabled(true);
         mMap.getUiSettings().setMapToolbarEnabled(false);
         mMap.getUiSettings().setMyLocationButtonEnabled(true);
@@ -308,17 +311,21 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             public boolean onMarkerClick(final Marker marker) {
                 Toast.makeText(getApplicationContext(), "Yey detta fungerade", Toast.LENGTH_SHORT).show();
                 //TODO:Implementera vad som händer när man klickar på en marker
-                if (marker.getPosition().equals("kolla igenom alla longlat")) {
-                    //handle click here
+                for (MyLocation location : locations) {
+                    if (marker.getPosition().equals(location.getLatlng())) {
+                        //TODO: öppna bilden.
+
+
+                    }
+                    return true;
                 }
-                return true;
+                return false;
             }
+
 
         });
 
         mMapready = true;
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
 
         mMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
             @Override
@@ -449,7 +456,35 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
         } else if (id == R.id.end_trip_button) {
-            //Implementera end tripp
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+            builder.setTitle("Confirm");
+            builder.setIcon(getDrawable(R.drawable.worldmap));
+            builder.setMessage("Are you sure you want to end this trip?");
+
+            builder.setNegativeButton("END", new DialogInterface.OnClickListener() {
+
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    // Do nothing
+                    dialog.dismiss();
+                }
+            });
+
+            builder.setPositiveButton("CANCEL", new DialogInterface.OnClickListener() {
+
+                public void onClick(DialogInterface dialog, int which) {
+                    // Do nothing but close the dialog
+
+                    dialog.dismiss();
+                }
+
+            });
+
+
+
+            AlertDialog alert = builder.create();
+            alert.show();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

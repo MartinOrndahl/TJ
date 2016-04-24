@@ -1,11 +1,14 @@
 package com.beatem.tj;
 
+import com.google.android.gms.maps.model.LatLng;
+
 /**
  * Created by mliljenberg on 12/04/16.
  */
 public class MyLocation {
     private float longditude,latitude;
     private String text,picpath,trip;
+    private LatLng latlng;
 
     public MyLocation(float londitude ,float latitude,String trip,String text, String picpath){
         this.latitude = latitude;
@@ -13,6 +16,7 @@ public class MyLocation {
         this.text =text;
         this.picpath = picpath;
         this.trip = trip;
+        latlng = new LatLng(latitude,londitude);
 
     }
     public float getLongditude() {
@@ -33,5 +37,9 @@ public class MyLocation {
 
     public String getTrip() {
         return trip;
+    }
+
+    public LatLng getLatlng() {
+        return latlng;
     }
 }
