@@ -22,8 +22,8 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.SeekBar;
-import android.widget.SeekBar.OnSeekBarChangeListener;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.beatem.tj.ImageViewingActivity;
 import com.beatem.tj.R;
@@ -34,27 +34,28 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 
 import jp.co.cyberagent.android.gpuimage.GPUImage;
 import jp.co.cyberagent.android.gpuimage.GPUImage.OnPictureSavedListener;
-import jp.co.cyberagent.android.gpuimage.GPUImageFilter;
 
 
-public class ActivityCamera extends Activity implements OnSeekBarChangeListener, OnClickListener {
+public class ActivityCamera extends Activity implements OnClickListener {
 
     boolean frontCamera = false, autoFlashActivated = true;
+    private TextView direction;
+    private Compass compass;
+    private ImageView flash, flashShadow;
+    private GLSurfaceView glSurfaceView;
+
     private GPUImage mGPUImage;
     private CameraHelper mCameraHelper;
     private CameraLoader mCamera;
-    private GPUImageFilter mFilter;
-    private GPUImageFilterTools.FilterAdjuster mFilterAdjuster;
-    HashMap<String, Integer> buttons = new HashMap<>();
+
     LinearLayout ll;
     ViewGroup.LayoutParams lp;
     View cameraSwitchView;
-    private ImageView flash, flashShadow;
+
 
     @Override
     public void onCreate(final Bundle savedInstanceState) {
@@ -62,9 +63,10 @@ public class ActivityCamera extends Activity implements OnSeekBarChangeListener,
         setContentView(R.layout.custom_camera2);
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
+        Toast.makeText(getApplicationContext(), "fresh", Toast.LENGTH_SHORT).show();
         init();
         activateClickListener();
+
 
 
     }
@@ -78,8 +80,13 @@ public class ActivityCamera extends Activity implements OnSeekBarChangeListener,
             frontCamera = true;
         }
 
+        glSurfaceView = (GLSurfaceView) findViewById(R.id.surfaceView);
+
+        direction = (TextView) findViewById(R.id.direction);
         flash = (ImageView) findViewById(R.id.flash_icon);
         flashShadow = (ImageView) findViewById(R.id.flash_shadow);
+        compass = new Compass(this, direction, "back");
+        compass.start();
 
 
         ll = (LinearLayout) findViewById(R.id.button_list);
@@ -109,6 +116,7 @@ public class ActivityCamera extends Activity implements OnSeekBarChangeListener,
     protected void onResume() {
         super.onResume();
         mCamera.onResume();
+        Toast.makeText(getApplicationContext(), "resumed", Toast.LENGTH_SHORT).show();
 
 
     }
@@ -117,13 +125,15 @@ public class ActivityCamera extends Activity implements OnSeekBarChangeListener,
     protected void onPause() {
         mCamera.onPause();
         super.onPause();
+        Toast.makeText(getApplicationContext(), "paused", Toast.LENGTH_SHORT).show();
     }
+
 
     @Override
     public void onClick(final View v) {
 
-        switch (v.getId()) {
 
+        switch (v.getId()) {
 
 
 
@@ -272,30 +282,6 @@ public class ActivityCamera extends Activity implements OnSeekBarChangeListener,
         return mediaFile;
     }
 
-    private void switchFilterTo(final GPUImageFilter filter) {
-        if (mFilter == null
-                || (filter != null && !mFilter.getClass().equals(filter.getClass()))) {
-            mFilter = filter;
-            mGPUImage.setFilter(mFilter);
-            mFilterAdjuster = new GPUImageFilterTools.FilterAdjuster(mFilter);
-        }
-    }
-
-    @Override
-    public void onProgressChanged(final SeekBar seekBar, final int progress,
-                                  final boolean fromUser) {
-        if (mFilterAdjuster != null) {
-            mFilterAdjuster.adjust(progress);
-        }
-    }
-
-    @Override
-    public void onStartTrackingTouch(final SeekBar seekBar) {
-    }
-
-    @Override
-    public void onStopTrackingTouch(final SeekBar seekBar) {
-    }
 
     private class CameraLoader {
 
@@ -303,6 +289,11 @@ public class ActivityCamera extends Activity implements OnSeekBarChangeListener,
         private Camera mCameraInstance;
 
         public void onResume() {
+            if(frontCamera){
+                mCurrentCameraId=1;
+                flash.setImageResource(0);
+                flashShadow.setImageResource(0);
+            }
             setUpCamera(mCurrentCameraId);
         }
 
@@ -313,8 +304,8 @@ public class ActivityCamera extends Activity implements OnSeekBarChangeListener,
         public void switchCamera() {
             releaseCamera();
             mCurrentCameraId = (mCurrentCameraId + 1) % mCameraHelper.getNumberOfCameras();
-
             setUpCamera(mCurrentCameraId);
+            compass.changeCam();
 
         }
 
