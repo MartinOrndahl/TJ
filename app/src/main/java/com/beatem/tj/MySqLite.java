@@ -16,13 +16,13 @@ public class MySqLite extends SQLiteOpenHelper {
     private SQLiteDatabase putAllDatabase;
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "traveljournal";
-    private static final String CREATE_LOCATIONS_TABLE= "create table Location(\n" +
-            "longditud float not null,\n" +
+    private static final String CREATE_LOCATIONS_TABLE= "create table Locations(\n" +
+            "longditude float not null,\n" +
             "latitude float not null,\n" +
             "trip varchar(50) not null,\n" +
             "text varchar(300),\n" +
             "picturepath varchar(300) not null,\n" +
-            "primary key(landitude,latitude)\n" +
+            "primary key(longditude,latitude)\n" +
             ");";
 
     private static final String TABLE_LOCATIONS = "Locations";
@@ -99,7 +99,7 @@ public class MySqLite extends SQLiteOpenHelper {
         Cursor cursor = db.query(
                 TABLE_LOCATIONS,             //table
                 LOCATION_COLUMNS,            //column names
-                "*",    //selections
+                null,    //selections
                 null, //selections args
                 null,                      //group by
                 null,                      //having

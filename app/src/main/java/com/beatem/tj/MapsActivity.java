@@ -67,6 +67,16 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         permission = false;
 
         polygon = new PolygonOptions().geodesic(true);
+        if(!SaveSharedPreferences.getFirstStart(getApplicationContext())){
+            //TODO:lägg till en trip med bilder i databasen.
+            MySqLite db = new MySqLite(getApplicationContext());
+            db.addLocation(new MyLocation(10,20,"Australien","test","bildpath här"));
+            db.addLocation(new MyLocation(10,25,"Australien","test","bildpath här"));
+            db.addLocation(new MyLocation(11,26,"Australien","test","bildpath här"));
+            db.addLocation(new MyLocation(15,18,"Australien","test","bildpath här"));
+            SaveSharedPreferences.setStartBefore(getApplicationContext(),true);
+        }
+        getTrips();
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
@@ -197,16 +207,14 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     public synchronized void uppdateMap() {
         if (mMapready) {
-            //TODO: fixa
+
             mMap.clear();
-            /**
-            mMap.addPolyline(new PolylineOptions().addAll(locations));
-            for (LatLng l : locations) {
-                mMap.addMarker(new MarkerOptions().position(l));
+            ArrayList<LatLng> polylist = new ArrayList<LatLng>();
+            for (MyLocation location : locations) {
+                mMap.addMarker(new MarkerOptions().position(location.getLatlng()));
+                polylist.add(location.getLatlng());
             }
-             **/
-
-
+            mMap.addPolyline(new PolylineOptions().addAll(polylist));
         }
     }
 
@@ -260,6 +268,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         double smalestLong = 0;
         int log = 0;
         double largestlog;
+        //TODO: Få denna att faktist fungera....
         if (locations!=null&&locations.size()>0) {
             largestLat = locations.get(0).getLatitude();
             smalestLat = locations.get(0).getLatitude();
@@ -278,7 +287,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             LatLngBounds bounds = new LatLngBounds(new LatLng(smalestLat,smalestLong),new LatLng(largestLat,largestLong));
 
-            mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds,100));
+            mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds,300));
+
             mMap.moveCamera(CameraUpdateFactory.newLatLng(bounds.getCenter()));
         }else{
             mMap.moveCamera(CameraUpdateFactory.newLatLng(currentlocation));
