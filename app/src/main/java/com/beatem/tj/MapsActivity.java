@@ -50,7 +50,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private boolean mMapready, permission, zoomEnabled, galleryCreated;
     private final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 36;
     private PolygonOptions polygon;
-    private ArrayList<LatLng> locations;
+    private ArrayList<MyLocation> locations;
     private LocationListener locationListener;
     private SensorManager mSensorManager;
     private boolean moveWithSensor = true;
@@ -63,7 +63,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         super.onCreate(savedInstanceState);
         zoomEnabled = false;
         permission = false;
-        locations = new ArrayList<LatLng>();
+
         polygon = new PolygonOptions().geodesic(true);
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -110,10 +110,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         setSupportActionBar(toolbar);
 
 
-        locations.add(new LatLng(-34, 151));
-        locations.add(new LatLng(-34, 147));
-        locations.add(new LatLng(-37, 130));
-        locations.add(new LatLng(-20, 120));
+
 
         mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -141,6 +138,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
 
+    }
+    public void getTrips(){
+        MySqLite db = new MySqLite(getApplicationContext());
+        locations = db.getLocations();
     }
 
     public synchronized void GpsListniner(boolean onoff) {
@@ -170,18 +171,22 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
             }
+            //TODO:Fixa
+           /**
             mMap.addPolyline(new PolylineOptions().addAll(locations));
             for (LatLng l : locations) {
 
                 mMap.addMarker(new MarkerOptions().position(l));
 
             }
+            **/
 
         }
     }
 
     public synchronized void addLocationMarker(LatLng pos) {
-    locations.add(pos);
+    //TODO:fixa
+        //locations.add(pos);
     mMap.addMarker(new MarkerOptions().position(pos));
 
 
@@ -189,12 +194,14 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     public synchronized void uppdateMap() {
         if (mMapready) {
-
+            //TODO: fixa
             mMap.clear();
+            /**
             mMap.addPolyline(new PolylineOptions().addAll(locations));
             for (LatLng l : locations) {
                 mMap.addMarker(new MarkerOptions().position(l));
             }
+             **/
 
 
         }
@@ -251,19 +258,19 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         int log = 0;
         double largestlog;
         if (locations.size()>0) {
-            largestLat = locations.get(0).latitude;
-            smalestLat = locations.get(0).latitude;
-            smalestLong = locations.get(0).longitude;
-            largestLong = locations.get(0).longitude;
+            largestLat = locations.get(0).getLatitude();
+            smalestLat = locations.get(0).getLatitude();
+            smalestLong = locations.get(0).getLongditude();
+            largestLong = locations.get(0).getLongditude();
 
             for (int i = 0; i < locations.size(); i++) {
-                if (largestLat<locations.get(i).latitude){largestLat = locations.get(i).latitude;}
-                if (smalestLat>locations.get(i).latitude){ smalestLat = locations.get(i).latitude;}
-                if (largestLong<locations.get(i).longitude){ largestLong = locations.get(i).longitude;}
-                if (smalestLong>locations.get(i).longitude){ smalestLong = locations.get(i).longitude;}
+                if (largestLat<locations.get(i).getLatitude()){largestLat = locations.get(i).getLatitude();}
+                if (smalestLat>locations.get(i).getLatitude()){ smalestLat = locations.get(i).getLatitude();}
+                if (largestLong<locations.get(i).getLongditude()){ largestLong = locations.get(i).getLongditude();}
+                if (smalestLong>locations.get(i).getLongditude()){ smalestLong = locations.get(i).getLongditude();}
 
-                lat += locations.get(i).latitude;
-                log += locations.get(i).longitude;
+                lat += locations.get(i).getLatitude();
+                log += locations.get(i).getLongditude();
             }
 
             LatLngBounds bounds = new LatLngBounds(new LatLng(smalestLat,smalestLong),new LatLng(largestLat,largestLong));

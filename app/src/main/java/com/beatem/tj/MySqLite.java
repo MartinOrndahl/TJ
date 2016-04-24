@@ -31,7 +31,7 @@ public class MySqLite extends SQLiteOpenHelper {
     private static final String VAR_PICTUREPATH = "picturepath";
     private static final String VAR_TRIP = "trip";
     private static final String VAR_TEXT = "text";
-    private static final String[] LOCATION_COLUMNS = {KEY_LONGDITUDE,KEY_LATITUDE,VAR_PICTUREPATH,VAR_TEXT};
+    private static final String[] LOCATION_COLUMNS = {KEY_LONGDITUDE,KEY_LATITUDE,VAR_TRIP,VAR_PICTUREPATH,VAR_TEXT};
 
     public MySqLite(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -57,7 +57,7 @@ public class MySqLite extends SQLiteOpenHelper {
      **/
 
 
-    public synchronized Boolean addLocation(Location location) {
+    public synchronized Boolean addLocation(MyLocation location) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(KEY_LONGDITUDE, location.getLongditude());
@@ -70,7 +70,7 @@ public class MySqLite extends SQLiteOpenHelper {
         return inserted;
     }
 
-    public synchronized Location getLocation(float longditude, float latitude) {
+    public synchronized MyLocation getLocation(float longditude, float latitude) {
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.query(
                 TABLE_LOCATIONS,             //table
@@ -85,21 +85,22 @@ public class MySqLite extends SQLiteOpenHelper {
         if(cursor != null) {
             cursor.moveToFirst();
         }
-        Location location = new Location(Float.valueOf(cursor.getString(0)), Float.valueOf(cursor.getString(1)), cursor.getString(2), cursor.getString(3),cursor.getString(4));
+        MyLocation location = new MyLocation(Float.valueOf(cursor.getString(0)), Float.valueOf(cursor.getString(1)), cursor.getString(2), cursor.getString(3),cursor.getString(4));
         db.close();
         cursor.close();
 
         return location;
     }
 
-    public synchronized ArrayList<Location> getLocations(float longditude, float latitude) {
+    public synchronized ArrayList<MyLocation> getLocations() {
+        //TODO: testa ifal denna fungerar
         SQLiteDatabase db = this.getWritableDatabase();
-        ArrayList<Location> locations = new ArrayList<Location>();
+        ArrayList<MyLocation> locations = new ArrayList<MyLocation>();
         Cursor cursor = db.query(
                 TABLE_LOCATIONS,             //table
                 LOCATION_COLUMNS,            //column names
-                KEY_LONGDITUDE + " = ? AND " + KEY_LATITUDE + "= ?",    //selections
-                new String[] { longditude+"",latitude+"" }, //selections args
+                "*",    //selections
+                null, //selections args
                 null,                      //group by
                 null,                      //having
                 null,                      //order by
@@ -107,7 +108,7 @@ public class MySqLite extends SQLiteOpenHelper {
 
         if(cursor.moveToFirst()){
             do{
-                Location location = new Location(Float.valueOf(cursor.getString(0)), Float.valueOf(cursor.getString(1)), cursor.getString(2), cursor.getString(3),cursor.getString(4));
+                MyLocation location = new MyLocation(Float.valueOf(cursor.getString(0)), Float.valueOf(cursor.getString(1)), cursor.getString(2), cursor.getString(3),cursor.getString(4));
                 locations.add(location);
             } while(cursor.moveToNext());
         }
