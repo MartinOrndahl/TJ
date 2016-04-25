@@ -5,38 +5,42 @@
     android:background="@android:color/transparent"
     tools:context=".MainActivity">
 
-    <ImageView
-        android:layout_centerInParent="true"
-        android:src="@drawable/plane"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:id="@+id/mouse" />
-
     <RelativeLayout
-        android:layout_centerInParent="true"
+        android:id="@+id/planeLayout"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        >
 
         <ImageView
+            android:id="@+id/mouse"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_marginBottom="200dp"
             android:layout_centerInParent="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/globe1"
-            android:id="@+id/cat" />
+            android:src="@drawable/planeplaneplane" />
 
-        <com.example.ludvig.catloadingview.GraduallyTextView
-            android:id="@+id/graduallyTextView"
-            android:textSize="15sp"
-            android:textColor="#000000"
-            android:text="L O A D I N G ..."
+
+        <ImageView
+            android:id="@+id/cat"
             android:layout_width="110dp"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true" />
-
-
-
+            android:layout_height="110dp"
+            android:layout_centerInParent="true"
+            android:src="@drawable/globe2" />
 
     </RelativeLayout>
 
+    <com.beatem.tj.GraduallyTextView
+        android:id="@+id/graduallyTextView"
+        android:layout_width="110dp"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:text="L O A D I N G ..."
+        android:textColor="#000000"
+        android:textSize="15sp" />
+
+
 </RelativeLayout>
+

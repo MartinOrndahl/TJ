@@ -8,8 +8,10 @@
     android:clipToPadding="false"
     android:clipChildren="false"
     tools:context="com.beatem.tj.MainActivity"
-    android:background="#ffffff">
+    android:background="#67b5be">
+
 
     <include layout="@layout/content_main"/>
+
 
 </android.support.design.widget.CoordinatorLayout>

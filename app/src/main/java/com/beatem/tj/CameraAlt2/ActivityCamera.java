@@ -68,7 +68,6 @@ public class ActivityCamera extends Activity implements OnClickListener {
         activateClickListener();
 
 
-
     }
 
     private void activateClickListener() {
@@ -136,10 +135,8 @@ public class ActivityCamera extends Activity implements OnClickListener {
         switch (v.getId()) {
 
 
-
             case R.id.button_capture:
-                if (mCamera.mCameraInstance.getParameters().getFocusMode().equals(
-                        Parameters.FOCUS_MODE_CONTINUOUS_PICTURE)) {
+                if (mCamera.mCameraInstance.getParameters().getFocusMode().equals(Parameters.FOCUS_MODE_CONTINUOUS_PICTURE)) {
 
                     takePicture();
                 } else {
@@ -289,8 +286,8 @@ public class ActivityCamera extends Activity implements OnClickListener {
         private Camera mCameraInstance;
 
         public void onResume() {
-            if(frontCamera){
-                mCurrentCameraId=1;
+            if (frontCamera) {
+                mCurrentCameraId = 1;
                 flash.setImageResource(0);
                 flashShadow.setImageResource(0);
             }
@@ -312,8 +309,6 @@ public class ActivityCamera extends Activity implements OnClickListener {
         private void setUpCamera(final int id) {
             mCameraInstance = getCameraInstance(id);
             Parameters parameters = mCameraInstance.getParameters();
-            // TODO adjust by getting supportedPreviewSizes and then choosing
-            // the best one for screen size (best fill screen)
             if (parameters.getSupportedFocusModes().contains(
                     Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE)) {
                 parameters.setFocusMode(Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);

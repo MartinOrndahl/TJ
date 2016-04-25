@@ -13,7 +13,6 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import java.io.File;
 import java.util.ArrayList;
 
 
@@ -60,7 +59,7 @@ public class GalleryFragment extends Fragment {
         public ImageAdapter(Context c)
         {
             context = c;
-            imageIDs = makeAlbums();
+            //imageIDs = makeAlbums();
         }
 
         //---returns the number of images---
