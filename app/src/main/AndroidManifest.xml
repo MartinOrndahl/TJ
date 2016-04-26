@@ -52,6 +52,11 @@
             </intent-filter>
 
 
+
+        </activity>
+
+        <activity android:name=".Filters.ActivityGallery" android:screenOrientation="portrait">
+
         </activity>
         <activity
             android:name=".Camera.CameraActivity"

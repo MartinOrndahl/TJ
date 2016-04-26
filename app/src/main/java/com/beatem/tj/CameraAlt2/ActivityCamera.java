@@ -25,7 +25,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.beatem.tj.ImageViewingActivity;
+import com.beatem.tj.Filters.ActivityGallery;
 import com.beatem.tj.R;
 
 import java.io.File;
@@ -228,7 +228,7 @@ public class ActivityCamera extends Activity implements OnClickListener {
                                 });
 
 
-                        Intent intent = new Intent(getApplicationContext(), ImageViewingActivity.class);
+                        Intent intent = new Intent(getApplicationContext(), ActivityGallery.class);
                         intent.putExtra("file_name", pictureFile.getAbsolutePath());
                         if (frontCamera) {
                             intent.putExtra("camera_type", "front");
