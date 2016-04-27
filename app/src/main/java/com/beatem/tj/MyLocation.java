@@ -69,7 +69,7 @@ public class MyLocation implements Parcelable{
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeStringArray(new String[] {this.latitude+"",
                 this.longditude+"",
-                this.text,this.picpath,this.trip});
+                this.trip,this.text,this.picpath});
     }
     public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
         public MyLocation createFromParcel(Parcel in) {

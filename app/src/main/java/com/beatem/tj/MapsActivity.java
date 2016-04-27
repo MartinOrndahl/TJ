@@ -29,6 +29,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.beatem.tj.CameraAlt2.ActivityCamera;
@@ -367,7 +368,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             public boolean onMarkerClick(final Marker marker) {
                 for (MyLocation location : locations) {
                     if (marker.getPosition().equals(location.getLatlng())) {
-                        Toast.makeText(getApplicationContext(),"detta är rätt "+location.getPicpath(),Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(),location.getPicpath(),Toast.LENGTH_SHORT).show();
 
                         Intent i = new Intent(getApplicationContext(), ActivityGallery.class);
                         i.putExtra("location",location);
@@ -527,7 +528,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    // Do nothing
+                    Button start = (Button) findViewById(R.id.end_trip_button);
+                    start.setText("Start new trip");
                     dialog.dismiss();
                 }
             });
