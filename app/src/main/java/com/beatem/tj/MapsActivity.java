@@ -121,6 +121,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             return;
         }
         setContentView(R.layout.activity_nav_drawer);
+        CatLoadingView cat= new CatLoadingView();
+        android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        cat.show(fragmentTransaction,"");
+
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -297,7 +301,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         double smalestLong = 0;
         int log = 0;
         double largestlog;
-        //TODO: Få denna att faktist fungera....
         if (locations!=null&&locations.size()>0) {
             largestLat = locations.get(0).getLatitude();
             smalestLat = locations.get(0).getLatitude();
@@ -352,11 +355,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 //TODO:Implementera vad som händer när man klickar på en marker
                 for (MyLocation location : locations) {
                     if (marker.getPosition().equals(location.getLatlng())) {
-                        //TODO: öppna bilden.
+                        Toast.makeText(getApplicationContext(),"detta är rätt "+location.getLatlng().toString(),Toast.LENGTH_SHORT).show();
 
+                        Intent i = new Intent();
 
+                        return true;
                     }
-                    return true;
+
                 }
                 return false;
             }
@@ -479,6 +484,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
             fragmentTransaction.add(R.id.fragment_container, galleryFragment);
             fragmentTransaction.commit();
+
+
 
 
 
