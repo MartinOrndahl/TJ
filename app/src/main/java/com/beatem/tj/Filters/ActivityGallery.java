@@ -19,6 +19,7 @@ package com.beatem.tj.Filters;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -176,34 +177,32 @@ public class ActivityGallery extends Activity implements OnClickListener, OnPict
             if (imgFile.exists()) {
                 path = imgFile.getAbsolutePath();
                 Bitmap myBitmap = BitmapFactory.decodeFile(path);
-                cameraType=getIntent().getStringExtra("camera_type").toString();
+                cameraType = getIntent().getStringExtra("camera_type").toString();
                 FrameLayout.LayoutParams imageParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
 
                 if (cameraType.equals("front")) {
-                    Toast.makeText(getApplicationContext(), "front", Toast.LENGTH_SHORT).show();
+                    Matrix m = new Matrix();
+                    m.setScale(-1, 1);
+                    WindowManager wm = (WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE); // the results will be higher than using the activity context object or the getWindowManager() shortcut
+                    wm.getDefaultDisplay().getMetrics(displayMetrics);
+                    int screenWidth = displayMetrics.heightPixels;
 
-                    mGPUImageView.setImage(RotateBitmap(myBitmap, 270)); //Blir spegelvänd..
+
+                    myBitmap = Bitmap.createBitmap(myBitmap, 0, 0, myBitmap.getWidth(), myBitmap.getHeight(), m, false);
+                    myBitmap.setDensity(DisplayMetrics.DENSITY_DEFAULT);
 
 
-                } else {
 
-                    mGPUImageView.setImage(RotateBitmap(myBitmap, 90));
 
                 }
-               /* String[] info = path.split("%");
-                date.setText(handleDate(info[1]));
-                dateValue = handleDate(info[1]);
-                cityName.setText(info[2]);
-                cityNameValue = info[2];
-                direction.setText(info[3]);
-                directionValue = info[3];*/
+
+                mGPUImageView.setImage(RotateBitmap(myBitmap, 90));
+
 
             } else {
                 Toast.makeText(this, "Couldn't find image", Toast.LENGTH_SHORT).show();
             }
         }
-
-
 
 
         filters.addFilter("1977", FilterType.I_1977);
@@ -664,7 +663,6 @@ ställer in vilket mode vi befinner oss i
     public void startCamera() {
         startActivity(new Intent(this, ActivityCamera.class).putExtra("camType", cameraType));
     }
-
 
 
     private void deleteImageAction() {
