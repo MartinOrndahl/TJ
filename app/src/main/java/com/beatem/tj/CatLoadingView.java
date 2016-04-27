@@ -34,8 +34,6 @@ public class CatLoadingView extends DialogFragment {
 
     @Override public Dialog onCreateDialog(Bundle savedInstanceState) {
         if (mDialog == null) {
-            //Remove title bar
-            //
 
             //Remove notification bar
 
