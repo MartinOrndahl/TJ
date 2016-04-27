@@ -49,14 +49,13 @@ public class MyLocation implements Parcelable{
     //-------Parcable delen-----------
 
     public MyLocation(Parcel in){
-        String[] data = new String[3];
 
-        in.readStringArray(data);
-        this.latitude = Float.valueOf(data[0]);
-        this.longditude = Float.valueOf(data[1]);
-        this.text = data[2];
-        this.picpath = data[3];
-        this.trip = data[4];
+        this.longditude = in.readFloat();
+        this.latitude = in.readFloat();
+        this.trip = in.readString();
+        this.text = in.readString();
+        this.picpath = in.readString();
+
         latlng = new LatLng(latitude,longditude);
     }
 

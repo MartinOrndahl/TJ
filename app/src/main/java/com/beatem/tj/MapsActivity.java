@@ -67,6 +67,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private GalleryFragment galleryFragment;
     private SupportMapFragment mapFragment;
     private MapFragment mapFragment1;
+    private android.support.v4.app.FragmentTransaction fragmentTransactionCat;
+    private CatLoadingView cat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,8 +77,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         permission = false;
 
         polygon = new PolygonOptions().geodesic(true);
+        cat= new CatLoadingView();
+        setContentView(R.layout.activity_nav_drawer);
+        fragmentTransactionCat = getSupportFragmentManager().beginTransaction();
+        cat.show(fragmentTransactionCat,"");
+
         if(!SaveSharedPreferences.getFirstStart(getApplicationContext())){
-            //TODO:lägg till en trip med bilder i databasen.
+            //TODO:testa ifall bild tilläget fungerade.
             MySqLite db = new MySqLite(getApplicationContext());
             Bitmap bm = BitmapFactory.decodeResource(getResources(),R.drawable.adventure);
             String root = Environment.getExternalStorageDirectory().toString();
@@ -87,7 +94,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             n = generator.nextInt(n);
             String fname = "Image-" + n + ".jpg";
             File file = new File(myDir, fname);
-            Log.i("yey", "" + file);
+
             if (file.exists())
                 file.delete();
             try {
@@ -99,12 +106,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 e.printStackTrace();
             }
 
-            Log.i("test bild", file.getAbsolutePath());
-            db.addLocation(new MyLocation(10,20,"Australien","test",file.getAbsolutePath()));
-            db.addLocation(new MyLocation(10,25,"Australien","test",file.getAbsolutePath()));
-            db.addLocation(new MyLocation(11,26,"Australien","test",file.getAbsolutePath()));
-            db.addLocation(new MyLocation(15,18,"Australien","test",file.getAbsolutePath()));
+
+            db.addLocation(new MyLocation(10,20,"Australien","t",file.getAbsolutePath()));
+            db.addLocation(new MyLocation(10,25,"Australien","test1231",file.getAbsolutePath()));
+            db.addLocation(new MyLocation(11,26,"Australien","testfgd",file.getAbsolutePath()));
+            db.addLocation(new MyLocation(15,18,"Australien","testare","fuck this shit"));
             SaveSharedPreferences.setStartBefore(getApplicationContext(),true);
+            Toast.makeText(getApplicationContext(), file.getAbsolutePath()+ "yeeeey",Toast.LENGTH_SHORT).show();
         }
         getTrips();
 
@@ -121,10 +129,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
             return;
         }
-        setContentView(R.layout.activity_nav_drawer);
-        CatLoadingView cat= new CatLoadingView();
-        android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        cat.show(fragmentTransaction,"");
+
+
 
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -181,13 +187,19 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         navigationView.setNavigationItemSelectedListener(this);
 
        galleryFragment = new GalleryFragment();
-
-
+        removeCat();
 
     }
+
+
+
     public void getTrips(){
         MySqLite db = new MySqLite(getApplicationContext());
         locations = db.getLocations();
+    }
+    public void removeCat(){
+        fragmentTransactionCat.remove(cat);
+
     }
 
     public synchronized void GpsListniner(boolean onoff) {
@@ -349,16 +361,17 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
 
+
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(final Marker marker) {
                 for (MyLocation location : locations) {
                     if (marker.getPosition().equals(location.getLatlng())) {
-                        Toast.makeText(getApplicationContext(),"detta är rätt "+location.getLatlng().toString(),Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(),"detta är rätt "+location.getPicpath(),Toast.LENGTH_SHORT).show();
 
                         Intent i = new Intent(getApplicationContext(), ActivityGallery.class);
                         i.putExtra("location",location);
-                        startActivity(i);
+                        //startActivity(i);
 
                         return true;
                     }
@@ -377,7 +390,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             public void onMapLoaded() {
                 uppdateMap();
                 uppdateCurrentLocation();
-                worldMapmode();
+                currentTripMode();
+                removeCat();
 
             }
         });
