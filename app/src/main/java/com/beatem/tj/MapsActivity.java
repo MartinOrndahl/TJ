@@ -508,7 +508,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             builder.setIcon(getDrawable(R.drawable.worldmap));
             builder.setMessage("Are you sure you want to end this trip?");
 
-            builder.setNegativeButton("END", new DialogInterface.OnClickListener() {
+            builder.setNegativeButton("YES", new DialogInterface.OnClickListener() {
 
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
