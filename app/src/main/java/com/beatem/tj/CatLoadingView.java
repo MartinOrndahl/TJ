@@ -46,6 +46,7 @@ public class CatLoadingView extends DialogFragment {
             mDialog.getWindow().setGravity(Gravity.CENTER);
 
 
+
             operatingAnim = new RotateAnimation(360f, 0f,
                     Animation.RELATIVE_TO_SELF, 0.5f,
                     Animation.RELATIVE_TO_SELF, 0.5f);
