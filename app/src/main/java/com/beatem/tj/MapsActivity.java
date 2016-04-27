@@ -32,6 +32,7 @@ import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.beatem.tj.CameraAlt2.ActivityCamera;
+import com.beatem.tj.Filters.ActivityGallery;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -121,6 +122,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             return;
         }
         setContentView(R.layout.activity_nav_drawer);
+        CatLoadingView cat= new CatLoadingView();
+        android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        cat.show(fragmentTransaction,"");
+
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -297,7 +302,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         double smalestLong = 0;
         int log = 0;
         double largestlog;
-        //TODO: Få denna att faktist fungera....
         if (locations!=null&&locations.size()>0) {
             largestLat = locations.get(0).getLatitude();
             smalestLat = locations.get(0).getLatitude();
@@ -348,15 +352,17 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(final Marker marker) {
-                Toast.makeText(getApplicationContext(), "Yey detta fungerade", Toast.LENGTH_SHORT).show();
-                //TODO:Implementera vad som händer när man klickar på en marker
                 for (MyLocation location : locations) {
                     if (marker.getPosition().equals(location.getLatlng())) {
-                        //TODO: öppna bilden.
+                        Toast.makeText(getApplicationContext(),"detta är rätt "+location.getLatlng().toString(),Toast.LENGTH_SHORT).show();
 
+                        Intent i = new Intent(getApplicationContext(), ActivityGallery.class);
+                        i.putExtra("location",location);
+                        startActivity(i);
 
+                        return true;
                     }
-                    return true;
+
                 }
                 return false;
             }
@@ -482,6 +488,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
 
+
+
         } else if (id == R.id.map_button) {
 
             worldMapmode();
@@ -501,7 +509,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             builder.setIcon(getDrawable(R.drawable.worldmap));
             builder.setMessage("Are you sure you want to end this trip?");
 
-            builder.setNegativeButton("END", new DialogInterface.OnClickListener() {
+            builder.setNegativeButton("YES", new DialogInterface.OnClickListener() {
 
                 @Override
                 public void onClick(DialogInterface dialog, int which) {

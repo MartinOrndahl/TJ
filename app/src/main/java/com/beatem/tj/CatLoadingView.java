@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
@@ -32,10 +34,17 @@ public class CatLoadingView extends DialogFragment {
 
     @Override public Dialog onCreateDialog(Bundle savedInstanceState) {
         if (mDialog == null) {
+            //Remove title bar
+            mDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+            //Remove notification bar
+            mDialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
             mDialog = new Dialog(getActivity(), R.style.cart_dialog);
             mDialog.setContentView(R.layout.catloading_main);
             mDialog.setCanceledOnTouchOutside(true);
             mDialog.getWindow().setGravity(Gravity.CENTER);
+
 
 
             operatingAnim = new RotateAnimation(360f, 0f,
