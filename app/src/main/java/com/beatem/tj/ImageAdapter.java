@@ -1,16 +1,12 @@
 package com.beatem.tj;
 
 import android.content.Context;
-import android.media.Image;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
-import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -54,6 +50,8 @@ public class ImageAdapter extends BaseAdapter {
 
         ImageView img = (ImageView)convertView.findViewById(R.id.image_model);
         img.setImageResource(images.get(position).getImage());
+        TextView albumName =(TextView)convertView.findViewById(R.id.name_model);
+        albumName.setText(images.get(position).getName());
 
 
         return convertView;

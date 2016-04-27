@@ -1,6 +1,30 @@
 <resources>
     <string name="app_name">TJ</string>
 
+
+    <string name="title_activity_activity_main">GPUImage Sample</string>
+    <string name="text_filter_normal">原图</string>
+    <string name="text_filter_meifu">自然美肌</string>
+    <string name="text_filter_meishi">美食</string>
+    <string name="text_filter_amaro">流年</string>
+    <string name="text_filter_rise">森系</string>
+    <string name="text_filter_hudson">胶片</string>
+    <string name="text_filter_xproii">新潮</string>
+    <string name="text_filter_sierra">清新</string>
+    <string name="text_filter_lomofi">个性</string>
+    <string name="text_filter_early_bird">怡尚</string>
+    <string name="text_filter_sutro">摩登</string>
+    <string name="text_filter_toaster">绚丽</string>
+    <string name="text_filter_brannan">淡雅</string>
+    <string name="text_filter_inkwell">黑白</string>
+    <string name="text_filter_walden">日系</string>
+    <string name="text_filter_hefe">优格</string>
+    <string name="text_filter_valencia">优雅</string>
+    <string name="text_filter_nashville">复古</string>
+    <string name="text_filter_in1977">创新</string>
+    <string name="text_filter_lord_kelvin">回忆</string>
+
+
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="title_activity_maps">Map</string>
@@ -11,15 +35,5 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
-    <style name="cart_dialog"
-        parent="@android:style/Theme.Holo.Light.Dialog">
-        <item name="android:windowFrame">@null</item>
-        <item name="android:windowIsFloating">true</item>
-        <item name="android:windowIsTranslucent">true</item>
-        <item name="android:windowNoTitle">true</item>
-        <item name="android:background">@android:color/transparent</item>
-        <item name="android:windowBackground">@android:color/transparent</item>
-        <item name="android:backgroundDimEnabled">true</item>
-        <item name="android:backgroundDimAmount">0.6</item>
-    </style>
+
 </resources>

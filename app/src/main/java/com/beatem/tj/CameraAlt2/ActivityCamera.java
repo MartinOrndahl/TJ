@@ -25,7 +25,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.beatem.tj.ImageViewingActivity;
+import com.beatem.tj.Filters.ActivityGallery;
 import com.beatem.tj.R;
 
 import java.io.File;
@@ -66,7 +66,6 @@ public class ActivityCamera extends Activity implements OnClickListener {
         Toast.makeText(getApplicationContext(), "fresh", Toast.LENGTH_SHORT).show();
         init();
         activateClickListener();
-
 
 
     }
@@ -136,10 +135,8 @@ public class ActivityCamera extends Activity implements OnClickListener {
         switch (v.getId()) {
 
 
-
             case R.id.button_capture:
-                if (mCamera.mCameraInstance.getParameters().getFocusMode().equals(
-                        Parameters.FOCUS_MODE_CONTINUOUS_PICTURE)) {
+                if (mCamera.mCameraInstance.getParameters().getFocusMode().equals(Parameters.FOCUS_MODE_CONTINUOUS_PICTURE)) {
 
                     takePicture();
                 } else {
@@ -231,7 +228,7 @@ public class ActivityCamera extends Activity implements OnClickListener {
                                 });
 
 
-                        Intent intent = new Intent(getApplicationContext(), ImageViewingActivity.class);
+                        Intent intent = new Intent(getApplicationContext(), ActivityGallery.class);
                         intent.putExtra("file_name", pictureFile.getAbsolutePath());
                         if (frontCamera) {
                             intent.putExtra("camera_type", "front");
@@ -289,8 +286,8 @@ public class ActivityCamera extends Activity implements OnClickListener {
         private Camera mCameraInstance;
 
         public void onResume() {
-            if(frontCamera){
-                mCurrentCameraId=1;
+            if (frontCamera) {
+                mCurrentCameraId = 1;
                 flash.setImageResource(0);
                 flashShadow.setImageResource(0);
             }
@@ -312,8 +309,6 @@ public class ActivityCamera extends Activity implements OnClickListener {
         private void setUpCamera(final int id) {
             mCameraInstance = getCameraInstance(id);
             Parameters parameters = mCameraInstance.getParameters();
-            // TODO adjust by getting supportedPreviewSizes and then choosing
-            // the best one for screen size (best fill screen)
             if (parameters.getSupportedFocusModes().contains(
                     Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE)) {
                 parameters.setFocusMode(Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);

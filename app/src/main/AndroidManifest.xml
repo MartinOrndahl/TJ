@@ -51,6 +51,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
+
+
+        </activity>
+
+        <activity android:name=".Filters.ActivityGallery" android:screenOrientation="portrait">
+
         </activity>
         <activity
             android:name=".Camera.CameraActivity"
@@ -82,6 +88,11 @@
             android:label="@string/title_activity_maps"
             android:theme="@style/AppTheme.NoActionBar">
 
+
+        </activity>
+        <activity android:name=".MainActivity"
+            android:label="mainActivity"
+            android:screenOrientation="portrait">
 
         </activity>
     </application>

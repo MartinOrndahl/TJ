@@ -1,9 +1,4 @@
 package com.beatem.tj;
-
-/**
- * Created by Martin on 2016-04-13.
- */
-
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Canvas;

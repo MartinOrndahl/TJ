@@ -8,4 +8,11 @@
         android:layout_height="wrap_content"
         android:id="@+id/image_model"
         android:background="@drawable/ic_menu_camera"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Name"
+        android:id="@+id/name_model" />
 </LinearLayout>

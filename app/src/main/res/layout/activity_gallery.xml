@@ -1,44 +1,600 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#000000"
     android:orientation="vertical">
 
+
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_height="match_parent">
 
         <jp.co.cyberagent.android.gpuimage.GPUImageView
             android:id="@+id/gpuimage"
-            android:layout_gravity="center"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <SeekBar
-            android:id="@+id/seekBar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:max="100" />
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:fitsSystemWindows="true" />
+
+
     </FrameLayout>
+
+    <TextView
+        android:id="@+id/main_direction"
+        style="@style/ImageText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_margin="16dp"
+        android:text="N" />
+
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal">
+        android:orientation="vertical"
+        android:padding="@dimen/defaultTextPaddingImage">
 
-        <Button
-            android:id="@+id/button_choose_filter"
+        <TextView
+            android:id="@+id/chosen_image_date"
+            style="@style/ImageText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Choose filter" />
+            android:text="24 Aug 2015"
 
-        <Button
-            android:id="@+id/button_save"
+            />
+
+        <TextView
+            android:id="@+id/cityName"
+            style="@style/ImageText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Save" />
+            android:text="Hawaii" />
+
     </LinearLayout>
 
-</LinearLayout>
+
+    <com.getbase.floatingactionbutton.FloatingActionsMenu
+        android:id="@+id/multiple_actions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+       android:layout_above="@+id/relativeLayout2"
+
+        fab:fab_addButtonColorNormal="#fff"
+        fab:fab_addButtonColorPressed="#fff"
+        fab:fab_addButtonPlusIconColor="#000"
+
+
+        >
+
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/action_pen2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fab:fab_colorNormal="#fff"
+            fab:fab_colorPressed="#fff"
+            fab:fab_icon="@drawable/vector_drawable_ic_mode_edit_black___px"
+            fab:fab_size="mini"
+
+            >
+
+
+        </com.getbase.floatingactionbutton.FloatingActionButton>
+
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/action_filter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fab:fab_colorNormal="#fff"
+            fab:fab_colorPressed="#fff"
+            fab:fab_icon="@drawable/vector_drawable_ic_filter_black___px"
+            fab:fab_size="mini"></com.getbase.floatingactionbutton.FloatingActionButton>
+
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/action_save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fab:fab_colorNormal="#fff"
+            fab:fab_colorPressed="#fff"
+            fab:fab_icon="@drawable/vector_drawable_ic_save_black___px"
+            fab:fab_size="mini"></com.getbase.floatingactionbutton.FloatingActionButton>
+
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/action_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fab:fab_colorNormal="#ef4242"
+            fab:fab_colorPressed="#ef4242"
+            fab:fab_icon="@drawable/vector_drawable_ic_delete_black___px"
+            fab:fab_size="mini"></com.getbase.floatingactionbutton.FloatingActionButton>
+    </com.getbase.floatingactionbutton.FloatingActionsMenu>
+
+    <RelativeLayout
+        android:id="@+id/filterLayout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_alignParentBottom="true"
+        android:background="#80000000">
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true">
+
+            <LinearLayout
+                android:id="@+id/images_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="5dp">
+
+                    <ImageView
+                        android:id="@+id/filter_normal"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:src="@drawable/filter_normal" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="Normal"
+                        android:textColor="#fff" />
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="5dp">
+
+                    <ImageView
+                        android:id="@+id/filter_in1977"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:src="@drawable/filter_in1977" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="1977"
+                        android:textColor="#fff" />
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="5dp">
+
+                    <ImageView
+                        android:id="@+id/filter_amaro"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:src="@drawable/filter_amaro" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="Amaro"
+                        android:textColor="#fff" />
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="5dp">
+
+                    <ImageView
+                        android:id="@+id/filter_brannan"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:src="@drawable/filter_brannan" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="Brannan"
+                        android:textColor="#fff" />
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="5dp">
+
+                    <ImageView
+                        android:id="@+id/filter_early_bird"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:src="@drawable/filter_early_bird" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="Early bird"
+                        android:textColor="#fff" />
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="5dp">
+
+                    <ImageView
+                        android:id="@+id/filter_hefe"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:src="@drawable/filter_hefe" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="Hefe"
+                        android:textColor="#fff" />
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="5dp">
+
+                    <ImageView
+                        android:id="@+id/filter_hudson"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:src="@drawable/filter_hudson" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="Hudson"
+                        android:textColor="#fff" />
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="5dp">
+
+                    <ImageView
+                        android:id="@+id/filter_inkwell"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:src="@drawable/filter_inkwell" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="Inkwell"
+                        android:textColor="#fff" />
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="5dp">
+
+                    <ImageView
+                        android:id="@+id/filter_lomofi"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:src="@drawable/filter_lomofi" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="Lomofi"
+                        android:textColor="#fff" />
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="5dp">
+
+                    <ImageView
+                        android:id="@+id/filter_lord_kelvin"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:src="@drawable/filter_lord_kelvin" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="Lord Kelvin"
+                        android:textColor="#fff" />
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="5dp">
+
+                    <ImageView
+                        android:id="@+id/filter_nashville"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:src="@drawable/filter_nashville" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="Nashville"
+                        android:textColor="#fff" />
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="5dp">
+
+                    <ImageView
+                        android:id="@+id/filter_rise"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:src="@drawable/filter_rise" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="Rise"
+                        android:textColor="#fff" />
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="5dp">
+
+                    <ImageView
+                        android:id="@+id/filter_sierra"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:src="@drawable/filter_sierra" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="Sierra"
+                        android:textColor="#fff" />
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="5dp">
+
+                    <ImageView
+                        android:id="@+id/filter_sutro"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:src="@drawable/filter_sutro" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="Sutro"
+                        android:textColor="#fff" />
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="5dp">
+
+                    <ImageView
+                        android:id="@+id/filter_toaster"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:src="@drawable/filter_toaster" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="Toaster"
+                        android:textColor="#fff" />
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="5dp">
+
+                    <ImageView
+                        android:id="@+id/filter_valencia"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:src="@drawable/filter_valencia" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="Valencia"
+                        android:textColor="#fff" />
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="5dp">
+
+                    <ImageView
+                        android:id="@+id/filter_walden"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:src="@drawable/filter_walden" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="Walden"
+                        android:textColor="#fff" />
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="5dp">
+
+                    <ImageView
+                        android:id="@+id/filter_xproii"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:src="@drawable/filter_xproii" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="Xproii"
+                        android:textColor="#fff" />
+
+
+                </LinearLayout>
+            </LinearLayout>
+
+
+        </HorizontalScrollView>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_alignParentBottom="true"
+        android:animateLayoutChanges="true"
+        android:background="#80000000">
+
+        <RelativeLayout
+            android:id="@+id/relativeLayout1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true">
+
+            <ImageButton
+                android:id="@+id/mic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:background="@null"
+                android:src="@drawable/vector_drawable_ic_mic_black___px" />
+
+            <ImageButton
+                android:id="@+id/info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_toRightOf="@+id/mic"
+                android:background="@null"
+                android:src="@drawable/vector_drawable_ic_info_outline_white___px" />
+
+
+            <TextView
+                android:id="@+id/hide2"
+                style="@style/ImageText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingTop="16dp"
+                android:text="Hide"
+                />
+        </RelativeLayout>
+
+
+        <EditText
+            android:id="@+id/editText"
+            style="@style/DescriptionText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/relativeLayout1"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:background="#00000000"
+            android:hint="Add your description here"
+            android:imeOptions="actionDone"
+            android:textColorHint="#fff"
+            android:textCursorDrawable="@null"
+
+            />
+
+
+    </RelativeLayout>
+
+</RelativeLayout>

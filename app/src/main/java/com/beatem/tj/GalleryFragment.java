@@ -2,24 +2,17 @@ package com.beatem.tj;
 
 
 import android.content.Context;
-import android.content.Intent;
-import android.media.Image;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import java.io.File;
 import java.util.ArrayList;
 
 
@@ -29,7 +22,8 @@ import java.util.ArrayList;
 public class GalleryFragment extends Fragment {
 
     private static GridView gridView;
-    private int[]imageIDs={R.mipmap.ic_launcher, R.mipmap.ic_launcher, R.mipmap.ic_launcher,R.mipmap.ic_launcher,R.mipmap.ic_launcher,R.mipmap.ic_launcher,R.mipmap.ic_launcher,R.mipmap.ic_launcher,R.mipmap.ic_launcher};
+    private int[]imageIDs;
+    private String[]name;
 
     public GalleryFragment() {
         // Required empty public constructor
@@ -65,6 +59,7 @@ public class GalleryFragment extends Fragment {
         public ImageAdapter(Context c)
         {
             context = c;
+            //imageIDs = makeAlbums();
         }
 
         //---returns the number of images---
@@ -96,6 +91,15 @@ public class GalleryFragment extends Fragment {
             imageView.setImageResource(imageIDs[position]);
             return imageView;
         }
+    }
+
+    private ArrayList<Images> getImages(){
+        ArrayList<Images>albumImages =new ArrayList<>();
+        albumImages.add(new Images(imageIDs[0], name[0]));
+
+
+
+        return albumImages;
     }
 
 }
