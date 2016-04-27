@@ -32,6 +32,7 @@ import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.beatem.tj.CameraAlt2.ActivityCamera;
+import com.beatem.tj.Filters.ActivityGallery;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -351,13 +352,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(final Marker marker) {
-                Toast.makeText(getApplicationContext(), "Yey detta fungerade", Toast.LENGTH_SHORT).show();
-                //TODO:Implementera vad som händer när man klickar på en marker
                 for (MyLocation location : locations) {
                     if (marker.getPosition().equals(location.getLatlng())) {
                         Toast.makeText(getApplicationContext(),"detta är rätt "+location.getLatlng().toString(),Toast.LENGTH_SHORT).show();
 
-                        Intent i = new Intent();
+                        Intent i = new Intent(getApplicationContext(), ActivityGallery.class);
+                        i.putExtra("location",location);
+                        startActivity(i);
 
                         return true;
                     }
