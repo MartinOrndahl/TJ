@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -13,6 +15,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.GravityCompat;
@@ -40,7 +43,11 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback,SensorEventListener,NavigationView.OnNavigationItemSelectedListener {
 
@@ -48,7 +55,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     Toolbar toolbar = null;
     private GoogleMap mMap;
     private LocationManager locationManager;
-    private LatLng currentlocation;
+    public static LatLng currentlocation;
     private boolean mMapready, permission, zoomEnabled, galleryCreated;
     private final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 36;
     private PolygonOptions polygon;
@@ -70,10 +77,32 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         if(!SaveSharedPreferences.getFirstStart(getApplicationContext())){
             //TODO:lägg till en trip med bilder i databasen.
             MySqLite db = new MySqLite(getApplicationContext());
-            db.addLocation(new MyLocation(10,20,"Australien","test","bildpath här"));
-            db.addLocation(new MyLocation(10,25,"Australien","test","bildpath här"));
-            db.addLocation(new MyLocation(11,26,"Australien","test","bildpath här"));
-            db.addLocation(new MyLocation(15,18,"Australien","test","bildpath här"));
+            Bitmap bm = BitmapFactory.decodeResource(getResources(),R.drawable.adventure);
+            String root = Environment.getExternalStorageDirectory().toString();
+            File myDir = new File(root + "/req_images");
+            myDir.mkdirs();
+            Random generator = new Random();
+            int n = 10000;
+            n = generator.nextInt(n);
+            String fname = "Image-" + n + ".jpg";
+            File file = new File(myDir, fname);
+            Log.i("yey", "" + file);
+            if (file.exists())
+                file.delete();
+            try {
+                FileOutputStream out = new FileOutputStream(file);
+                bm.compress(Bitmap.CompressFormat.JPEG, 90, out);
+                out.flush();
+                out.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            Log.i("test bild", file.getAbsolutePath());
+            db.addLocation(new MyLocation(10,20,"Australien","test",file.getAbsolutePath()));
+            db.addLocation(new MyLocation(10,25,"Australien","test",file.getAbsolutePath()));
+            db.addLocation(new MyLocation(11,26,"Australien","test",file.getAbsolutePath()));
+            db.addLocation(new MyLocation(15,18,"Australien","test",file.getAbsolutePath()));
             SaveSharedPreferences.setStartBefore(getApplicationContext(),true);
         }
         getTrips();
