@@ -205,7 +205,7 @@ public class ActivityGallery extends Activity implements OnClickListener, OnPict
 
 
 
-        filters.addFilter("default", FilterType.I_1977);
+
         filters.addFilter("1977", FilterType.I_1977);
         filters.addFilter("Amaro", FilterType.I_AMARO);
         filters.addFilter("Brannan", FilterType.I_BRANNAN);
@@ -216,7 +216,7 @@ public class ActivityGallery extends Activity implements OnClickListener, OnPict
         filters.addFilter("Lomo", FilterType.I_LOMO);
         filters.addFilter("LordKelvin", FilterType.I_LORDKELVIN);
         filters.addFilter("Nashville", FilterType.I_NASHVILLE);
-        filters.addFilter("Rise", FilterType.I_NASHVILLE);
+        filters.addFilter("Rise", FilterType.I_RISE);
         filters.addFilter("Sierra", FilterType.I_SIERRA);
         filters.addFilter("sutro", FilterType.I_SUTRO);
         filters.addFilter("Toaster", FilterType.I_TOASTER);
@@ -319,82 +319,82 @@ ställer in vilket mode vi befinner oss i
                 break;
 
             case R.id.filter_amaro:
-                filter = GPUImageFilterTools.createFilterForType(ActivityGallery.this, filters.filters.get(2));
+                filter = GPUImageFilterTools.createFilterForType(ActivityGallery.this, filters.filters.get(1));
                 switchFilterTo(filter);
                 break;
 
             case R.id.filter_brannan:
-                filter = GPUImageFilterTools.createFilterForType(ActivityGallery.this, filters.filters.get(3));
+                filter = GPUImageFilterTools.createFilterForType(ActivityGallery.this, filters.filters.get(2));
                 switchFilterTo(filter);
                 break;
 
             case R.id.filter_early_bird:
-                filter = GPUImageFilterTools.createFilterForType(ActivityGallery.this, filters.filters.get(4));
+                filter = GPUImageFilterTools.createFilterForType(ActivityGallery.this, filters.filters.get(3));
                 switchFilterTo(filter);
                 break;
 
             case R.id.filter_hefe:
-                filter = GPUImageFilterTools.createFilterForType(ActivityGallery.this, filters.filters.get(5));
+                filter = GPUImageFilterTools.createFilterForType(ActivityGallery.this, filters.filters.get(4));
                 switchFilterTo(filter);
                 break;
 
             case R.id.filter_hudson:
-                filter = GPUImageFilterTools.createFilterForType(ActivityGallery.this, filters.filters.get(6));
+                filter = GPUImageFilterTools.createFilterForType(ActivityGallery.this, filters.filters.get(5));
                 switchFilterTo(filter);
                 break;
 
             case R.id.filter_inkwell:
-                filter = GPUImageFilterTools.createFilterForType(ActivityGallery.this, filters.filters.get(7));
+                filter = GPUImageFilterTools.createFilterForType(ActivityGallery.this, filters.filters.get(6));
                 switchFilterTo(filter);
                 break;
 
             case R.id.filter_lomofi:
-                filter = GPUImageFilterTools.createFilterForType(ActivityGallery.this, filters.filters.get(8));
+                filter = GPUImageFilterTools.createFilterForType(ActivityGallery.this, filters.filters.get(7));
                 switchFilterTo(filter);
                 break;
 
             case R.id.filter_lord_kelvin:
-                filter = GPUImageFilterTools.createFilterForType(ActivityGallery.this, filters.filters.get(9));
+                filter = GPUImageFilterTools.createFilterForType(ActivityGallery.this, filters.filters.get(8));
                 switchFilterTo(filter);
                 break;
 
             case R.id.filter_nashville:
-                filter = GPUImageFilterTools.createFilterForType(ActivityGallery.this, filters.filters.get(10));
+                filter = GPUImageFilterTools.createFilterForType(ActivityGallery.this, filters.filters.get(9));
                 switchFilterTo(filter);
                 break;
 
             case R.id.filter_rise:
-                filter = GPUImageFilterTools.createFilterForType(ActivityGallery.this, filters.filters.get(11));
+                filter = GPUImageFilterTools.createFilterForType(ActivityGallery.this, filters.filters.get(10));
                 switchFilterTo(filter);
                 break;
 
             case R.id.filter_sierra:
-                filter = GPUImageFilterTools.createFilterForType(ActivityGallery.this, filters.filters.get(12));
+                filter = GPUImageFilterTools.createFilterForType(ActivityGallery.this, filters.filters.get(11));
                 switchFilterTo(filter);
                 break;
 
             case R.id.filter_sutro:
-                filter = GPUImageFilterTools.createFilterForType(ActivityGallery.this, filters.filters.get(13));
+                filter = GPUImageFilterTools.createFilterForType(ActivityGallery.this, filters.filters.get(12));
                 switchFilterTo(filter);
                 break;
 
             case R.id.filter_toaster:
-                filter = GPUImageFilterTools.createFilterForType(ActivityGallery.this, filters.filters.get(14));
+                filter = GPUImageFilterTools.createFilterForType(ActivityGallery.this, filters.filters.get(13));
                 switchFilterTo(filter);
                 break;
 
             case R.id.filter_valencia:
-                filter = GPUImageFilterTools.createFilterForType(ActivityGallery.this, filters.filters.get(15));
+                filter = GPUImageFilterTools.createFilterForType(ActivityGallery.this, filters.filters.get(14));
                 switchFilterTo(filter);
                 break;
 
             case R.id.filter_walden:
-                filter = GPUImageFilterTools.createFilterForType(ActivityGallery.this, filters.filters.get(16));
+                filter = GPUImageFilterTools.createFilterForType(ActivityGallery.this, filters.filters.get(15));
                 switchFilterTo(filter);
                 break;
 
             case R.id.filter_xproii:
-                filter = GPUImageFilterTools.createFilterForType(ActivityGallery.this, filters.filters.get(17));
+                filter = GPUImageFilterTools.createFilterForType(ActivityGallery.this, filters.filters.get(16));
                 switchFilterTo(filter);
                 break;
 
