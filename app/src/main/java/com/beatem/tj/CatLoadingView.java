@@ -34,13 +34,12 @@ public class CatLoadingView extends DialogFragment {
 
     @Override public Dialog onCreateDialog(Bundle savedInstanceState) {
         if (mDialog == null) {
-            //Remove title bar
-            mDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 
             //Remove notification bar
-            mDialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
             mDialog = new Dialog(getActivity(), R.style.cart_dialog);
+            mDialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+            mDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             mDialog.setContentView(R.layout.catloading_main);
             mDialog.setCanceledOnTouchOutside(true);
             mDialog.getWindow().setGravity(Gravity.CENTER);

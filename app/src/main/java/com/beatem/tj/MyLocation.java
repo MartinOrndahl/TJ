@@ -49,14 +49,13 @@ public class MyLocation implements Parcelable{
     //-------Parcable delen-----------
 
     public MyLocation(Parcel in){
-        String[] data = new String[3];
 
-        in.readStringArray(data);
-        this.latitude = Float.valueOf(data[0]);
-        this.longditude = Float.valueOf(data[1]);
-        this.text = data[2];
-        this.picpath = data[3];
-        this.trip = data[4];
+        this.longditude = in.readFloat();
+        this.latitude = in.readFloat();
+        this.trip = in.readString();
+        this.text = in.readString();
+        this.picpath = in.readString();
+
         latlng = new LatLng(latitude,longditude);
     }
 
@@ -70,7 +69,7 @@ public class MyLocation implements Parcelable{
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeStringArray(new String[] {this.latitude+"",
                 this.longditude+"",
-                this.text,this.picpath,this.trip});
+                this.trip,this.text,this.picpath});
     }
     public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
         public MyLocation createFromParcel(Parcel in) {

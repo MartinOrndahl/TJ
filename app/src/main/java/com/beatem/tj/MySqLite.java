@@ -63,8 +63,8 @@ public class MySqLite extends SQLiteOpenHelper {
         values.put(KEY_LONGDITUDE, location.getLongditude());
         values.put(KEY_LATITUDE, location.getLatitude());
         values.put(VAR_TRIP, location.getTrip());
-        values.put(VAR_PICTUREPATH, location.getPicpath());
         values.put(VAR_TEXT, location.getText());
+        values.put(VAR_PICTUREPATH, location.getPicpath());
         Boolean inserted = db.insert(TABLE_LOCATIONS, null, values) > 0;
 
         return inserted;
@@ -118,7 +118,5 @@ public class MySqLite extends SQLiteOpenHelper {
 
         return locations;
     }
-
-
 
     }
