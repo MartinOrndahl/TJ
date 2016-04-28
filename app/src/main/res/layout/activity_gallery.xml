@@ -6,19 +6,23 @@
     android:orientation="vertical">
 
 
-    <FrameLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+
+
+        >
 
         <jp.co.cyberagent.android.gpuimage.GPUImageView
             android:id="@+id/gpuimage"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:fitsSystemWindows="true" />
 
 
-    </FrameLayout>
+            />
+
+
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/main_direction"

@@ -179,7 +179,7 @@ public class ActivityGallery extends Activity implements OnClickListener, OnPict
                 Bitmap myBitmap = BitmapFactory.decodeFile(path);
                 cameraType = getIntent().getStringExtra("camera_type").toString();
                 FrameLayout.LayoutParams imageParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-
+                myBitmap = RotateBitmap(myBitmap, 90);
                 if (cameraType.equals("front")) {
                     Matrix m = new Matrix();
                     m.setScale(-1, 1);
@@ -191,12 +191,18 @@ public class ActivityGallery extends Activity implements OnClickListener, OnPict
                     myBitmap = Bitmap.createBitmap(myBitmap, 0, 0, myBitmap.getWidth(), myBitmap.getHeight(), m, false);
                     myBitmap.setDensity(DisplayMetrics.DENSITY_DEFAULT);
 
-
+                    myBitmap = Bitmap.createBitmap(
+                            myBitmap, 230
+                            ,
+                            0,
+                            myBitmap.getWidth() - 460,
+                            myBitmap.getHeight()
+                    );
 
 
                 }
 
-                mGPUImageView.setImage(RotateBitmap(myBitmap, 90));
+                mGPUImageView.setImage(myBitmap);
 
 
             } else {
