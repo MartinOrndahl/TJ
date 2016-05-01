@@ -52,6 +52,46 @@
             android:layout_margin="16dp"
             android:text="NW" />
 
+        <ImageView
+            android:id="@+id/slidingimages_layout_arrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/vector_drawable_ic_keyboard_arrow_up_white___px"
+            android:layout_above="@+id/slidingimages_layout_description_text"
+            android:layout_centerHorizontal="true"
+            />
+        <TextView
+            android:id="@+id/slidingimages_layout_description_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/ImageTextThin"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="16dp"
+            android:text="Description"
+            android:layout_above="@+id/slidingimages_layout_description_layout"
+
+            />
+        <RelativeLayout
+            android:id="@+id/slidingimages_layout_description_layout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_alignParentBottom="true"
+            android:animateLayoutChanges="true"
+            android:background="#80000000"
+            android:layout_centerVertical="true"
+            >
+            <TextView
+                android:id="@+id/slidingimages_layout_descriptiontext_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/ImageTextThin"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:layout_margin="16dp"
+                />
+        </RelativeLayout>
+
+
 
     </RelativeLayout>
 </FrameLayout>

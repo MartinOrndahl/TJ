@@ -63,7 +63,6 @@ public class ActivityCamera extends Activity implements OnClickListener {
         setContentView(R.layout.custom_camera2);
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        Toast.makeText(getApplicationContext(), "fresh", Toast.LENGTH_SHORT).show();
         init();
         activateClickListener();
 
@@ -75,7 +74,7 @@ public class ActivityCamera extends Activity implements OnClickListener {
     }
 
     private void init() {
-        if (getIntent().getStringExtra("camType").equals("front")) {
+        if (getIntent().getStringExtra("camType")!=null && getIntent().getStringExtra("camType").equals("front")) {
             frontCamera = true;
         }
 
@@ -115,8 +114,6 @@ public class ActivityCamera extends Activity implements OnClickListener {
     protected void onResume() {
         super.onResume();
         mCamera.onResume();
-        Toast.makeText(getApplicationContext(), "resumed", Toast.LENGTH_SHORT).show();
-
 
     }
 
@@ -124,7 +121,6 @@ public class ActivityCamera extends Activity implements OnClickListener {
     protected void onPause() {
         mCamera.onPause();
         super.onPause();
-        Toast.makeText(getApplicationContext(), "paused", Toast.LENGTH_SHORT).show();
     }
 
 
@@ -212,6 +208,7 @@ public class ActivityCamera extends Activity implements OnClickListener {
                         view.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
 
 
+
                         /*
                         Filnamnet
                          */
@@ -222,13 +219,14 @@ public class ActivityCamera extends Activity implements OnClickListener {
                                     @Override
                                     public void onPictureSaved(final Uri
                                                                        uri) {
-                                        pictureFile.delete();
+                                        //pictureFile.delete();
                                         view.setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
                                     }
                                 });
 
 
                         Intent intent = new Intent(getApplicationContext(), ActivityGallery.class);
+                        Toast.makeText(getApplicationContext(), pictureFile.getAbsolutePath(), Toast.LENGTH_SHORT).show();
                         intent.putExtra("file_name", pictureFile.getAbsolutePath());
                         if (frontCamera) {
                             intent.putExtra("camera_type", "front");

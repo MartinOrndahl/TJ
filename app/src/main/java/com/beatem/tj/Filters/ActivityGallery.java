@@ -179,7 +179,7 @@ public class ActivityGallery extends Activity implements OnClickListener, OnPict
                 Bitmap myBitmap = BitmapFactory.decodeFile(path);
                 cameraType = getIntent().getStringExtra("camera_type").toString();
                 FrameLayout.LayoutParams imageParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-                myBitmap = RotateBitmap(myBitmap, 90);
+
                 if (cameraType.equals("front")) {
                     Matrix m = new Matrix();
                     m.setScale(-1, 1);
@@ -190,7 +190,7 @@ public class ActivityGallery extends Activity implements OnClickListener, OnPict
 
                     myBitmap = Bitmap.createBitmap(myBitmap, 0, 0, myBitmap.getWidth(), myBitmap.getHeight(), m, false);
                     myBitmap.setDensity(DisplayMetrics.DENSITY_DEFAULT);
-
+                    myBitmap = RotateBitmap(myBitmap, 90);
                     myBitmap = Bitmap.createBitmap(
                             myBitmap, 230
                             ,
@@ -200,8 +200,9 @@ public class ActivityGallery extends Activity implements OnClickListener, OnPict
                     );
 
 
+                } else {
+                    myBitmap = RotateBitmap(myBitmap, 90);
                 }
-
                 mGPUImageView.setImage(myBitmap);
 
 
@@ -685,12 +686,15 @@ ställer in vilket mode vi befinner oss i
                             .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    File f = new File(String.valueOf(imgFile));
-                                    Toast.makeText(getApplicationContext(), "Deleted!", Toast.LENGTH_SHORT).show();
-                                    getContentResolver().delete(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                                            MediaStore.Images.Media.DATA + "=?", new String[]{f.toString()});
-                                    startCamera();
-                                    finish();
+                                    if (imgFile.delete()) {
+                                        Toast.makeText(getApplicationContext(), "Deleted!", Toast.LENGTH_SHORT).show();
+                                        startCamera();
+                                        finish();
+                                    }
+                                    else{
+                                        Toast.makeText(getApplicationContext(), "Couldn't delete image", Toast.LENGTH_SHORT).show();
+                                    }
+
 
                                 }
                             }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
