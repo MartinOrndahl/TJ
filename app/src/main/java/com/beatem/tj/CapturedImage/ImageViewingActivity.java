@@ -47,8 +47,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.beatem.tj.Camera.CameraActivity;
-import com.beatem.tj.CustomDialogCommandsClass;
 import com.beatem.tj.CapturedImage.GPUImageFilterTools.FilterType;
+import com.beatem.tj.CustomDialogCommandsClass;
 import com.beatem.tj.MapsActivity;
 import com.beatem.tj.MyLocation;
 import com.beatem.tj.MySqLite;
@@ -59,7 +59,9 @@ import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import jp.co.cyberagent.android.gpuimage.GPUImage.OnPictureSavedListener;
 import jp.co.cyberagent.android.gpuimage.GPUImageFilter;
@@ -259,9 +261,8 @@ ställer in vilket mode vi befinner oss i
         filterLayout = (RelativeLayout) findViewById(R.id.filterLayout);
 
 
-
-
         direction.setText(getIntent().getStringExtra("direction").toString());
+        date.setText(handleDate(new SimpleDateFormat("dd-MM-yyyy").format(new Date())));
 
 
              /*
@@ -305,6 +306,69 @@ ställer in vilket mode vi befinner oss i
         cdcc = new CustomDialogCommandsClass(ImageViewingActivity.this);
 
 
+    }
+
+    private String handleDate(String formattedDate) {
+        String returnValue = formattedDate;
+
+        if (returnValue.charAt(0) == '0') {
+            returnValue = returnValue.substring(1, returnValue.length());
+        }
+
+        String[] temp = returnValue.split("-");
+        StringBuilder sb = new StringBuilder();
+        sb.append(temp[0] + " ");
+        String month="";
+
+        switch (temp[1]){
+            case "01":
+                month= "Jan";
+                break;
+            case "02":
+                month= "Feb";
+                break;
+            case "03":
+                month= "Mar";
+                break;
+            case "04":
+                month= "Apr";
+                break;
+            case "05":
+                month= "May";
+                break;
+            case "06":
+                month= "Jun";
+                break;
+            case "07":
+                month= "Jul";
+                break;
+            case "08":
+                month= "Aug";
+                break;
+            case "09":
+                month= "Sep";
+                break;
+            case "10":
+                month= "Oct";
+                break;
+            case "11":
+                month= "Nov";
+                break;
+            case "12":
+                month= "Dec";
+                break;
+            default:
+                break;
+
+        }
+
+
+        char t = Character.toUpperCase(month.charAt(0));
+        month.replace(month.charAt(0), t);
+        sb.append(t);
+        sb.append(month.substring(1, month.length()) + " ");
+        sb.append(temp[2]);
+        return sb.toString();
     }
 
 
@@ -460,7 +524,6 @@ ställer in vilket mode vi befinner oss i
         Toast.makeText(this, "Saved: " + uri.toString(), Toast.LENGTH_SHORT)
                 .show();
     }
-
 
 
     private void switchFilterTo(final GPUImageFilter filter) {
@@ -682,7 +745,7 @@ ställer in vilket mode vi befinner oss i
 
                                     Toast.makeText(getApplicationContext(), "Deleted", Toast.LENGTH_SHORT).show();
                                     f.delete();
-                                    MediaScannerConnection.scanFile(getApplicationContext(), new String[] {
+                                    MediaScannerConnection.scanFile(getApplicationContext(), new String[]{
 
                                                     f.getAbsolutePath()},
 
@@ -713,7 +776,6 @@ ställer in vilket mode vi befinner oss i
     }
 
 
-
     private void saveImageAction() {
 
         /*
@@ -721,14 +783,13 @@ ställer in vilket mode vi befinner oss i
          */
 
         MySqLite sqLite = new MySqLite(getApplicationContext());
-        if(sqLite.addLocation(new MyLocation((float) MapsActivity.currentlocation.longitude,
+        if (sqLite.addLocation(new MyLocation((float) MapsActivity.currentlocation.longitude,
                 (float) MapsActivity.currentlocation.latitude, "Joels Resa", editText.getText().toString(),
                 path
-                ))){
+        ))) {
             Toast.makeText(getApplicationContext(), "Saved!", Toast.LENGTH_SHORT).show();
             startActivity(new Intent(getApplicationContext(), MapsActivity.class));
-        }
-        else{
+        } else {
             Toast.makeText(getApplicationContext(), "Fail", Toast.LENGTH_SHORT).show();
         }
 
