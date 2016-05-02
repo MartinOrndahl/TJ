@@ -1,20 +1,8 @@
-/*
- * Copyright (C) 2012 CyberAgent
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+package com.beatem.tj.Camera;
 
-package com.beatem.tj.Filters.utils;
+/**
+ * Created by JoelBuhrman on 16-04-22.
+ */
 
 import static android.os.Build.VERSION.SDK_INT;
 import static android.os.Build.VERSION_CODES.GINGERBREAD;
@@ -82,7 +70,7 @@ public class CameraHelper {
     }
 
     public void setCameraDisplayOrientation(final Activity activity,
-            final int cameraId, final Camera camera) {
+                                            final int cameraId, final Camera camera) {
         int result = getCameraDisplayOrientation(activity, cameraId);
         camera.setDisplayOrientation(result);
     }
@@ -109,7 +97,7 @@ public class CameraHelper {
         int result;
         CameraInfo2 info = new CameraInfo2();
         getCameraInfo(cameraId, info);
-        if (info.facing == CameraInfo.CAMERA_FACING_FRONT) {
+        if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
             result = (info.orientation + degrees) % 360;
         } else { // back-facing
             result = (info.orientation - degrees + 360) % 360;

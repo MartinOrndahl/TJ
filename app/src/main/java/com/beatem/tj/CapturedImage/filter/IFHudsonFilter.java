@@ -1,11 +1,11 @@
-package com.beatem.tj.Filters.filter;
+package com.beatem.tj.CapturedImage.filter;
 
 import android.content.Context;
 import com.beatem.tj.R;
 /**
  * Created by sam on 14-8-9.
  */
-public class IFSierraFilter extends IFImageFilter {
+public class IFHudsonFilter extends IFImageFilter {
     private static final String SHADER = "precision lowp float;\n" +
             " \n" +
             " varying highp vec2 textureCoordinate;\n" +
@@ -19,6 +19,7 @@ public class IFSierraFilter extends IFImageFilter {
             " {\n" +
             "     \n" +
             "     vec4 texel = texture2D(inputImageTexture, textureCoordinate);\n" +
+            "     \n" +
             "     vec3 bbTexel = texture2D(inputImageTexture2, textureCoordinate).rgb;\n" +
             "     \n" +
             "     texel.r = texture2D(inputImageTexture3, vec2(bbTexel.r, texel.r)).r;\n" +
@@ -30,18 +31,17 @@ public class IFSierraFilter extends IFImageFilter {
             "     mapped.g = texture2D(inputImageTexture4, vec2(texel.g, .5)).g;\n" +
             "     mapped.b = texture2D(inputImageTexture4, vec2(texel.b, .83333)).b;\n" +
             "     mapped.a = 1.0;\n" +
-            "     \n" +
             "     gl_FragColor = mapped;\n" +
             " }\n";
 
-    public IFSierraFilter(Context paramContext) {
+    public IFHudsonFilter(Context paramContext) {
         super(paramContext, SHADER);
         setRes();
     }
 
     private void setRes() {
-        addInputTexture(R.drawable.sierra_vignette);
+        addInputTexture(R.drawable.hudson_background);
         addInputTexture(R.drawable.overlay_map);
-        addInputTexture(R.drawable.sierra_map);
+        addInputTexture(R.drawable.hudson_map);
     }
 }

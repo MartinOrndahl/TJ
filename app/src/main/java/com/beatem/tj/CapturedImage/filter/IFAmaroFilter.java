@@ -1,11 +1,14 @@
-package com.beatem.tj.Filters.filter;
+package com.beatem.tj.CapturedImage.filter;
 
 import android.content.Context;
+
 import com.beatem.tj.R;
+
+
 /**
  * Created by sam on 14-8-9.
  */
-public class IFRiseFilter extends IFImageFilter {
+public class IFAmaroFilter extends IFImageFilter {
     private static final String SHADER = "\n precision lowp float;\n\n " +
             "varying highp vec2 textureCoordinate;\n\n " +
             "uniform sampler2D inputImageTexture;\n " +
@@ -25,14 +28,14 @@ public class IFRiseFilter extends IFImageFilter {
             "mapped.a = 1.0;\n\n   " +
             "gl_FragColor = mapped;\n }";
 
-    public IFRiseFilter(Context paramContext) {
-        super(paramContext, SHADER);
+    public IFAmaroFilter(Context context) {
+        super(context, SHADER);
         setRes();
     }
 
     private void setRes() {
         addInputTexture(R.drawable.blackboard);
         addInputTexture(R.drawable.overlay_map);
-        addInputTexture(R.drawable.rise_map);
+        addInputTexture(R.drawable.amaro_map);
     }
 }

@@ -50,10 +50,18 @@
             android:label="TJ"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
 
 
 
         </activity>
+
+        <activity android:name=".AndroidDatabaseManager"
+            android:theme="@style/Theme.AppCompat.Light"/>
 
         <activity
             android:name=".OldTripsViewer.SlideImageActivity"
@@ -65,28 +73,19 @@
         </activity>
 
         <activity
-            android:name=".Filters.ActivityGallery"
+            android:name=".CapturedImage.ImageViewingActivity"
             android:screenOrientation="portrait">
 
 
         </activity>
+
+
         <activity
             android:name=".Camera.CameraActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
-        </activity>
 
 
-        <activity
-            android:name=".CameraAlt2.ActivityCamera"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar">
-
-
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
 
         </activity>
 

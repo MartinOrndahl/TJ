@@ -1,4 +1,4 @@
-package com.beatem.tj.Filters.filter;
+package com.beatem.tj.CapturedImage.filter;
 
 import android.content.Context;
 import com.beatem.tj.R;

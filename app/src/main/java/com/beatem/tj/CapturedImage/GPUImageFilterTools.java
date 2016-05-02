@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.beatem.tj.Filters;
+package com.beatem.tj.CapturedImage;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -22,23 +22,23 @@ import android.content.DialogInterface;
 import android.graphics.BitmapFactory;
 import android.graphics.PointF;
 
-import com.beatem.tj.Filters.filter.IF1977Filter;
-import com.beatem.tj.Filters.filter.IFAmaroFilter;
-import com.beatem.tj.Filters.filter.IFBrannanFilter;
-import com.beatem.tj.Filters.filter.IFEarlybirdFilter;
-import com.beatem.tj.Filters.filter.IFHefeFilter;
-import com.beatem.tj.Filters.filter.IFHudsonFilter;
-import com.beatem.tj.Filters.filter.IFInkwellFilter;
-import com.beatem.tj.Filters.filter.IFLomoFilter;
-import com.beatem.tj.Filters.filter.IFLordKelvinFilter;
-import com.beatem.tj.Filters.filter.IFNashvilleFilter;
-import com.beatem.tj.Filters.filter.IFRiseFilter;
-import com.beatem.tj.Filters.filter.IFSierraFilter;
-import com.beatem.tj.Filters.filter.IFSutroFilter;
-import com.beatem.tj.Filters.filter.IFToasterFilter;
-import com.beatem.tj.Filters.filter.IFValenciaFilter;
-import com.beatem.tj.Filters.filter.IFWaldenFilter;
-import com.beatem.tj.Filters.filter.IFXprollFilter;
+import com.beatem.tj.CapturedImage.filter.IF1977Filter;
+import com.beatem.tj.CapturedImage.filter.IFAmaroFilter;
+import com.beatem.tj.CapturedImage.filter.IFBrannanFilter;
+import com.beatem.tj.CapturedImage.filter.IFEarlybirdFilter;
+import com.beatem.tj.CapturedImage.filter.IFHefeFilter;
+import com.beatem.tj.CapturedImage.filter.IFHudsonFilter;
+import com.beatem.tj.CapturedImage.filter.IFInkwellFilter;
+import com.beatem.tj.CapturedImage.filter.IFLomoFilter;
+import com.beatem.tj.CapturedImage.filter.IFLordKelvinFilter;
+import com.beatem.tj.CapturedImage.filter.IFNashvilleFilter;
+import com.beatem.tj.CapturedImage.filter.IFRiseFilter;
+import com.beatem.tj.CapturedImage.filter.IFSierraFilter;
+import com.beatem.tj.CapturedImage.filter.IFSutroFilter;
+import com.beatem.tj.CapturedImage.filter.IFToasterFilter;
+import com.beatem.tj.CapturedImage.filter.IFValenciaFilter;
+import com.beatem.tj.CapturedImage.filter.IFWaldenFilter;
+import com.beatem.tj.CapturedImage.filter.IFXprollFilter;
 import com.beatem.tj.R;
 
 import java.util.LinkedList;

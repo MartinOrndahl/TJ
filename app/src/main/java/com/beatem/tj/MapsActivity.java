@@ -32,8 +32,8 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.beatem.tj.CameraAlt2.ActivityCamera;
-import com.beatem.tj.Filters.ActivityGallery;
+import com.beatem.tj.Camera.CameraActivity;
+import com.beatem.tj.CapturedImage.ImageViewingActivity;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -46,12 +46,11 @@ import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback,SensorEventListener,NavigationView.OnNavigationItemSelectedListener {
+public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, SensorEventListener, NavigationView.OnNavigationItemSelectedListener {
 
     NavigationView navigationView = null;
     Toolbar toolbar = null;
@@ -78,15 +77,15 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         permission = false;
 
         polygon = new PolygonOptions().geodesic(true);
-        cat= new CatLoadingView();
+        cat = new CatLoadingView();
         setContentView(R.layout.activity_nav_drawer);
         fragmentTransactionCat = getSupportFragmentManager().beginTransaction();
-        cat.show(fragmentTransactionCat,"");
+        cat.show(fragmentTransactionCat, "");
 
-        if(!SaveSharedPreferences.getFirstStart(getApplicationContext())){
+        if (!SaveSharedPreferences.getFirstStart(getApplicationContext())) {
             //TODO:testa ifall bild tilläget fungerade.
             MySqLite db = new MySqLite(getApplicationContext());
-            Bitmap bm = BitmapFactory.decodeResource(getResources(),R.drawable.adventure);
+            Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.adventure);
             String root = Environment.getExternalStorageDirectory().toString();
             File myDir = new File(root + "/req_images");
             myDir.mkdirs();
@@ -108,12 +107,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
 
 
-            db.addLocation(new MyLocation(10,20,"Australien","t",file.getAbsolutePath()));
-            db.addLocation(new MyLocation(10,25,"Australien","test1231",file.getAbsolutePath()));
-            db.addLocation(new MyLocation(11,26,"Australien","testfgd",file.getAbsolutePath()));
-            db.addLocation(new MyLocation(15,18,"Australien","testare","fuck this shit"));
-            SaveSharedPreferences.setStartBefore(getApplicationContext(),true);
-            Toast.makeText(getApplicationContext(), file.getAbsolutePath()+ "yeeeey",Toast.LENGTH_SHORT).show();
+            db.addLocation(new MyLocation(10, 20, "Australien", "t", file.getAbsolutePath()));
+            db.addLocation(new MyLocation(10, 25, "Australien", "test1231", file.getAbsolutePath()));
+            db.addLocation(new MyLocation(11, 26, "Australien", "testfgd", file.getAbsolutePath()));
+            db.addLocation(new MyLocation(15, 18, "Australien", "testare", "fuck this shit"));
+            SaveSharedPreferences.setStartBefore(getApplicationContext(), true);
+            Toast.makeText(getApplicationContext(), file.getAbsolutePath() + "yeeeey", Toast.LENGTH_SHORT).show();
         }
         getTrips();
 
@@ -132,8 +131,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
 
 
-
-
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -143,7 +140,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
 
         // Define a listener that responds to location updates
-            locationListener = new LocationListener() {
+        locationListener = new LocationListener() {
             public void onLocationChanged(Location location) {
                 // Called when a new location is found by the network location provider.
                 currentlocation = new LatLng(location.getLatitude(), location.getLongitude());
@@ -163,11 +160,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         setSupportActionBar(toolbar);
 
 
-
-
         mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-
 
 
 // Register the listener with the Location Manager to receive location updates
@@ -187,43 +181,41 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-       galleryFragment = new GalleryFragment();
+        galleryFragment = new GalleryFragment();
         removeCat();
 
     }
 
 
-
-    public void getTrips(){
+    public void getTrips() {
         MySqLite db = new MySqLite(getApplicationContext());
         locations = db.getLocations();
     }
-    public void removeCat(){
+
+    public void removeCat() {
         fragmentTransactionCat.remove(cat);
 
     }
 
     public synchronized void GpsListniner(boolean onoff) {
         try {
-        if (onoff && locationManager != null) {
+            if (onoff && locationManager != null) {
 
                 locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
 
-        }else{
-            //TODO:sluta lyssna efter gps signal.
-        }
-        }catch(SecurityException e){
+            } else {
+                //TODO:sluta lyssna efter gps signal.
+            }
+        } catch (SecurityException e) {
 
         }
     }
 
     public synchronized void uppdateCurrentLocation() {
-        Log.i("test1","vi kom hit");
+        Log.i("test1", "vi kom hit");
         if (currentlocation != null && mMapready) {
             try {
                 mMap.setMyLocationEnabled(true);
-
-
 
 
             } catch (SecurityException e) {
@@ -232,22 +224,22 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             }
             //TODO:Fixa
-           /**
-            mMap.addPolyline(new PolylineOptions().addAll(locations));
-            for (LatLng l : locations) {
+            /**
+             mMap.addPolyline(new PolylineOptions().addAll(locations));
+             for (LatLng l : locations) {
 
-                mMap.addMarker(new MarkerOptions().position(l));
+             mMap.addMarker(new MarkerOptions().position(l));
 
-            }
-            **/
+             }
+             **/
 
         }
     }
 
     public synchronized void addLocationMarker(LatLng pos) {
-    //TODO:fixa, alternativt ta bort.
+        //TODO:fixa, alternativt ta bort.
         getTrips();
-    mMap.addMarker(new MarkerOptions().position(pos));
+        mMap.addMarker(new MarkerOptions().position(pos));
 
 
     }
@@ -290,16 +282,18 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             // permissions this app might request
         }
     }
-    public void worldMapmode(){
+
+    public void worldMapmode() {
         mMap.getUiSettings().setAllGesturesEnabled(true);
         mMap.getUiSettings().setMyLocationButtonEnabled(true);
         zoomEnabled = true;
         //Todo: hämta alla markeringar från SQLLite databas och sätt ut på karta
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(0,0)));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(0, 0)));
 
 
     }
-    public void currentTripMode(){
+
+    public void currentTripMode() {
         mMap.getUiSettings().setAllGesturesEnabled(false);
         mMap.getUiSettings().setMapToolbarEnabled(false);
         mMap.getUiSettings().setMyLocationButtonEnabled(false);
@@ -307,40 +301,47 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         moveToCurrentTrip();
     }
 
-    public void moveToCurrentTrip(){
+    public void moveToCurrentTrip() {
         int lat = 0;
-       double largestLat = 0;
+        double largestLat = 0;
         double smalestLat = 0;
         double largestLong = 0;
         double smalestLong = 0;
         int log = 0;
         double largestlog;
-        if (locations!=null&&locations.size()>0) {
+        if (locations != null && locations.size() > 0) {
             largestLat = locations.get(0).getLatitude();
             smalestLat = locations.get(0).getLatitude();
             smalestLong = locations.get(0).getLongditude();
             largestLong = locations.get(0).getLongditude();
 
             for (int i = 0; i < locations.size(); i++) {
-                if (largestLat<locations.get(i).getLatitude()){largestLat = locations.get(i).getLatitude();}
-                if (smalestLat>locations.get(i).getLatitude()){ smalestLat = locations.get(i).getLatitude();}
-                if (largestLong<locations.get(i).getLongditude()){ largestLong = locations.get(i).getLongditude();}
-                if (smalestLong>locations.get(i).getLongditude()){ smalestLong = locations.get(i).getLongditude();}
+                if (largestLat < locations.get(i).getLatitude()) {
+                    largestLat = locations.get(i).getLatitude();
+                }
+                if (smalestLat > locations.get(i).getLatitude()) {
+                    smalestLat = locations.get(i).getLatitude();
+                }
+                if (largestLong < locations.get(i).getLongditude()) {
+                    largestLong = locations.get(i).getLongditude();
+                }
+                if (smalestLong > locations.get(i).getLongditude()) {
+                    smalestLong = locations.get(i).getLongditude();
+                }
 
                 lat += locations.get(i).getLatitude();
                 log += locations.get(i).getLongditude();
             }
 
-            LatLngBounds bounds = new LatLngBounds(new LatLng(smalestLat,smalestLong),new LatLng(largestLat,largestLong));
+            LatLngBounds bounds = new LatLngBounds(new LatLng(smalestLat, smalestLong), new LatLng(largestLat, largestLong));
 
-            mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds,300));
+            mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 300));
 
             mMap.moveCamera(CameraUpdateFactory.newLatLng(bounds.getCenter()));
-        }else{
+        } else {
             mMap.moveCamera(CameraUpdateFactory.newLatLng(currentlocation));
         }
     }
-
 
 
     /**
@@ -361,17 +362,15 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mMap.getUiSettings().setMyLocationButtonEnabled(true);
 
 
-
-
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(final Marker marker) {
                 for (MyLocation location : locations) {
                     if (marker.getPosition().equals(location.getLatlng())) {
-                        Toast.makeText(getApplicationContext(),location.getPicpath(),Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), location.getPicpath(), Toast.LENGTH_SHORT).show();
 
-                        Intent i = new Intent(getApplicationContext(), ActivityGallery.class);
-                        i.putExtra("location",location);
+                        Intent i = new Intent(getApplicationContext(), ImageViewingActivity.class);
+                        i.putExtra("location", location);
                         //startActivity(i);
 
                         return true;
@@ -399,12 +398,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
     }
+
     @Override
     protected void onResume() {
         super.onResume();
 
         // for the system's orientation sensor registered listeners
-        if(mSensorManager != null) {
+        if (mSensorManager != null) {
             mSensorManager.registerListener(this, mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
                     SensorManager.SENSOR_DELAY_GAME);
         }
@@ -415,7 +415,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         super.onPause();
 
         // to stop the listener and save battery
-        if(mSensorManager!=null) {
+        if (mSensorManager != null) {
             mSensorManager.unregisterListener(this);
         }
     }
@@ -424,7 +424,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onSensorChanged(SensorEvent event) {
 
         // get the angle around the z-axis rotated
-        if(zoomEnabled) {
+        if (zoomEnabled) {
             float x = Math.round(event.values[0]);
             float y = Math.round(event.values[1]);
             double z = Math.round(event.values[2]);
@@ -443,6 +443,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
         // not in use
     }
+
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -469,6 +470,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+
+            Intent dbmanager = new Intent(getApplicationContext(), AndroidDatabaseManager.class);
+            startActivity(dbmanager);
+
             return true;
         }
 
@@ -482,10 +487,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         int id = item.getItemId();
 
 
-
         if (id == R.id.current_trip_button) {
 
-            if(galleryCreated) {
+            if (galleryCreated) {
                 android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.remove(galleryFragment);
                 fragmentTransaction.commit();
@@ -502,13 +506,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             fragmentTransaction.commit();
 
 
-
-
-
         } else if (id == R.id.map_button) {
 
             worldMapmode();
-            if(galleryCreated) {
+            if (galleryCreated) {
                 android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.remove(galleryFragment);
                 fragmentTransaction.commit();
@@ -516,8 +517,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
 
 
-
         } else if (id == R.id.end_trip_button) {
+
+
+
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
             builder.setTitle("Confirm");
@@ -556,8 +559,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
 
-    public void startCameraActivity(View view){
-        startActivity(new Intent(this, ActivityCamera.class).putExtra("camType", "back"));
+    public void startCameraActivity(View view) {
+        startActivity(new Intent(this, CameraActivity.class).putExtra("camType", "back"));
 
     }
 }

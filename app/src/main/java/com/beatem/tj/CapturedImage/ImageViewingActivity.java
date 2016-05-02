@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.beatem.tj.Filters;
+package com.beatem.tj.CapturedImage;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -46,10 +46,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.beatem.tj.CameraAlt2.ActivityCamera;
+import com.beatem.tj.Camera.CameraActivity;
 import com.beatem.tj.CustomDialogCommandsClass;
-import com.beatem.tj.Filters.GPUImageFilterTools.FilterType;
+import com.beatem.tj.CapturedImage.GPUImageFilterTools.FilterType;
 import com.beatem.tj.MapsActivity;
+import com.beatem.tj.MyLocation;
+import com.beatem.tj.MySqLite;
 import com.beatem.tj.R;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
@@ -63,7 +65,7 @@ import jp.co.cyberagent.android.gpuimage.GPUImage.OnPictureSavedListener;
 import jp.co.cyberagent.android.gpuimage.GPUImageFilter;
 import jp.co.cyberagent.android.gpuimage.GPUImageView;
 
-public class ActivityGallery extends Activity implements OnClickListener, OnPictureSavedListener {
+public class ImageViewingActivity extends Activity implements OnClickListener, OnPictureSavedListener {
     private static int mode;
     private static final int FILTER_MODE = 0;
     private static final int REGULAR_MODE = 1;
@@ -76,6 +78,7 @@ public class ActivityGallery extends Activity implements OnClickListener, OnPict
     private GPUImageFilterTools.FilterAdjuster mFilterAdjuster;
     private GPUImageView mGPUImageView;
     private LinearLayout imageLL;
+    private Bitmap myBitmap;
 
     private boolean expanded;
     private RelativeLayout descriptionLayout, filterLayout, topRelLayout;
@@ -177,7 +180,7 @@ public class ActivityGallery extends Activity implements OnClickListener, OnPict
             imgFile = new File(getIntent().getStringExtra("file_name").toString());
             if (imgFile.exists()) {
                 path = imgFile.getAbsolutePath();
-                Bitmap myBitmap = BitmapFactory.decodeFile(path);
+                myBitmap = BitmapFactory.decodeFile(path);
                 cameraType = getIntent().getStringExtra("camera_type").toString();
                 FrameLayout.LayoutParams imageParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
 
@@ -257,13 +260,8 @@ ställer in vilket mode vi befinner oss i
 
 
 
-        /*
-        Tempvärden för textViews
-         */
-        cityNameValue = "Temp";
-        dateValue = "Temp";
-        directionValue = "Temp";
 
+        direction.setText(getIntent().getStringExtra("direction").toString());
 
 
              /*
@@ -304,7 +302,7 @@ ställer in vilket mode vi befinner oss i
          /*
         Custom dialogerna
          */
-        cdcc = new CustomDialogCommandsClass(ActivityGallery.this);
+        cdcc = new CustomDialogCommandsClass(ImageViewingActivity.this);
 
 
     }
@@ -321,87 +319,87 @@ ställer in vilket mode vi befinner oss i
                 break;
 
             case R.id.filter_in1977:
-                filter = GPUImageFilterTools.createFilterForType(ActivityGallery.this, filters.filters.get(0));
+                filter = GPUImageFilterTools.createFilterForType(ImageViewingActivity.this, filters.filters.get(0));
                 switchFilterTo(filter);
                 break;
 
             case R.id.filter_amaro:
-                filter = GPUImageFilterTools.createFilterForType(ActivityGallery.this, filters.filters.get(1));
+                filter = GPUImageFilterTools.createFilterForType(ImageViewingActivity.this, filters.filters.get(1));
                 switchFilterTo(filter);
                 break;
 
             case R.id.filter_brannan:
-                filter = GPUImageFilterTools.createFilterForType(ActivityGallery.this, filters.filters.get(2));
+                filter = GPUImageFilterTools.createFilterForType(ImageViewingActivity.this, filters.filters.get(2));
                 switchFilterTo(filter);
                 break;
 
             case R.id.filter_early_bird:
-                filter = GPUImageFilterTools.createFilterForType(ActivityGallery.this, filters.filters.get(3));
+                filter = GPUImageFilterTools.createFilterForType(ImageViewingActivity.this, filters.filters.get(3));
                 switchFilterTo(filter);
                 break;
 
             case R.id.filter_hefe:
-                filter = GPUImageFilterTools.createFilterForType(ActivityGallery.this, filters.filters.get(4));
+                filter = GPUImageFilterTools.createFilterForType(ImageViewingActivity.this, filters.filters.get(4));
                 switchFilterTo(filter);
                 break;
 
             case R.id.filter_hudson:
-                filter = GPUImageFilterTools.createFilterForType(ActivityGallery.this, filters.filters.get(5));
+                filter = GPUImageFilterTools.createFilterForType(ImageViewingActivity.this, filters.filters.get(5));
                 switchFilterTo(filter);
                 break;
 
             case R.id.filter_inkwell:
-                filter = GPUImageFilterTools.createFilterForType(ActivityGallery.this, filters.filters.get(6));
+                filter = GPUImageFilterTools.createFilterForType(ImageViewingActivity.this, filters.filters.get(6));
                 switchFilterTo(filter);
                 break;
 
             case R.id.filter_lomofi:
-                filter = GPUImageFilterTools.createFilterForType(ActivityGallery.this, filters.filters.get(7));
+                filter = GPUImageFilterTools.createFilterForType(ImageViewingActivity.this, filters.filters.get(7));
                 switchFilterTo(filter);
                 break;
 
             case R.id.filter_lord_kelvin:
-                filter = GPUImageFilterTools.createFilterForType(ActivityGallery.this, filters.filters.get(8));
+                filter = GPUImageFilterTools.createFilterForType(ImageViewingActivity.this, filters.filters.get(8));
                 switchFilterTo(filter);
                 break;
 
             case R.id.filter_nashville:
-                filter = GPUImageFilterTools.createFilterForType(ActivityGallery.this, filters.filters.get(9));
+                filter = GPUImageFilterTools.createFilterForType(ImageViewingActivity.this, filters.filters.get(9));
                 switchFilterTo(filter);
                 break;
 
             case R.id.filter_rise:
-                filter = GPUImageFilterTools.createFilterForType(ActivityGallery.this, filters.filters.get(10));
+                filter = GPUImageFilterTools.createFilterForType(ImageViewingActivity.this, filters.filters.get(10));
                 switchFilterTo(filter);
                 break;
 
             case R.id.filter_sierra:
-                filter = GPUImageFilterTools.createFilterForType(ActivityGallery.this, filters.filters.get(11));
+                filter = GPUImageFilterTools.createFilterForType(ImageViewingActivity.this, filters.filters.get(11));
                 switchFilterTo(filter);
                 break;
 
             case R.id.filter_sutro:
-                filter = GPUImageFilterTools.createFilterForType(ActivityGallery.this, filters.filters.get(12));
+                filter = GPUImageFilterTools.createFilterForType(ImageViewingActivity.this, filters.filters.get(12));
                 switchFilterTo(filter);
                 break;
 
             case R.id.filter_toaster:
-                filter = GPUImageFilterTools.createFilterForType(ActivityGallery.this, filters.filters.get(13));
+                filter = GPUImageFilterTools.createFilterForType(ImageViewingActivity.this, filters.filters.get(13));
                 switchFilterTo(filter);
                 break;
 
             case R.id.filter_valencia:
-                filter = GPUImageFilterTools.createFilterForType(ActivityGallery.this, filters.filters.get(14));
+                filter = GPUImageFilterTools.createFilterForType(ImageViewingActivity.this, filters.filters.get(14));
                 switchFilterTo(filter);
                 break;
 
             case R.id.filter_walden:
-                filter = GPUImageFilterTools.createFilterForType(ActivityGallery.this, filters.filters.get(15));
+                filter = GPUImageFilterTools.createFilterForType(ImageViewingActivity.this, filters.filters.get(15));
                 switchFilterTo(filter);
                 break;
 
             case R.id.filter_xproii:
-                filter = GPUImageFilterTools.createFilterForType(ActivityGallery.this, filters.filters.get(16));
+                filter = GPUImageFilterTools.createFilterForType(ImageViewingActivity.this, filters.filters.get(16));
                 switchFilterTo(filter);
                 break;
 
@@ -457,20 +455,13 @@ ställer in vilket mode vi befinner oss i
 
     }
 
-    private void hideFilters() {
-
-    }
-
     @Override
     public void onPictureSaved(final Uri uri) {
         Toast.makeText(this, "Saved: " + uri.toString(), Toast.LENGTH_SHORT)
                 .show();
     }
 
-    private void saveImage() {
-        String fileName = System.currentTimeMillis() + ".jpg";
-        mGPUImageView.saveToPictures("GPUImage", fileName, (GPUImageView.OnPictureSavedListener) this);
-    }
+
 
     private void switchFilterTo(final GPUImageFilter filter) {
         if (mFilter == null
@@ -669,7 +660,7 @@ ställer in vilket mode vi befinner oss i
 
 
     public void startCamera() {
-        startActivity(new Intent(this, ActivityCamera.class).putExtra("camType", cameraType));
+        startActivity(new Intent(this, CameraActivity.class).putExtra("camType", cameraType));
     }
 
 
@@ -680,7 +671,7 @@ ställer in vilket mode vi befinner oss i
             public void run() {
 
                 if (!isFinishing()) {
-                    new AlertDialog.Builder(ActivityGallery.this)
+                    new AlertDialog.Builder(ImageViewingActivity.this)
                             .setTitle("Delete Image?")
                             .setMessage("Are you sure you want to delete this image?")
                             .setCancelable(false)
@@ -689,7 +680,7 @@ ställer in vilket mode vi befinner oss i
                                 public void onClick(DialogInterface dialog, int which) {
                                     File f = new File(getIntent().getStringExtra("file_name2"));
 
-                                    Toast.makeText(getApplicationContext(), f.getAbsolutePath(), Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getApplicationContext(), "Deleted", Toast.LENGTH_SHORT).show();
                                     f.delete();
                                     MediaScannerConnection.scanFile(getApplicationContext(), new String[] {
 
@@ -724,8 +715,23 @@ ställer in vilket mode vi befinner oss i
 
 
     private void saveImageAction() {
-        startActivity(new Intent(getApplicationContext(), MapsActivity.class));
-        Toast.makeText(getApplicationContext(), "Saved!", Toast.LENGTH_SHORT).show();
+
+        /*
+        Spara till SQL
+         */
+
+        MySqLite sqLite = new MySqLite(getApplicationContext());
+        if(sqLite.addLocation(new MyLocation((float) MapsActivity.currentlocation.longitude,
+                (float) MapsActivity.currentlocation.latitude, "Joels Resa", editText.getText().toString(),
+                path
+                ))){
+            Toast.makeText(getApplicationContext(), "Saved!", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(getApplicationContext(), MapsActivity.class));
+        }
+        else{
+            Toast.makeText(getApplicationContext(), "Fail", Toast.LENGTH_SHORT).show();
+        }
+
     }
 
 

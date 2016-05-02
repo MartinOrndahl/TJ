@@ -1,31 +1,31 @@
 package com.beatem.tj.Camera;
 
-import android.Manifest;
-import android.content.Context;
+/**
+ * Created by JoelBuhrman on 16-04-22.
+ */
+
+import android.app.Activity;
 import android.content.Intent;
-import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.hardware.Camera;
-import android.location.Address;
-import android.location.Geocoder;
-import android.location.Location;
-import android.location.LocationManager;
+import android.hardware.Camera.CameraInfo;
+import android.hardware.Camera.Parameters;
 import android.net.Uri;
+import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.SurfaceHolder;
-import android.view.SurfaceView;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
+import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.beatem.tj.CapturedImage.ImageViewingActivity;
 import com.beatem.tj.R;
-import com.melnykov.fab.FloatingActionButton;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -34,386 +34,339 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
-import butterknife.ButterKnife;
-import butterknife.InjectView;
+import jp.co.cyberagent.android.gpuimage.GPUImage;
+import jp.co.cyberagent.android.gpuimage.GPUImage.OnPictureSavedListener;
 
-/**
- * Created by JoelBuhrman on 16-04-03.
- */
-public class CameraActivity extends AppCompatActivity implements SurfaceHolder.Callback {
-    private Camera camera;
-    @InjectView(R.id.surfaceView)
-    SurfaceView surfaceView;
-    @InjectView(R.id.btn_take_photo)
-    FloatingActionButton btn_take_photo;
-    private SurfaceHolder surfaceHolder;
-    private Camera.PictureCallback jpegCallback;
-    private Camera.ShutterCallback shutterCallback;
-    private String takenImagePath, date, photoFile, file_name, cityName, cameraType = "back";
-    private SimpleDateFormat simpleDateFormat;
-    private File picfile;
-    private ImageView flip, flash, flashShadow;
-    // Flash modes supported by this camera
-    private List<String> mSupportedFlashModes;
-    private boolean frontCamera, autoFlashActivated;
-    FileOutputStream outputStream;
-    File file_image;
-    Intent intent, intent2;
+
+public class CameraActivity extends Activity implements OnClickListener {
+
+    boolean frontCamera = false, autoFlashActivated = true;
     private TextView direction;
     private Compass compass;
-    private ProgressBar progressBar;
-    File dics = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM);
+    private ImageView flash, flashShadow;
+    private GLSurfaceView glSurfaceView;
+
+    private GPUImage mGPUImage;
+    private CameraHelper mCameraHelper;
+    private CameraLoader mCamera;
+
+    LinearLayout ll;
+    ViewGroup.LayoutParams lp;
+    View cameraSwitchView;
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.custom_camera);
+        setContentView(R.layout.custom_camera2);
+
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        ButterKnife.inject(this);
         init();
-        setOnClickListeners();
-        jpegCallback = getJpegCallback();
+        activateClickListener();
 
 
     }
 
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        finish();
+    private void activateClickListener() {
+        findViewById(R.id.flash_icon).setOnClickListener(this);
     }
 
-
-    /*
-    Detektera klick på flash och flip
-     */
-    private void setOnClickListeners() {
-        btn_take_photo.setOnClickListener(new FloatingActionButton.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                progressBar.setVisibility(View.VISIBLE);
-                camera.takePicture(null, null, jpegCallback);
-
-            }
-        });
-
-        flip.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                flipCamera();
-            }
-        });
-
-        flash.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                setFlashMode();
-            }
-        });
-
-
-    }
-
-
-    /*
-    Tilldela alla komponenter
-     */
     private void init() {
-        simpleDateFormat = new SimpleDateFormat("dd-MMM-yyyy");
-        date = simpleDateFormat.format(new Date());
+        if (getIntent().getStringExtra("camType")!=null && getIntent().getStringExtra("camType").equals("front")) {
+            frontCamera = true;
+        }
 
-        surfaceHolder = surfaceView.getHolder();
-        surfaceHolder.addCallback(this);
-        surfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
-        flip = (ImageView) findViewById(R.id.flip_icon);
-        frontCamera = false;
-        flash = (ImageView) findViewById(R.id.flash_icon);
-        flashShadow = (ImageView) findViewById(R.id.flash_shadow);
-
-
-        outputStream = null;
-        intent2 = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-
-        cityName = getCityName();
+        glSurfaceView = (GLSurfaceView) findViewById(R.id.surfaceView);
 
         direction = (TextView) findViewById(R.id.direction);
+        flash = (ImageView) findViewById(R.id.flash_icon);
+        flashShadow = (ImageView) findViewById(R.id.flash_shadow);
         compass = new Compass(this, direction, "back");
         compass.start();
 
-        progressBar = (ProgressBar) findViewById(R.id.progressBar);
-        progressBar.setVisibility(View.GONE);
+
+        ll = (LinearLayout) findViewById(R.id.button_list);
+
+        lp = new ViewGroup.LayoutParams(300, 300);
 
 
-        if (getIntent().getStringExtra("camType") != null) {
-            cameraType = getIntent().getStringExtra("camType");
+        findViewById(R.id.button_capture).setOnClickListener(this);
+
+        mGPUImage = new GPUImage(this);
+        mGPUImage.setGLSurfaceView((GLSurfaceView) findViewById(R.id.surfaceView));
+
+        mCameraHelper = new CameraHelper(this);
+        mCamera = new CameraLoader();
+
+
+        cameraSwitchView = findViewById(R.id.img_switch_camera);
+        cameraSwitchView.setOnClickListener(this);
+        if (!mCameraHelper.hasFrontCamera() || !mCameraHelper.hasBackCamera()) {
+            cameraSwitchView.setVisibility(View.GONE);
         }
 
 
     }
 
-
-    /*
-    Spara till fotogalleriet
-     */
-    private void refreshGallery(File file) {
-
-        intent2.setData(Uri.fromFile(file));
-        sendBroadcast(intent2);
-
-
-    }
-
-
-    public void refreshCamera() {
-        if (surfaceHolder.getSurface() == null) {
-            return;
-        }
-
-        try {
-            camera.stopPreview();
-        } catch (Exception e) {
-
-        }
-        try {
-            camera.setPreviewDisplay(surfaceHolder);
-            camera.startPreview();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-
-    /*
-    Hämta filen som skapats
-     */
-    private File getDirc() {
-
-        return new File(dics, "Travel Journey");
-    }
-
-
-    /*
-    Sätt inställningar till vår surfaceview (previewskärmen)
-     */
     @Override
-    public void surfaceCreated(SurfaceHolder surfaceHolder) {
-
-        try {
-            //camera = android.hardware.Camera.open(Camera.CameraInfo.CAMERA_FACING_FRONT);
-            camera = Camera.open();
-            mSupportedFlashModes = camera.getParameters().getSupportedFlashModes();
-
-
-            // Set the camera to Auto Flash mode.
-            if (mSupportedFlashModes != null && mSupportedFlashModes.contains(Camera.Parameters.FLASH_MODE_AUTO)) {
-                Camera.Parameters parameters = camera.getParameters();
-                parameters.setFlashMode(Camera.Parameters.FLASH_MODE_AUTO);
-                parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
-                camera.setParameters(parameters);
-                autoFlashActivated = true;
-            }
-        } catch (RuntimeException e) {
-            Log.i("camera","allt är fel critical error");
-
-        }
-        Camera.Parameters parameters;
-        parameters = camera.getParameters();
-        parameters.setPreviewFrameRate(20);
-        //parameters.setPreviewSize(352, 288);
-        //camera.setParameters(parameters);
-        camera.setDisplayOrientation(90);
-
-
-        try {
-            camera.setPreviewDisplay(surfaceHolder);
-            camera.startPreview();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        if (cameraType.equals("front")) {
-            flipCamera();
-        }
-
+    protected void onResume() {
+        super.onResume();
+        mCamera.onResume();
 
     }
 
-    /*
-    När något ändras, tex om man kunde flipat skärmen.
-     */
     @Override
-    public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int i1, int i2) {
-        refreshCamera();
+    protected void onPause() {
+        mCamera.onPause();
+        super.onPause();
     }
 
 
-    /*
-    Om kameran lämnas
-     */
     @Override
-    public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
-        //camera.stopPreview();
-        camera.release();
-        //camera = null;
-    }
+    public void onClick(final View v) {
 
 
-    /*
-    skapa filen osv
-     */
-    public Camera.PictureCallback getJpegCallback() {
-
-        return new Camera.PictureCallback() {
+        switch (v.getId()) {
 
 
-            @Override
-            public void onPictureTaken(byte[] bytes, Camera camera) {
+            case R.id.button_capture:
+                if (mCamera.mCameraInstance.getParameters().getFocusMode().equals(Parameters.FOCUS_MODE_CONTINUOUS_PICTURE)) {
 
-                file_image = getDirc();
-
-                if (!file_image.exists() && !file_image.mkdirs()) {
-                    Toast.makeText(getApplicationContext(), "Can't create directory to save Image", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                photoFile = "Travel Journey%" + date + "%" + cityName + "%" + direction.getText() + "%.jpg";
-                file_name = file_image.getAbsolutePath() + "/" + photoFile;
-                picfile = new File(file_name);
-
-
-                try {
-
-                    outputStream = new FileOutputStream(picfile);
-                    outputStream.write(bytes);
-                    outputStream.close();
-                } catch (FileNotFoundException e) {
-                    System.out.println(Toast.makeText(getApplicationContext(), "File error", Toast.LENGTH_SHORT));
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    System.out.println(Toast.makeText(getApplicationContext(), "Camera error", Toast.LENGTH_SHORT));
-                    e.printStackTrace();
-                } finally {
-
-                }
-
-
-                intent.putExtra("file_name", file_name);
-                if (frontCamera) {
-                    intent.putExtra("camera_type", "front");
+                    takePicture();
                 } else {
-                    intent.putExtra("camera_type", "back");
+                    mCamera.mCameraInstance.autoFocus(new Camera.AutoFocusCallback() {
+
+                        @Override
+                        public void onAutoFocus(final boolean success, final Camera camera) {
+
+                            takePicture();
+                        }
+                    });
+                }
+                break;
+
+            case R.id.img_switch_camera:
+
+                mCamera.switchCamera();
+
+
+                if (frontCamera) {
+                    frontCamera = false;
+                    flash.setImageResource(R.drawable.vector_drawable_ic_flash_auto_white___px);
+                    flashShadow.setImageResource(R.drawable.vector_drawable_ic_flash_auto_black___px);
+                } else {
+                    frontCamera = true;
+                    flash.setImageResource(0);
+                    flashShadow.setImageResource(0);
                 }
 
-                startActivity(intent);
-                refreshGallery(picfile);
-                finish();
+                break;
 
-
-
-            }
-        };
-    }
-
-
-    /*
-    flipa kameran vid klick på flip
-     */
-    public void flipCamera() {
-        if (frontCamera) {
-            camera.stopPreview();
-            camera.release();
-            camera = Camera.open(Camera.CameraInfo.CAMERA_FACING_BACK);
-            try {
-
-                camera.setPreviewDisplay(surfaceHolder);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            frontCamera = false;
-        } else {
-            camera.stopPreview();
-            camera.release();
-
-            camera = Camera.open(Camera.CameraInfo.CAMERA_FACING_FRONT);
-            try {
-                camera.setPreviewDisplay(surfaceHolder);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-
-            frontCamera = true;
-        }
-        camera.setDisplayOrientation(90);
-        camera.startPreview();
-
-        compass.changeCam();
-    }
-
-    /*
-    Sätt flash till off eller auto
-     */
-    private void setFlashMode() {
-        if (autoFlashActivated) {
-            if (mSupportedFlashModes != null && mSupportedFlashModes.contains(Camera.Parameters.FLASH_MODE_AUTO)) {
-                Camera.Parameters parameters = camera.getParameters();
-                parameters.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
-                camera.setParameters(parameters);
-                autoFlashActivated = false;
-
-                flash.setImageResource(R.drawable.vector_drawable_ic_flash_off_white___px);
-                flashShadow.setImageResource(R.drawable.vector_drawable_ic_flash_off_black___px);
-            }
-
-        } else {
-
-            if (mSupportedFlashModes != null && mSupportedFlashModes.contains(Camera.Parameters.FLASH_MODE_AUTO)) {
-                Camera.Parameters parameters = camera.getParameters();
-                parameters.setFlashMode(Camera.Parameters.FLASH_MODE_AUTO);
-                camera.setParameters(parameters);
-                autoFlashActivated = true;
-                flash.setImageResource(R.drawable.vector_drawable_ic_flash_auto_white___px);
-                flashShadow.setImageResource(R.drawable.vector_drawable_ic_flash_auto_black___px);
-            }
-
+            case R.id.flash_icon:
+                mCamera.changeFlashMode();
+                break;
         }
     }
 
+    private void takePicture() {
+        // TODO get a size that is about the size of the screen
+        Camera.Parameters params = mCamera.mCameraInstance.getParameters();
+        params.setRotation(90);
+        mCamera.mCameraInstance.setParameters(params);
+        for (Camera.Size size : params.getSupportedPictureSizes()) {
+            Log.i("ASDF", "Supported: " + size.width + "x" + size.height);
+        }
+        mCamera.mCameraInstance.takePicture(null, null,
+                new Camera.PictureCallback() {
 
-    public String getCityName() {
-        LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
+                    @Override
+                    public void onPictureTaken(byte[] data, final Camera camera) {
+
+                        final File pictureFile = getOutputMediaFile(MEDIA_TYPE_IMAGE);
+                        if (pictureFile == null) {
+                            Log.d("ASDF",
+                                    "Error creating media file, check storage permissions");
+                            return;
+                        }
+
+                        try {
+                            FileOutputStream fos = new FileOutputStream(pictureFile);
+                            fos.write(data);
+                            fos.close();
+                        } catch (FileNotFoundException e) {
+                            Log.d("ASDF", "File not found: " + e.getMessage());
+                        } catch (IOException e) {
+                            Log.d("ASDF", "Error accessing file: " + e.getMessage());
+                        }
+
+                        data = null;
+                        Bitmap bitmap = BitmapFactory.decodeFile(pictureFile.getAbsolutePath());
+                        // mGPUImage.setImage(bitmap);
+                        final GLSurfaceView view = (GLSurfaceView) findViewById(R.id.surfaceView);
+                        view.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
+
+
+
+                        /*
+                        Filnamnet
+                         */
+                        long time= System.currentTimeMillis();
+                        mGPUImage.saveToPictures(bitmap, "TJ",
+                                time + "%" + "Bildnamn" + ".jpg",
+                                new OnPictureSavedListener() {
+
+                                    @Override
+                                    public void onPictureSaved(final Uri
+                                                                       uri) {
+                                        pictureFile.delete();
+                                        view.setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
+                                    }
+                                });
+
+
+                        Intent intent = new Intent(getApplicationContext(), ImageViewingActivity.class);
+                        intent.putExtra("file_name", pictureFile.getAbsolutePath());
+                        intent.putExtra("file_name2", "/storage/emulated/0/Pictures/TJ/"+time+"%Bildnamn.jpg");
+                        intent.putExtra("direction", direction.getText().toString());
+                        if (frontCamera) {
+                            intent.putExtra("camera_type", "front");
+                        } else {
+                            intent.putExtra("camera_type", "back");
+                        }
+
+                        startActivity(intent);
+                        finish();
+                    }
+                });
+    }
+
+
+    public static final int MEDIA_TYPE_IMAGE = 1;
+    public static final int MEDIA_TYPE_VIDEO = 2;
+
+    private static File getOutputMediaFile(final int type) {
+        // To be safe, you should check that the SDCard is mounted
+        // using Environment.getExternalStorageState() before doing this.
+
+        File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_PICTURES), "MyCameraApp");
+        // This location works best if you want the created images to be shared
+        // between applications and persist after your app has been uninstalled.
+
+        // Create the storage directory if it does not exist
+        if (!mediaStorageDir.exists()) {
+            if (!mediaStorageDir.mkdirs()) {
+                Log.d("MyCameraApp", "failed to create directory");
+                return null;
+            }
+        }
+
+        // Create a media file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        File mediaFile;
+        if (type == MEDIA_TYPE_IMAGE) {
+            mediaFile = new File(mediaStorageDir.getPath() + File.separator +
+                    "IMG_" + timeStamp + ".jpg");
+        } else if (type == MEDIA_TYPE_VIDEO) {
+            mediaFile = new File(mediaStorageDir.getPath() + File.separator +
+                    "VID_" + timeStamp + ".mp4");
+        } else {
             return null;
         }
-        Location location = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 
-        double longitude = location.getLongitude();
-        double latitude = location.getLatitude();
-        Geocoder gcd = new Geocoder(getApplicationContext(), Locale.getDefault());
-        List<Address> addresses = null;
-        try {
-            addresses = gcd.getFromLocation(latitude, longitude, 1);
-        } catch (IOException e) {
-            e.printStackTrace();
+        return mediaFile;
+    }
+
+
+    private class CameraLoader {
+
+        private int mCurrentCameraId = 0;
+        private Camera mCameraInstance;
+
+        public void onResume() {
+            if (frontCamera) {
+                mCurrentCameraId = 1;
+                flash.setImageResource(0);
+                flashShadow.setImageResource(0);
+            }
+            setUpCamera(mCurrentCameraId);
         }
-        if (addresses.size() > 0) {
-            return addresses.get(0).getLocality();
+
+        public void onPause() {
+            releaseCamera();
         }
-        return null;
+
+        public void switchCamera() {
+            releaseCamera();
+            mCurrentCameraId = (mCurrentCameraId + 1) % mCameraHelper.getNumberOfCameras();
+            setUpCamera(mCurrentCameraId);
+            compass.changeCam();
+
+        }
+
+        private void setUpCamera(final int id) {
+            mCameraInstance = getCameraInstance(id);
+            Parameters parameters = mCameraInstance.getParameters();
+            if (parameters.getSupportedFocusModes().contains(
+                    Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE)) {
+                parameters.setFocusMode(Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
+            }
+
+            mCameraInstance.setParameters(parameters);
+
+            int orientation = mCameraHelper.getCameraDisplayOrientation(
+                    CameraActivity.this, mCurrentCameraId);
+            CameraHelper.CameraInfo2 cameraInfo = new CameraHelper.CameraInfo2();
+            mCameraHelper.getCameraInfo(mCurrentCameraId, cameraInfo);
+            boolean flipHorizontal = cameraInfo.facing == CameraInfo.CAMERA_FACING_FRONT;
+            mGPUImage.setUpCamera(mCameraInstance, orientation, flipHorizontal, false);
+        }
+
+        /**
+         * A safe way to get an instance of the Camera object.
+         */
+        private Camera getCameraInstance(final int id) {
+            Camera c = null;
+            try {
+                c = mCameraHelper.openCamera(id);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return c;
+        }
+
+        private void releaseCamera() {
+            mCameraInstance.setPreviewCallback(null);
+            mCameraInstance.release();
+            mCameraInstance = null;
+        }
+
+        public void changeFlashMode() {
+            List<String> mSupportedFlashModes = mCameraInstance.getParameters().getSupportedFlashModes();
+
+            if (autoFlashActivated) {
+                if (mSupportedFlashModes != null && mSupportedFlashModes.contains(Camera.Parameters.FLASH_MODE_AUTO)) {
+                    Camera.Parameters parameters = mCameraInstance.getParameters();
+                    parameters.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
+                    mCameraInstance.setParameters(parameters);
+                    autoFlashActivated = false;
+
+                    flash.setImageResource(R.drawable.vector_drawable_ic_flash_off_white___px);
+                    flashShadow.setImageResource(R.drawable.vector_drawable_ic_flash_off_black___px);
+                }
+            } else {
+
+                if (mSupportedFlashModes != null && mSupportedFlashModes.contains(Camera.Parameters.FLASH_MODE_AUTO)) {
+                    Camera.Parameters parameters = mCameraInstance.getParameters();
+                    parameters.setFlashMode(Camera.Parameters.FLASH_MODE_AUTO);
+                    mCameraInstance.setParameters(parameters);
+                    autoFlashActivated = true;
+                    flash.setImageResource(R.drawable.vector_drawable_ic_flash_auto_white___px);
+                    flashShadow.setImageResource(R.drawable.vector_drawable_ic_flash_auto_black___px);
+                }
+
+            }
+        }
     }
 }
-

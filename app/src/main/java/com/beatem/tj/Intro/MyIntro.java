@@ -9,7 +9,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
-import com.beatem.tj.Filters.ActivityGallery;
+import com.beatem.tj.CapturedImage.ImageViewingActivity;
 import com.beatem.tj.MapsActivity;
 import com.beatem.tj.R;
 import com.github.paolorotolo.appintro.AppIntro;
@@ -68,7 +68,7 @@ public class MyIntro extends AppIntro {
     }
 
     public void doneWithIntroClicked(View view){
-        startActivity(new Intent(this, ActivityGallery.class));
+        startActivity(new Intent(this, ImageViewingActivity.class));
         finish();
     }
 
