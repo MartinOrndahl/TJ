@@ -25,6 +25,8 @@ public class MySqLite extends SQLiteOpenHelper {
             "trip varchar(50) not null,\n" +
             "text varchar(300),\n" +
             "picturepath varchar(300) not null,\n" +
+            "direction varchar(50) not null,\n" +
+            "filter varchar(100) not null,\n" +
             "primary key(longditude,latitude)\n" +
             ");";
 
@@ -32,9 +34,11 @@ public class MySqLite extends SQLiteOpenHelper {
     private static final String KEY_LATITUDE = "latitude";
     private static final String KEY_LONGDITUDE = "longditude";
     private static final String VAR_PICTUREPATH = "picturepath";
+    private static final String VAR_DIRECTION = "direction";
+    private static final String VAR_FILTER = "filter";
     private static final String VAR_TRIP = "trip";
     private static final String VAR_TEXT = "text";
-    private static final String[] LOCATION_COLUMNS = {KEY_LONGDITUDE, KEY_LATITUDE, VAR_TRIP, VAR_PICTUREPATH, VAR_TEXT};
+    private static final String[] LOCATION_COLUMNS = {KEY_LONGDITUDE, KEY_LATITUDE, VAR_TRIP, VAR_PICTUREPATH, VAR_DIRECTION, VAR_FILTER, VAR_TEXT};
 
     public MySqLite(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -69,6 +73,8 @@ public class MySqLite extends SQLiteOpenHelper {
         values.put(VAR_TRIP, location.getTrip());
         values.put(VAR_TEXT, location.getText());
         values.put(VAR_PICTUREPATH, location.getPicpath());
+        values.put(VAR_DIRECTION, location.getDirection());
+        values.put(VAR_FILTER, location.getFilter());
         Boolean inserted = db.insert(TABLE_LOCATIONS, null, values) > 0;
 
         return inserted;
@@ -89,7 +95,7 @@ public class MySqLite extends SQLiteOpenHelper {
         if (cursor != null) {
             cursor.moveToFirst();
         }
-        MyLocation location = new MyLocation(Float.valueOf(cursor.getString(0)), Float.valueOf(cursor.getString(1)), cursor.getString(2), cursor.getString(3), cursor.getString(4));
+        MyLocation location = new MyLocation(Float.valueOf(cursor.getString(0)), Float.valueOf(cursor.getString(1)), cursor.getString(2), cursor.getString(3), cursor.getString(4), cursor.getString(5), cursor.getString(6));
         db.close();
         cursor.close();
 
@@ -112,7 +118,7 @@ public class MySqLite extends SQLiteOpenHelper {
 
         if (cursor.moveToFirst()) {
             do {
-                MyLocation location = new MyLocation(Float.valueOf(cursor.getString(0)), Float.valueOf(cursor.getString(1)), cursor.getString(2), cursor.getString(3), cursor.getString(4));
+                MyLocation location = new MyLocation(Float.valueOf(cursor.getString(0)), Float.valueOf(cursor.getString(1)), cursor.getString(2), cursor.getString(3), cursor.getString(4),cursor.getString(5), cursor.getString(6));
                 locations.add(location);
             } while (cursor.moveToNext());
         }

@@ -813,7 +813,7 @@ ställer in vilket mode vi befinner oss i
         MySqLite sqLite = new MySqLite(getApplicationContext());
         if (sqLite.addLocation(new MyLocation((float) MapsActivity.currentlocation.longitude,
                 (float) MapsActivity.currentlocation.latitude, "Joels Resa", editText.getText().toString(),
-                path
+                path, direction.getText().toString(), "Testfilter"
         ))) {
             Toast.makeText(getApplicationContext(), "Saved!", Toast.LENGTH_SHORT).show();
             startActivity(new Intent(getApplicationContext(), MapsActivity.class));
