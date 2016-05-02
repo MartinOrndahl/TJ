@@ -1,6 +1,7 @@
 package com.beatem.tj;
 
 import android.Manifest;
+import android.content.ClipData;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -519,38 +520,53 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         } else if (id == R.id.end_trip_button) {
 
+            if (navigationView.getMenu().findItem(R.id.end_trip_button).getTitle().toString().equals("Start new trip")) {
+                MenuItem i = navigationView.getMenu().findItem(R.id.end_trip_button);
+                i.setTitle("End trip");
+                AlertDialog.Builder startNewTrip = new AlertDialog.Builder(this);
+                startNewTrip.setTitle("Tripname");
+                startNewTrip.setIcon(getDrawable(R.drawable.walden_map));
+                startNewTrip.setMessage("Please enter a name for your trip");
+
+                SaveSharedPreferences.setCurrentTrip(getApplicationContext(), "");
+                currentTripMode();
+            } else {
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+                builder.setTitle("Confirm");
+                builder.setIcon(getDrawable(R.drawable.worldmap));
+                builder.setMessage("Are you sure you want to end this trip?");
 
 
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
 
-            builder.setTitle("Confirm");
-            builder.setIcon(getDrawable(R.drawable.worldmap));
-            builder.setMessage("Are you sure you want to end this trip?");
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
 
-            builder.setNegativeButton("YES", new DialogInterface.OnClickListener() {
+                        // Do nothing but close the dialog
+                        dialog.dismiss();
+                    }
+                });
 
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    Button start = (Button) findViewById(R.id.end_trip_button);
-                    start.setText("Start new trip");
-                    dialog.dismiss();
-                }
-            });
+                builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
 
-            builder.setPositiveButton("CANCEL", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        MenuItem i = navigationView.getMenu().findItem(R.id.end_trip_button);
+                        i.setTitle("Start new trip");
+                        SaveSharedPreferences.setCurrentTrip(getApplicationContext(), "none");
+                        worldMapmode();
 
-                public void onClick(DialogInterface dialog, int which) {
-                    // Do nothing but close the dialog
+                        dialog.dismiss();
+                    }
 
-                    dialog.dismiss();
-                }
+                });
 
-            });
+                AlertDialog alert = builder.create();
+                alert.show();
 
 
-
-            AlertDialog alert = builder.create();
-            alert.show();
+            }
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
