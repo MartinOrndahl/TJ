@@ -25,6 +25,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -686,14 +687,26 @@ ställer in vilket mode vi befinner oss i
                             .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    if (imgFile.delete()) {
-                                        Toast.makeText(getApplicationContext(), "Deleted!", Toast.LENGTH_SHORT).show();
-                                        startCamera();
-                                        finish();
-                                    }
-                                    else{
-                                        Toast.makeText(getApplicationContext(), "Couldn't delete image", Toast.LENGTH_SHORT).show();
-                                    }
+                                    File f = new File(getIntent().getStringExtra("file_name2"));
+
+                                    Toast.makeText(getApplicationContext(), f.getAbsolutePath(), Toast.LENGTH_SHORT).show();
+                                    f.delete();
+                                    MediaScannerConnection.scanFile(getApplicationContext(), new String[] {
+
+                                                    f.getAbsolutePath()},
+
+                                            null, new MediaScannerConnection.OnScanCompletedListener() {
+
+                                                public void onScanCompleted(String path, Uri uri)
+
+                                                {
+
+
+                                                }
+
+                                            });
+                                    startCamera();
+                                    finish();
 
 
                                 }
@@ -707,6 +720,8 @@ ställer in vilket mode vi befinner oss i
             }
         });
     }
+
+
 
     private void saveImageAction() {
         startActivity(new Intent(getApplicationContext(), MapsActivity.class));

@@ -212,14 +212,15 @@ public class ActivityCamera extends Activity implements OnClickListener {
                         /*
                         Filnamnet
                          */
+                        long time= System.currentTimeMillis();
                         mGPUImage.saveToPictures(bitmap, "TJ",
-                                System.currentTimeMillis() + "%" + "Bildnamn" + ".jpg",
+                                time + "%" + "Bildnamn" + ".jpg",
                                 new OnPictureSavedListener() {
 
                                     @Override
                                     public void onPictureSaved(final Uri
                                                                        uri) {
-                                        //pictureFile.delete();
+                                        pictureFile.delete();
                                         view.setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
                                     }
                                 });
@@ -228,6 +229,7 @@ public class ActivityCamera extends Activity implements OnClickListener {
                         Intent intent = new Intent(getApplicationContext(), ActivityGallery.class);
                         Toast.makeText(getApplicationContext(), pictureFile.getAbsolutePath(), Toast.LENGTH_SHORT).show();
                         intent.putExtra("file_name", pictureFile.getAbsolutePath());
+                        intent.putExtra("file_name2", "/storage/emulated/0/Pictures/TJ/"+time+"%Bildnamn.jpg");
                         if (frontCamera) {
                             intent.putExtra("camera_type", "front");
                         } else {
