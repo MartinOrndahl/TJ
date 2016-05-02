@@ -107,10 +107,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
 
 
-            db.addLocation(new MyLocation(10, 20, "Australien", "t", file.getAbsolutePath(), "N", "NoFilter"));
-            db.addLocation(new MyLocation(10, 25, "Australien", "test1231", file.getAbsolutePath(), "N", "NoFilter"));
-            db.addLocation(new MyLocation(11, 26, "Australien", "testfgd", file.getAbsolutePath(), "N", "NoFilter"));
-            db.addLocation(new MyLocation(15, 18, "Australien", "testare", "fuck this shit", "N", "NoFilter"));
+            db.addLocation(new MyLocation(10, 20, "Australien", "t", file.getAbsolutePath(), "N", "NoFilter", "1 Jan 2016"));
+            db.addLocation(new MyLocation(10, 25, "Australien", "test1231", file.getAbsolutePath(), "N", "NoFilter", "1 Jan 2016"));
+            db.addLocation(new MyLocation(11, 26, "Australien", "testfgd", file.getAbsolutePath(), "N", "NoFilter", "1 Jan 2016"));
+            db.addLocation(new MyLocation(15, 18, "Australien", "testare", "fuck this shit", "N", "NoFilter", "1 Jan 2016"));
             SaveSharedPreferences.setStartBefore(getApplicationContext(), true);
             Toast.makeText(getApplicationContext(), file.getAbsolutePath() + "yeeeey", Toast.LENGTH_SHORT).show();
         }

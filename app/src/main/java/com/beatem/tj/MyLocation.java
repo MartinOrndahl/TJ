@@ -10,10 +10,10 @@ import com.google.android.gms.maps.model.LatLng;
  */
 public class MyLocation implements Parcelable{
     private float longditude,latitude;
-    private String text,picpath,trip, direction, filter;
+    private String text,picpath,trip, direction, filter, date;
     private LatLng latlng;
 
-    public MyLocation(float londitude ,float latitude,String trip,String text, String picpath, String direction, String filter){
+    public MyLocation(float londitude ,float latitude,String trip,String text, String picpath, String direction, String filter, String date){
         this.latitude = latitude;
         this.longditude = londitude;
         this.text =text;
@@ -21,6 +21,7 @@ public class MyLocation implements Parcelable{
         this.trip = trip;
         this.direction=direction;
         this.filter=filter;
+        this.date=date;
         latlng = new LatLng(latitude,londitude);
 
     }
@@ -56,6 +57,11 @@ public class MyLocation implements Parcelable{
         return filter;
     }
 
+
+    public String getDate() {
+        return date;
+    }
+
     //-------Parcable delen-----------
 
     public MyLocation(Parcel in){
@@ -65,6 +71,9 @@ public class MyLocation implements Parcelable{
         this.trip = in.readString();
         this.text = in.readString();
         this.picpath = in.readString();
+        this.direction= in.readString();
+        this.filter=in.readString();
+        this.date=in.readString();
 
         latlng = new LatLng(latitude,longditude);
     }
@@ -90,6 +99,7 @@ public class MyLocation implements Parcelable{
             return new MyLocation[size];
         }
     };
+
 
 
 }
