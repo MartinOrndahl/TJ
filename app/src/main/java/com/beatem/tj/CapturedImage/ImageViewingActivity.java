@@ -25,6 +25,8 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.location.Address;
+import android.location.Geocoder;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Bundle;
@@ -62,6 +64,8 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
 import jp.co.cyberagent.android.gpuimage.GPUImage.OnPictureSavedListener;
 import jp.co.cyberagent.android.gpuimage.GPUImageFilter;
@@ -263,6 +267,7 @@ ställer in vilket mode vi befinner oss i
 
         direction.setText(getIntent().getStringExtra("direction").toString());
         date.setText(handleDate(new SimpleDateFormat("dd-MM-yyyy").format(new Date())));
+        cityName.setText(getCity());
 
 
              /*
@@ -690,6 +695,29 @@ ställer in vilket mode vi befinner oss i
             expanded = true;
 
         }
+    }
+
+    public String getCity() {
+        Geocoder geoCoder = new Geocoder(this, Locale.getDefault());
+        String[] total= new String[]{};
+        StringBuilder builder = new StringBuilder();
+        try {
+            List<Address> address = geoCoder.getFromLocation(MapsActivity.currentlocation.latitude,
+                    MapsActivity.currentlocation.longitude, 1);
+            int maxLines = address.get(0).getMaxAddressLineIndex();
+            for (int i=0; i<maxLines; i++) {
+                String addressStr = address.get(0).getAddressLine(i);
+                builder.append(addressStr);
+                builder.append(" ");
+            }
+
+            String fnialAddress = builder.toString(); //This is the complete address.
+            total= fnialAddress.split(" ");
+
+        } catch (IOException e) {}
+        catch (NullPointerException e) {}
+
+        return total[total.length-1];
     }
 
     private class ResizeAnimation extends Animation {
