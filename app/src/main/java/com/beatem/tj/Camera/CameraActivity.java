@@ -44,7 +44,7 @@ public class CameraActivity extends Activity implements OnClickListener {
     boolean frontCamera = false, autoFlashActivated = true;
     private TextView direction;
     private Compass compass;
-    private ImageView flash, flashShadow;
+    private ImageView flash;
     private GLSurfaceView glSurfaceView;
 
     private GPUImage mGPUImage;
@@ -81,7 +81,6 @@ public class CameraActivity extends Activity implements OnClickListener {
 
         direction = (TextView) findViewById(R.id.direction);
         flash = (ImageView) findViewById(R.id.flash_icon);
-        flashShadow = (ImageView) findViewById(R.id.flash_shadow);
         compass = new Compass(this, direction, "back");
         compass.start();
 
@@ -154,11 +153,11 @@ public class CameraActivity extends Activity implements OnClickListener {
                 if (frontCamera) {
                     frontCamera = false;
                     flash.setImageResource(R.drawable.vector_drawable_ic_flash_auto_white___px);
-                    flashShadow.setImageResource(R.drawable.vector_drawable_ic_flash_auto_black___px);
+
                 } else {
                     frontCamera = true;
                     flash.setImageResource(0);
-                    flashShadow.setImageResource(0);
+
                 }
 
                 break;
@@ -289,7 +288,7 @@ public class CameraActivity extends Activity implements OnClickListener {
             if (frontCamera) {
                 mCurrentCameraId = 1;
                 flash.setImageResource(0);
-                flashShadow.setImageResource(0);
+
             }
             setUpCamera(mCurrentCameraId);
         }
@@ -358,7 +357,7 @@ public class CameraActivity extends Activity implements OnClickListener {
                     autoFlashActivated = false;
 
                     flash.setImageResource(R.drawable.vector_drawable_ic_flash_off_white___px);
-                    flashShadow.setImageResource(R.drawable.vector_drawable_ic_flash_off_black___px);
+
                 }
             } else {
 
@@ -368,7 +367,6 @@ public class CameraActivity extends Activity implements OnClickListener {
                     mCameraInstance.setParameters(parameters);
                     autoFlashActivated = true;
                     flash.setImageResource(R.drawable.vector_drawable_ic_flash_auto_white___px);
-                    flashShadow.setImageResource(R.drawable.vector_drawable_ic_flash_auto_black___px);
                 }
 
             }
