@@ -554,6 +554,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 AlertDialog test = startNewTrip.create();
                 test.show();
 
+
                 SaveSharedPreferences.setCurrentTrip(getApplicationContext(), tripName);
                 if (galleryCreated) {
                     android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
