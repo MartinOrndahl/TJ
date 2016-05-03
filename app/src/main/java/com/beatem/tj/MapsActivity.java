@@ -31,6 +31,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.beatem.tj.Camera.CameraActivity;
@@ -70,6 +72,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private MapFragment mapFragment1;
     private android.support.v4.app.FragmentTransaction fragmentTransactionCat;
     private CatLoadingView cat;
+    private String tripName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -525,10 +528,39 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 i.setTitle("End trip");
                 AlertDialog.Builder startNewTrip = new AlertDialog.Builder(this);
                 startNewTrip.setTitle("Tripname");
-                startNewTrip.setIcon(getDrawable(R.drawable.walden_map));
+                startNewTrip.setIcon(getDrawable(R.drawable.worldmap));
                 startNewTrip.setMessage("Please enter a name for your trip");
+                final EditText input = new EditText(MapsActivity.this);
+                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.MATCH_PARENT);
+                input.setLayoutParams(lp);
+                startNewTrip.setView(input);
 
-                SaveSharedPreferences.setCurrentTrip(getApplicationContext(), "");
+                startNewTrip.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        tripName = input.getText().toString();
+                        dialog.dismiss();
+                    }
+                });
+                startNewTrip.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
+                AlertDialog test = startNewTrip.create();
+                test.show();
+
+                SaveSharedPreferences.setCurrentTrip(getApplicationContext(), tripName);
+                if (galleryCreated) {
+                    android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                    fragmentTransaction.remove(galleryFragment);
+                    fragmentTransaction.commit();
+                    galleryCreated = false;
+                }
                 currentTripMode();
             } else {
 
@@ -556,6 +588,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         i.setTitle("Start new trip");
                         SaveSharedPreferences.setCurrentTrip(getApplicationContext(), "none");
                         worldMapmode();
+                        if (galleryCreated) {
+                            android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                            fragmentTransaction.remove(galleryFragment);
+                            fragmentTransaction.commit();
+                            galleryCreated = false;
+                        }
 
                         dialog.dismiss();
                     }
