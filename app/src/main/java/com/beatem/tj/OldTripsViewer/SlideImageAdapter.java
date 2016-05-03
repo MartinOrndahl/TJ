@@ -45,7 +45,7 @@ import jp.co.cyberagent.android.gpuimage.GPUImageView;
 
 public class SlideImageAdapter extends PagerAdapter implements View.OnClickListener {
 
-
+ //Test
     private ArrayList<String> IMAGES;
     private ArrayList<String> DATES, CITIES, DIRECTIONS, DESCRIPTIONS, FILTERS;
 
