@@ -45,8 +45,12 @@ import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Random;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, SensorEventListener, NavigationView.OnNavigationItemSelectedListener {
@@ -82,36 +86,51 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         cat.show(fragmentTransactionCat, "");
 
         if (!SaveSharedPreferences.getFirstStart(getApplicationContext())) {
-            //TODO:testa ifall bild tilläget fungerade.
+
             MySqLite db = new MySqLite(getApplicationContext());
             Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.adventure);
-            String root = Environment.getExternalStorageDirectory().toString();
-            File myDir = new File(root + "/req_images");
-            myDir.mkdirs();
-            Random generator = new Random();
-            int n = 10000;
-            n = generator.nextInt(n);
-            String fname = "Image-" + n + ".jpg";
-            File file = new File(myDir, fname);
 
-            if (file.exists())
-                file.delete();
-            try {
-                FileOutputStream out = new FileOutputStream(file);
-                bm.compress(Bitmap.CompressFormat.JPEG, 90, out);
-                out.flush();
-                out.close();
-            } catch (Exception e) {
-                e.printStackTrace();
+            File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
+                    Environment.DIRECTORY_PICTURES), "MyCameraApp");
+            // This location works best if you want the created images to be shared
+            // between applications and persist after your app has been uninstalled.
+
+            // Create the storage directory if it does not exist
+            if (!mediaStorageDir.exists()) {
+
+                if (!mediaStorageDir.mkdirs()) {
+                    Log.e("MyCameraApp", "failed to create directory");
+                }
             }
 
 
-            db.addLocation(new MyLocation(10, 20, "Australien", "t", file.getAbsolutePath(), "N", "NoFilter", "1 Jan 2016"));
-            db.addLocation(new MyLocation(10, 25, "Australien", "test1231", file.getAbsolutePath(), "N", "NoFilter", "1 Jan 2016"));
-            db.addLocation(new MyLocation(11, 26, "Australien", "testfgd", file.getAbsolutePath(), "N", "NoFilter", "1 Jan 2016"));
-            db.addLocation(new MyLocation(15, 18, "Australien", "testare", "fuck this shit", "N", "NoFilter", "1 Jan 2016"));
-            SaveSharedPreferences.setStartBefore(getApplicationContext(), true);
-            Toast.makeText(getApplicationContext(), file.getAbsolutePath() + "yeeeey", Toast.LENGTH_SHORT).show();
+            boolean doIt = false;
+            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+            File mediaFile = new File(mediaStorageDir.getPath() + File.separator +
+                        "IMG_" + timeStamp + ".jpg");
+            try {
+                FileOutputStream out = new FileOutputStream(mediaFile);
+                Log.e("marcusärcpbra","Filen borde ha skrivits rätt här");
+                bm.compress(Bitmap.CompressFormat.JPEG, 90, out);
+                out.flush();
+                out.close();
+                bm.recycle();
+                doIt =true;
+
+
+            } catch (FileNotFoundException e) {
+                Log.e("ASDF", "File not found: " + e.getMessage());
+            } catch (IOException e) {
+                Log.e("ASDF", "Error accessing file: " + e.getMessage());
+            }
+
+            if(doIt) {
+                db.addLocation(new MyLocation(10, 20, "Australien", "t", mediaFile.getAbsolutePath(), "N", "NoFilter", "1 Jan 2016"));
+                db.addLocation(new MyLocation(10, 25, "Australien", "test1231", mediaFile.getAbsolutePath(), "N", "NoFilter", "1 Jan 2016"));
+                db.addLocation(new MyLocation(11, 26, "Australien", "testfgd", mediaFile.getAbsolutePath(), "N", "NoFilter", "1 Jan 2016"));
+                db.addLocation(new MyLocation(15, 18, "Australien", "testare", "fuck this shit", "N", "NoFilter", "1 Jan 2016"));
+                SaveSharedPreferences.setStartBefore(getApplicationContext(), true);
+            }
         }
         getTrips();
 
@@ -124,8 +143,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             // to handle the case where the user grants the permission. See the documentation
             // for ActivityCompat#requestPermissions for more details.
             ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                    MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
+                   Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.CAMERA},MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
             return;
         }
 
@@ -167,7 +186,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         String locationProvider = LocationManager.GPS_PROVIDER;
         Location lastKnownLocation = locationManager.getLastKnownLocation(locationProvider);
-        currentlocation = new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
+       try {
+           currentlocation = new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
+       }catch(Exception e){
+
+       }
         GpsListniner(true);
 
 
@@ -339,6 +362,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             mMap.moveCamera(CameraUpdateFactory.newLatLng(bounds.getCenter()));
         } else {
+            if(currentlocation == null){
+                currentlocation = new LatLng(0,0);
+            }
             mMap.moveCamera(CameraUpdateFactory.newLatLng(currentlocation));
         }
     }
@@ -371,7 +397,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                         Intent i = new Intent(getApplicationContext(), ImageViewingActivity.class);
                         i.putExtra("location", location);
-                        //startActivity(i);
+                        startActivity(i);
 
                         return true;
                     }

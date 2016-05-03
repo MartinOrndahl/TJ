@@ -33,6 +33,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.speech.RecognizerIntent;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -102,8 +103,8 @@ public class ImageViewingActivity extends Activity implements OnClickListener, O
 
     private FloatingActionsMenu menuMultipleActions;
     private FloatingActionButton penAction, filterAction, saveAction, deleteAction;
-
-
+    private  MyLocation location;
+    private boolean fromMain;
     private ImageButton mic, info;
     private EditText editText;
 
@@ -115,6 +116,13 @@ public class ImageViewingActivity extends Activity implements OnClickListener, O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gallery);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        Bundle data = getIntent().getExtras();
+        location = (MyLocation) data.getParcelable("location");
+        if(location!=null){
+            fromMain = true;
+        }else{
+            fromMain = false;
+        }
 
 
         init();
@@ -184,13 +192,25 @@ public class ImageViewingActivity extends Activity implements OnClickListener, O
            /*
         Check om vi kommer från en nytagen bild
          */
-        if (getIntent().getStringExtra("file_name") != null) {
-            imgFile = new File(getIntent().getStringExtra("file_name").toString());
+        String fileName;
+        if(fromMain){
+            fileName = location.getPicpath();
+        }else{
+            fileName = getIntent().getStringExtra("file_name");
+
+        }
+        if (fileName != null) {
+            imgFile = new File(fileName);
+            Log.e("marcusäger ", fileName);
             if (imgFile.exists()) {
                 path = imgFile.getAbsolutePath();
                 Toast.makeText(getApplicationContext(), path, Toast.LENGTH_LONG).show();
                 myBitmap = BitmapFactory.decodeFile(path);
-                cameraType = getIntent().getStringExtra("camera_type").toString();
+                if(!fromMain) {
+                    cameraType = getIntent().getStringExtra("camera_type").toString();
+                }else{
+                    cameraType ="back";
+                }
                 FrameLayout.LayoutParams imageParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
 
                 if (cameraType.equals("front")) {
@@ -220,7 +240,7 @@ public class ImageViewingActivity extends Activity implements OnClickListener, O
 
 
             } else {
-                Toast.makeText(this, "Couldn't find image", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Couldn't find image: "+ fileName, Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -268,7 +288,11 @@ ställer in vilket mode vi befinner oss i
         filterLayout = (RelativeLayout) findViewById(R.id.filterLayout);
 
 
-        direction.setText(getIntent().getStringExtra("direction").toString());
+        if(!fromMain){
+            direction.setText(getIntent().getStringExtra("direction").toString());
+        }else {
+            direction.setText(location.getDirection());
+        }
         date.setText(handleDate(new SimpleDateFormat("dd-MM-yyyy").format(new Date())));
         cityName.setText(getCity());
 

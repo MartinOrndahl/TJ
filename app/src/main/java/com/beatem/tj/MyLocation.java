@@ -86,9 +86,15 @@ public class MyLocation implements Parcelable{
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeStringArray(new String[] {this.latitude+"",
-                this.longditude+"",
-                this.trip,this.text,this.picpath});
+       dest.writeFloat(longditude);
+        dest.writeFloat(latitude);
+        dest.writeString(trip);
+        dest.writeString(text);
+        dest.writeString(picpath);
+        dest.writeString(direction);
+        dest.writeString(filter);
+        dest.writeString(date);
+
     }
     public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
         public MyLocation createFromParcel(Parcel in) {
