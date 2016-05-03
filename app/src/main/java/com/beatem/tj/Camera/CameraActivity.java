@@ -73,7 +73,7 @@ public class CameraActivity extends Activity implements OnClickListener {
     }
 
     private void init() {
-        if (getIntent().getStringExtra("camType")!=null && getIntent().getStringExtra("camType").equals("front")) {
+        if (getIntent().getStringExtra("camType") != null && getIntent().getStringExtra("camType").equals("front")) {
             frontCamera = true;
         }
 
@@ -173,6 +173,7 @@ public class CameraActivity extends Activity implements OnClickListener {
         // TODO get a size that is about the size of the screen
         Camera.Parameters params = mCamera.mCameraInstance.getParameters();
         params.setRotation(90);
+
         mCamera.mCameraInstance.setParameters(params);
         for (Camera.Size size : params.getSupportedPictureSizes()) {
             Log.i("ASDF", "Supported: " + size.width + "x" + size.height);
@@ -211,7 +212,7 @@ public class CameraActivity extends Activity implements OnClickListener {
                         /*
                         Filnamnet
                          */
-                        long time= System.currentTimeMillis();
+                        long time = System.currentTimeMillis();
                         mGPUImage.saveToPictures(bitmap, "TJ",
                                 time + "%" + "Bildnamn" + ".jpg",
                                 new OnPictureSavedListener() {
@@ -227,7 +228,7 @@ public class CameraActivity extends Activity implements OnClickListener {
 
                         Intent intent = new Intent(getApplicationContext(), ImageViewingActivity.class);
                         intent.putExtra("file_name", pictureFile.getAbsolutePath());
-                        intent.putExtra("file_name2", "/storage/emulated/0/Pictures/TJ/"+time+"%Bildnamn.jpg");
+                        intent.putExtra("file_name2", "/storage/emulated/0/Pictures/TJ/" + time + "%Bildnamn.jpg");
                         intent.putExtra("direction", direction.getText().toString());
                         if (frontCamera) {
                             intent.putExtra("camera_type", "front");
@@ -307,11 +308,13 @@ public class CameraActivity extends Activity implements OnClickListener {
 
         private void setUpCamera(final int id) {
             mCameraInstance = getCameraInstance(id);
+
             Parameters parameters = mCameraInstance.getParameters();
             if (parameters.getSupportedFocusModes().contains(
                     Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE)) {
                 parameters.setFocusMode(Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
             }
+
 
             mCameraInstance.setParameters(parameters);
 
@@ -321,6 +324,8 @@ public class CameraActivity extends Activity implements OnClickListener {
             mCameraHelper.getCameraInfo(mCurrentCameraId, cameraInfo);
             boolean flipHorizontal = cameraInfo.facing == CameraInfo.CAMERA_FACING_FRONT;
             mGPUImage.setUpCamera(mCameraInstance, orientation, flipHorizontal, false);
+
+
         }
 
         /**

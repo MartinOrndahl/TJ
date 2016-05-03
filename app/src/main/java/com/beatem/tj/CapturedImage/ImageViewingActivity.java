@@ -835,6 +835,7 @@ ställer in vilket mode vi befinner oss i
         Spara till SQL
          */
 
+
         MySqLite sqLite = new MySqLite(getApplicationContext());
         if (sqLite.addLocation(new MyLocation((float) MapsActivity.currentlocation.longitude,
                 (float) MapsActivity.currentlocation.latitude, "Joels Resa", editText.getText().toString(),
