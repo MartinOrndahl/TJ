@@ -21,7 +21,6 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.beatem.tj.CapturedImage.ImageViewingActivity;
@@ -55,7 +54,7 @@ public class CameraActivity extends Activity implements OnClickListener {
     private CameraLoader mCamera;
 
 
-    LinearLayout ll;
+
     ViewGroup.LayoutParams lp;
     View cameraSwitchView;
 
@@ -91,8 +90,6 @@ public class CameraActivity extends Activity implements OnClickListener {
         compass = new Compass(this, direction, "back");
         compass.start();
 
-
-        ll = (LinearLayout) findViewById(R.id.button_list);
 
         lp = new ViewGroup.LayoutParams(300, 300);
 
