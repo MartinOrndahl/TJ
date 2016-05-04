@@ -2,7 +2,6 @@ package com.beatem.tj.Intro;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -51,8 +50,9 @@ public class MyIntro extends AppIntro {
 
         // OPTIONAL METHODS
         // Override bar/separator color.
-        setBarColor(Color.parseColor("#698443"));
-        setSeparatorColor(Color.parseColor("#FF43542A"));
+
+        setBarColor(getResources().getColor(R.color.colorPrimary));
+        setSeparatorColor(getResources().getColor(R.color.colorPrimaryDark));
 
         // Hide Skip/Done button.
         showSkipButton(true);

@@ -34,4 +34,5 @@ dependencies {
 
 
     compile 'jp.co.cyberagent.android.gpuimage:gpuimage-library:+@aar'
+    
 }

@@ -33,12 +33,14 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.speech.RecognizerIntent;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.Transformation;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -85,6 +87,7 @@ public class ImageViewingActivity extends Activity implements OnClickListener, O
     private GPUImageView mGPUImageView;
     private LinearLayout imageLL;
     private Bitmap myBitmap;
+    private String currentFilter = "filter_normal";
 
     private boolean expanded;
     private RelativeLayout descriptionLayout, filterLayout, topRelLayout;
@@ -100,8 +103,8 @@ public class ImageViewingActivity extends Activity implements OnClickListener, O
 
     private FloatingActionsMenu menuMultipleActions;
     private FloatingActionButton penAction, filterAction, saveAction, deleteAction;
-
-
+    private  MyLocation location;
+    private boolean fromMain;
     private ImageButton mic, info;
     private EditText editText;
 
@@ -113,6 +116,13 @@ public class ImageViewingActivity extends Activity implements OnClickListener, O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gallery);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        Bundle data = getIntent().getExtras();
+        location = (MyLocation) data.getParcelable("location");
+        if(location!=null){
+            fromMain = true;
+        }else{
+            fromMain = false;
+        }
 
 
         init();
@@ -182,12 +192,25 @@ public class ImageViewingActivity extends Activity implements OnClickListener, O
            /*
         Check om vi kommer från en nytagen bild
          */
-        if (getIntent().getStringExtra("file_name") != null) {
-            imgFile = new File(getIntent().getStringExtra("file_name").toString());
+        String fileName;
+        if(fromMain){
+            fileName = location.getPicpath();
+        }else{
+            fileName = getIntent().getStringExtra("file_name");
+
+        }
+        if (fileName != null) {
+            imgFile = new File(fileName);
+            Log.e("marcusäger ", fileName);
             if (imgFile.exists()) {
                 path = imgFile.getAbsolutePath();
+                Toast.makeText(getApplicationContext(), path, Toast.LENGTH_LONG).show();
                 myBitmap = BitmapFactory.decodeFile(path);
-                cameraType = getIntent().getStringExtra("camera_type").toString();
+                if(!fromMain) {
+                    cameraType = getIntent().getStringExtra("camera_type").toString();
+                }else{
+                    cameraType ="back";
+                }
                 FrameLayout.LayoutParams imageParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
 
                 if (cameraType.equals("front")) {
@@ -217,7 +240,7 @@ public class ImageViewingActivity extends Activity implements OnClickListener, O
 
 
             } else {
-                Toast.makeText(this, "Couldn't find image", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Couldn't find image: "+ fileName, Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -265,7 +288,11 @@ ställer in vilket mode vi befinner oss i
         filterLayout = (RelativeLayout) findViewById(R.id.filterLayout);
 
 
-        direction.setText(getIntent().getStringExtra("direction").toString());
+        if(!fromMain){
+            direction.setText(getIntent().getStringExtra("direction").toString());
+        }else {
+            direction.setText(location.getDirection());
+        }
         date.setText(handleDate(new SimpleDateFormat("dd-MM-yyyy").format(new Date())));
         cityName.setText(getCity());
 
@@ -323,44 +350,44 @@ ställer in vilket mode vi befinner oss i
         String[] temp = returnValue.split("-");
         StringBuilder sb = new StringBuilder();
         sb.append(temp[0] + " ");
-        String month="";
+        String month = "";
 
-        switch (temp[1]){
+        switch (temp[1]) {
             case "01":
-                month= "Jan";
+                month = "Jan";
                 break;
             case "02":
-                month= "Feb";
+                month = "Feb";
                 break;
             case "03":
-                month= "Mar";
+                month = "Mar";
                 break;
             case "04":
-                month= "Apr";
+                month = "Apr";
                 break;
             case "05":
-                month= "May";
+                month = "May";
                 break;
             case "06":
-                month= "Jun";
+                month = "Jun";
                 break;
             case "07":
-                month= "Jul";
+                month = "Jul";
                 break;
             case "08":
-                month= "Aug";
+                month = "Aug";
                 break;
             case "09":
-                month= "Sep";
+                month = "Sep";
                 break;
             case "10":
-                month= "Oct";
+                month = "Oct";
                 break;
             case "11":
-                month= "Nov";
+                month = "Nov";
                 break;
             case "12":
-                month= "Dec";
+                month = "Dec";
                 break;
             default:
                 break;
@@ -385,91 +412,109 @@ ställer in vilket mode vi befinner oss i
 
             case R.id.filter_normal:
                 switchFilterTo(new GPUImageFilter());
+                currentFilter = "filter_normal";
                 break;
 
             case R.id.filter_in1977:
                 filter = GPUImageFilterTools.createFilterForType(ImageViewingActivity.this, filters.filters.get(0));
                 switchFilterTo(filter);
+                currentFilter = "filter_1977";
                 break;
 
             case R.id.filter_amaro:
                 filter = GPUImageFilterTools.createFilterForType(ImageViewingActivity.this, filters.filters.get(1));
                 switchFilterTo(filter);
+                currentFilter = "filter_amaro";
                 break;
 
             case R.id.filter_brannan:
                 filter = GPUImageFilterTools.createFilterForType(ImageViewingActivity.this, filters.filters.get(2));
                 switchFilterTo(filter);
+                currentFilter = "filter_brannan";
                 break;
 
             case R.id.filter_early_bird:
                 filter = GPUImageFilterTools.createFilterForType(ImageViewingActivity.this, filters.filters.get(3));
                 switchFilterTo(filter);
+                currentFilter = "filter_early_bird";
                 break;
 
             case R.id.filter_hefe:
                 filter = GPUImageFilterTools.createFilterForType(ImageViewingActivity.this, filters.filters.get(4));
                 switchFilterTo(filter);
+                currentFilter = "filter_hefe";
                 break;
 
             case R.id.filter_hudson:
                 filter = GPUImageFilterTools.createFilterForType(ImageViewingActivity.this, filters.filters.get(5));
                 switchFilterTo(filter);
+                currentFilter = "filter_hudson";
                 break;
 
             case R.id.filter_inkwell:
                 filter = GPUImageFilterTools.createFilterForType(ImageViewingActivity.this, filters.filters.get(6));
                 switchFilterTo(filter);
+                currentFilter = "filter_inkwell";
                 break;
 
             case R.id.filter_lomofi:
                 filter = GPUImageFilterTools.createFilterForType(ImageViewingActivity.this, filters.filters.get(7));
                 switchFilterTo(filter);
+                currentFilter = "filter_lomofi";
                 break;
 
             case R.id.filter_lord_kelvin:
                 filter = GPUImageFilterTools.createFilterForType(ImageViewingActivity.this, filters.filters.get(8));
                 switchFilterTo(filter);
+                currentFilter = "filter_lord_kelvin";
                 break;
 
             case R.id.filter_nashville:
                 filter = GPUImageFilterTools.createFilterForType(ImageViewingActivity.this, filters.filters.get(9));
                 switchFilterTo(filter);
+                currentFilter = "filter_nashville";
                 break;
 
             case R.id.filter_rise:
                 filter = GPUImageFilterTools.createFilterForType(ImageViewingActivity.this, filters.filters.get(10));
                 switchFilterTo(filter);
+                currentFilter = "filter_rise";
                 break;
 
             case R.id.filter_sierra:
                 filter = GPUImageFilterTools.createFilterForType(ImageViewingActivity.this, filters.filters.get(11));
                 switchFilterTo(filter);
+                currentFilter = "filter_sierra";
                 break;
 
             case R.id.filter_sutro:
                 filter = GPUImageFilterTools.createFilterForType(ImageViewingActivity.this, filters.filters.get(12));
                 switchFilterTo(filter);
+                currentFilter = "filter_sutro";
                 break;
 
             case R.id.filter_toaster:
                 filter = GPUImageFilterTools.createFilterForType(ImageViewingActivity.this, filters.filters.get(13));
                 switchFilterTo(filter);
+                currentFilter = "filter_toaster";
                 break;
 
             case R.id.filter_valencia:
                 filter = GPUImageFilterTools.createFilterForType(ImageViewingActivity.this, filters.filters.get(14));
                 switchFilterTo(filter);
+                currentFilter = "filter_valencia";
                 break;
 
             case R.id.filter_walden:
                 filter = GPUImageFilterTools.createFilterForType(ImageViewingActivity.this, filters.filters.get(15));
                 switchFilterTo(filter);
+                currentFilter = "filter_walden";
                 break;
 
             case R.id.filter_xproii:
                 filter = GPUImageFilterTools.createFilterForType(ImageViewingActivity.this, filters.filters.get(16));
                 switchFilterTo(filter);
+                currentFilter = "filter_xproii";
                 break;
 
 
@@ -505,6 +550,9 @@ ställer in vilket mode vi befinner oss i
                 cdcc.show();
                 break;
             case R.id.hide2:
+                InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
+
                 performExpandOrCollapseAction();
 
                 break;
@@ -699,25 +747,30 @@ ställer in vilket mode vi befinner oss i
 
     public String getCity() {
         Geocoder geoCoder = new Geocoder(this, Locale.getDefault());
-        String[] total= new String[]{};
+        String[] total = new String[]{};
         StringBuilder builder = new StringBuilder();
         try {
             List<Address> address = geoCoder.getFromLocation(MapsActivity.currentlocation.latitude,
                     MapsActivity.currentlocation.longitude, 1);
             int maxLines = address.get(0).getMaxAddressLineIndex();
-            for (int i=0; i<maxLines; i++) {
+            for (int i = 0; i < maxLines; i++) {
                 String addressStr = address.get(0).getAddressLine(i);
                 builder.append(addressStr);
                 builder.append(" ");
             }
 
             String fnialAddress = builder.toString(); //This is the complete address.
-            total= fnialAddress.split(" ");
+            total = fnialAddress.split(" ");
 
-        } catch (IOException e) {}
-        catch (NullPointerException e) {}
+        } catch (IOException e) {
+        } catch (NullPointerException e) {
+        }
 
-        return total[total.length-1];
+        if (total.length > 0) {
+            return total[total.length - 1];
+        } else {
+            return "";
+        }
     }
 
     private class ResizeAnimation extends Animation {
@@ -810,15 +863,16 @@ ställer in vilket mode vi befinner oss i
         Spara till SQL
          */
 
+
         MySqLite sqLite = new MySqLite(getApplicationContext());
         if (sqLite.addLocation(new MyLocation((float) MapsActivity.currentlocation.longitude,
                 (float) MapsActivity.currentlocation.latitude, "Joels Resa", editText.getText().toString(),
-                path, direction.getText().toString(), "Testfilter"
+                path, direction.getText().toString(), currentFilter, date.getText().toString()
         ))) {
             Toast.makeText(getApplicationContext(), "Saved!", Toast.LENGTH_SHORT).show();
             startActivity(new Intent(getApplicationContext(), MapsActivity.class));
         } else {
-            Toast.makeText(getApplicationContext(), "Fail", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "You've already taken a photo here", Toast.LENGTH_SHORT).show();
         }
 
     }

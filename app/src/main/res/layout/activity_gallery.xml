@@ -597,6 +597,7 @@
             android:imeOptions="actionDone"
             android:textColorHint="#fff"
             android:textCursorDrawable="@null"
+            android:inputType="textCapSentences"
 
             />
 

@@ -44,7 +44,7 @@ public class CameraActivity extends Activity implements OnClickListener {
     boolean frontCamera = false, autoFlashActivated = true;
     private TextView direction;
     private Compass compass;
-    private ImageView flash, flashShadow;
+    private ImageView flash;
     private GLSurfaceView glSurfaceView;
 
     private GPUImage mGPUImage;
@@ -73,7 +73,7 @@ public class CameraActivity extends Activity implements OnClickListener {
     }
 
     private void init() {
-        if (getIntent().getStringExtra("camType")!=null && getIntent().getStringExtra("camType").equals("front")) {
+        if (getIntent().getStringExtra("camType") != null && getIntent().getStringExtra("camType").equals("front")) {
             frontCamera = true;
         }
 
@@ -81,7 +81,6 @@ public class CameraActivity extends Activity implements OnClickListener {
 
         direction = (TextView) findViewById(R.id.direction);
         flash = (ImageView) findViewById(R.id.flash_icon);
-        flashShadow = (ImageView) findViewById(R.id.flash_shadow);
         compass = new Compass(this, direction, "back");
         compass.start();
 
@@ -154,11 +153,11 @@ public class CameraActivity extends Activity implements OnClickListener {
                 if (frontCamera) {
                     frontCamera = false;
                     flash.setImageResource(R.drawable.vector_drawable_ic_flash_auto_white___px);
-                    flashShadow.setImageResource(R.drawable.vector_drawable_ic_flash_auto_black___px);
+
                 } else {
                     frontCamera = true;
                     flash.setImageResource(0);
-                    flashShadow.setImageResource(0);
+
                 }
 
                 break;
@@ -173,6 +172,7 @@ public class CameraActivity extends Activity implements OnClickListener {
         // TODO get a size that is about the size of the screen
         Camera.Parameters params = mCamera.mCameraInstance.getParameters();
         params.setRotation(90);
+
         mCamera.mCameraInstance.setParameters(params);
         for (Camera.Size size : params.getSupportedPictureSizes()) {
             Log.i("ASDF", "Supported: " + size.width + "x" + size.height);
@@ -211,7 +211,7 @@ public class CameraActivity extends Activity implements OnClickListener {
                         /*
                         Filnamnet
                          */
-                        long time= System.currentTimeMillis();
+                        long time = System.currentTimeMillis();
                         mGPUImage.saveToPictures(bitmap, "TJ",
                                 time + "%" + "Bildnamn" + ".jpg",
                                 new OnPictureSavedListener() {
@@ -227,7 +227,7 @@ public class CameraActivity extends Activity implements OnClickListener {
 
                         Intent intent = new Intent(getApplicationContext(), ImageViewingActivity.class);
                         intent.putExtra("file_name", pictureFile.getAbsolutePath());
-                        intent.putExtra("file_name2", "/storage/emulated/0/Pictures/TJ/"+time+"%Bildnamn.jpg");
+                        intent.putExtra("file_name2", "/storage/emulated/0/Pictures/TJ/" + time + "%Bildnamn.jpg");
                         intent.putExtra("direction", direction.getText().toString());
                         if (frontCamera) {
                             intent.putExtra("camera_type", "front");
@@ -288,7 +288,7 @@ public class CameraActivity extends Activity implements OnClickListener {
             if (frontCamera) {
                 mCurrentCameraId = 1;
                 flash.setImageResource(0);
-                flashShadow.setImageResource(0);
+
             }
             setUpCamera(mCurrentCameraId);
         }
@@ -307,11 +307,13 @@ public class CameraActivity extends Activity implements OnClickListener {
 
         private void setUpCamera(final int id) {
             mCameraInstance = getCameraInstance(id);
+
             Parameters parameters = mCameraInstance.getParameters();
             if (parameters.getSupportedFocusModes().contains(
                     Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE)) {
                 parameters.setFocusMode(Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
             }
+
 
             mCameraInstance.setParameters(parameters);
 
@@ -321,6 +323,8 @@ public class CameraActivity extends Activity implements OnClickListener {
             mCameraHelper.getCameraInfo(mCurrentCameraId, cameraInfo);
             boolean flipHorizontal = cameraInfo.facing == CameraInfo.CAMERA_FACING_FRONT;
             mGPUImage.setUpCamera(mCameraInstance, orientation, flipHorizontal, false);
+
+
         }
 
         /**
@@ -353,7 +357,7 @@ public class CameraActivity extends Activity implements OnClickListener {
                     autoFlashActivated = false;
 
                     flash.setImageResource(R.drawable.vector_drawable_ic_flash_off_white___px);
-                    flashShadow.setImageResource(R.drawable.vector_drawable_ic_flash_off_black___px);
+
                 }
             } else {
 
@@ -363,7 +367,6 @@ public class CameraActivity extends Activity implements OnClickListener {
                     mCameraInstance.setParameters(parameters);
                     autoFlashActivated = true;
                     flash.setImageResource(R.drawable.vector_drawable_ic_flash_auto_white___px);
-                    flashShadow.setImageResource(R.drawable.vector_drawable_ic_flash_auto_black___px);
                 }
 
             }
