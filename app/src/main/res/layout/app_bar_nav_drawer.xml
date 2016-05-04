@@ -13,7 +13,6 @@
         android:theme="@style/AppTheme.AppBarOverlay">
 
 
-
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
@@ -24,26 +23,35 @@
     </android.support.design.widget.AppBarLayout>
 
 
-
     <FrameLayout
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <include
             layout="@layout/activity_maps"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
-        <android.support.design.widget.FloatingActionButton
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:text="HALLÅ"
-            android:layout_gravity="bottom|right"
-            android:layout_margin="16dp"
-            android:src="@drawable/ic_menu_camera"
-            android:onClick="startCameraActivity"
-            />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
+
+
+            <android.support.design.widget.FloatingActionButton
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="bottom|right"
+                android:layout_margin="16dp"
+                android:onClick="startCameraActivity"
+                android:src="@drawable/ic_menu_camera"
+                android:text="HALLÅ"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                />
+
+        </RelativeLayout>
 
     </FrameLayout>
 
