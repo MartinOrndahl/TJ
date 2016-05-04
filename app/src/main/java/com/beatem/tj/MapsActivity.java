@@ -16,6 +16,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.GravityCompat;
@@ -24,11 +25,13 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.EditText;
 
 import com.beatem.tj.Camera.CameraActivity;
 import com.beatem.tj.OldTripsViewer.SlideImageActivity;
@@ -105,15 +108,15 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             boolean doIt = false;
             String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
             File mediaFile = new File(mediaStorageDir.getPath() + File.separator +
-                        "IMG_" + timeStamp + ".jpg");
+                    "IMG_" + timeStamp + ".jpg");
             try {
                 FileOutputStream out = new FileOutputStream(mediaFile);
-                Log.e("marcusärcpbra","Filen borde ha skrivits rätt här");
+                Log.e("marcusärcpbra", "Filen borde ha skrivits rätt här");
                 bm.compress(Bitmap.CompressFormat.JPEG, 90, out);
                 out.flush();
                 out.close();
                 bm.recycle();
-                doIt =true;
+                doIt = true;
 
 
             } catch (FileNotFoundException e) {
@@ -122,7 +125,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 Log.e("ASDF", "Error accessing file: " + e.getMessage());
             }
 
-            if(doIt) {
+            if (doIt) {
                 db.addLocation(new MyLocation(10, 20, "Australien", "t", mediaFile.getAbsolutePath(), "N", "NoFilter", "1 Jan 2016"));
                 db.addLocation(new MyLocation(10, 25, "Australien", "test1231", mediaFile.getAbsolutePath(), "N", "NoFilter", "1 Jan 2016"));
                 db.addLocation(new MyLocation(11, 26, "Australien", "testfgd", mediaFile.getAbsolutePath(), "N", "NoFilter", "1 Jan 2016"));
@@ -142,7 +145,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             // for ActivityCompat#requestPermissions for more details.
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
-                   Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.CAMERA},MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA}, MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
             return;
         }
 
@@ -184,11 +187,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         String locationProvider = LocationManager.GPS_PROVIDER;
         Location lastKnownLocation = locationManager.getLastKnownLocation(locationProvider);
-       try {
-           currentlocation = new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
-       }catch(Exception e){
+        try {
+            currentlocation = new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude());
+        } catch (Exception e) {
 
-       }
+        }
         GpsListniner(true);
 
 
@@ -293,7 +296,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
 
-        @Override
+    @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
         switch (requestCode) {
@@ -375,8 +378,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             mMap.moveCamera(CameraUpdateFactory.newLatLng(bounds.getCenter()));
         } else {
-            if(currentlocation == null){
-                currentlocation = new LatLng(0,0);
+            if (currentlocation == null) {
+                currentlocation = new LatLng(0, 0);
             }
             mMap.moveCamera(CameraUpdateFactory.newLatLng(currentlocation));
         }
@@ -528,11 +531,18 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         if (id == R.id.current_trip_button) {
 
-            if (galleryCreated) {
-                android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.remove(galleryFragment);
-                fragmentTransaction.commit();
-                galleryCreated = false;
+            if(SaveSharedPreferences.getCurrentTrip(getApplicationContext()).equals("none")){
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(currentlocation));
+            }else {
+
+
+                if (galleryCreated) {
+
+                    android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                    fragmentTransaction.remove(galleryFragment);
+                    fragmentTransaction.commit();
+                    galleryCreated = false;
+                }
             }
             currentTripMode();
 
@@ -563,10 +573,25 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 i.setTitle("End trip");
                 AlertDialog.Builder startNewTrip = new AlertDialog.Builder(this);
                 startNewTrip.setTitle("Tripname");
-                startNewTrip.setIcon(getDrawable(R.drawable.walden_map));
-                startNewTrip.setMessage("Please enter a name for your trip");
+                startNewTrip.setIcon(getDrawable(R.drawable.worldmap));
+                final EditText input = new EditText(this);
+                input.setHint("Name of your trip");
+                input.setInputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
+                input.setSingleLine(true);
+                startNewTrip.setView(input, 64, 0, 0, 0);
+                startNewTrip.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 
-                SaveSharedPreferences.setCurrentTrip(getApplicationContext(), "");
+                    public void onClick(DialogInterface dialog, int which) {
+                        SaveSharedPreferences.setCurrentTrip(getApplicationContext(), input.getText().toString());
+                        MenuItem i = navigationView.getMenu().findItem(R.id.current_trip_button);
+                        i.setTitle("Current trip");
+                        dialog.dismiss();
+                    }
+
+                });
+                startNewTrip.show();
+
+
                 currentTripMode();
             } else {
 
@@ -592,9 +617,22 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     public void onClick(DialogInterface dialog, int which) {
                         MenuItem i = navigationView.getMenu().findItem(R.id.end_trip_button);
                         i.setTitle("Start new trip");
+                        MenuItem j = navigationView.getMenu().findItem(R.id.current_trip_button);
+                        j.setTitle("Current location");
                         SaveSharedPreferences.setCurrentTrip(getApplicationContext(), "none");
                         worldMapmode();
 
+                        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.floatingActionButton);
+                        fab.setImageResource(R.drawable.vector_drawable_ic_add_black___px);
+
+                        i.setIcon(R.drawable.vector_drawable_ic_add_black___px);
+                        dialog.dismiss();
+                    }
+
+                });
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
                     }
 
@@ -614,7 +652,45 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
     public void startCameraActivity(View view) {
-        startActivity(new Intent(this, CameraActivity.class).putExtra("camType", "back"));
+        if (!SaveSharedPreferences.getCurrentTrip(getApplicationContext()).equals("none")) {
+            startActivity(new Intent(this, CameraActivity.class).putExtra("camType", "back"));
+        }
+        else{
+            AlertDialog.Builder startNewTrip = new AlertDialog.Builder(this);
+            startNewTrip.setTitle("Tripname");
+            startNewTrip.setIcon(getDrawable(R.drawable.worldmap));
+            final EditText input = new EditText(this);
+            input.setHint("Name of your trip");
+            input.setInputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
+            input.setSingleLine(true);
+            startNewTrip.setView(input, 64,0,0,0);
+            startNewTrip.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+                public void onClick(DialogInterface dialog, int which) {
+                    SaveSharedPreferences.setCurrentTrip(getApplicationContext(),input.getText().toString());
+
+                    FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.floatingActionButton);
+                    fab.setImageResource(R.drawable.ic_menu_camera);
+                    MenuItem i = navigationView.getMenu().findItem(R.id.end_trip_button);
+                    i.setTitle("End trip");
+                    i.setIcon(R.drawable.vector_drawable_ic_cancel_black___px);
+                    MenuItem j = navigationView.getMenu().findItem(R.id.current_trip_button);
+                    j.setTitle("Current trip");
+                    dialog.dismiss();
+                }
+
+            });
+            startNewTrip.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    dialogInterface.dismiss();
+                }
+            });
+            startNewTrip.show();
+
+
+        }
+
 
     }
 }

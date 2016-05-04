@@ -26,7 +26,9 @@
     <FrameLayout
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginTop="?attr/actionBarSize"
+        >
 
         <include
             layout="@layout/activity_maps"
@@ -35,7 +37,8 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            >
 
 
 
@@ -47,6 +50,7 @@
                 android:onClick="startCameraActivity"
                 android:src="@drawable/ic_menu_camera"
                 android:text="HALLÅ"
+                android:id="@+id/floatingActionButton"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentRight="true"
                 />

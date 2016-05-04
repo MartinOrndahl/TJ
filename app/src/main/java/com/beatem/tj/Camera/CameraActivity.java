@@ -21,11 +21,16 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.beatem.tj.CapturedImage.ImageViewingActivity;
 import com.beatem.tj.R;
+import com.beatem.tj.SaveSharedPreferences;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -33,6 +38,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 import jp.co.cyberagent.android.gpuimage.GPUImage;
 import jp.co.cyberagent.android.gpuimage.GPUImage.OnPictureSavedListener;
@@ -54,6 +60,9 @@ public class CameraActivity extends Activity implements OnClickListener {
     private CameraLoader mCamera;
 
 
+    private RelativeLayout cameraView; Bitmap bmp;
+
+
 
     ViewGroup.LayoutParams lp;
     View cameraSwitchView;
@@ -65,10 +74,52 @@ public class CameraActivity extends Activity implements OnClickListener {
         setContentView(R.layout.custom_camera2);
 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        cameraView=(RelativeLayout)findViewById(R.id.cameraView);
         init();
         activateClickListener();
 
 
+    }
+
+    public void TakeScreenshot(){    //THIS METHOD TAKES A SCREENSHOT AND SAVES IT AS .jpg
+        Random num = new Random();
+        int nu=num.nextInt(1000); //PRODUCING A RANDOM NUMBER FOR FILE NAME
+        cameraView.setDrawingCacheEnabled(true); //CamView OR THE NAME OF YOUR LAYOUR
+        cameraView.buildDrawingCache(true);
+        bmp = Bitmap.createBitmap(cameraView.getDrawingCache());
+        cameraView.setDrawingCacheEnabled(false); // clear drawing cache
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        bmp.compress(Bitmap.CompressFormat.JPEG, 100, bos);
+        byte[] bitmapdata = bos.toByteArray();
+        ByteArrayInputStream fis = new ByteArrayInputStream(bitmapdata);
+
+        String picId=String.valueOf(nu);
+        String myfile="Ghost"+picId+".jpeg";
+
+        File dir_image = new  File(Environment.getExternalStorageDirectory()+//<---
+                File.separator+"Ultimate Entity Detector");          //<---
+        dir_image.mkdirs();                                                  //<---
+        //^IN THESE 3 LINES YOU SET THE FOLDER PATH/NAME . HERE I CHOOSE TO SAVE
+        //THE FILE IN THE SD CARD IN THE FOLDER "Ultimate Entity Detector"
+
+        try {
+            File tmpFile = new File(dir_image,myfile);
+            FileOutputStream fos = new FileOutputStream(tmpFile);
+
+            byte[] buf = new byte[1024];
+            int len;
+            while ((len = fis.read(buf)) > 0) {
+                fos.write(buf, 0, len);
+            }
+            fis.close();
+            fos.close();
+            Toast.makeText(getApplicationContext(),
+                    "The file is saved at :SD/Ultimate Entity Detector",Toast.LENGTH_LONG).show();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void activateClickListener() {
@@ -77,7 +128,7 @@ public class CameraActivity extends Activity implements OnClickListener {
 
     private void init() {
 
-        currentTrip = "JoelsResa";
+        currentTrip = SaveSharedPreferences.getCurrentTrip(getApplicationContext());
 
         if (getIntent().getStringExtra("camType") != null && getIntent().getStringExtra("camType").equals("front")) {
             frontCamera = true;

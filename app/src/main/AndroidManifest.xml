@@ -45,7 +45,7 @@
         android:supportsRtl="true"
 
         android:theme="@style/AppTheme">
-
+<activity android:name=".Camera.DisplayTry"></activity>
 
         <activity
             android:name=".Intro.MyIntro"

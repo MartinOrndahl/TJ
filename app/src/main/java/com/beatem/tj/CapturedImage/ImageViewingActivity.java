@@ -57,6 +57,7 @@ import com.beatem.tj.MapsActivity;
 import com.beatem.tj.MyLocation;
 import com.beatem.tj.MySqLite;
 import com.beatem.tj.R;
+import com.beatem.tj.SaveSharedPreferences;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 
@@ -884,7 +885,7 @@ ställer in vilket mode vi befinner oss i
 
         MySqLite sqLite = new MySqLite(getApplicationContext());
         if (sqLite.addLocation(new MyLocation((float) MapsActivity.currentlocation.longitude,
-                (float) MapsActivity.currentlocation.latitude, "Joels Resa", editText.getText().toString(),
+                (float) MapsActivity.currentlocation.latitude, SaveSharedPreferences.getCurrentTrip(getApplicationContext()), editText.getText().toString(),
                 path, direction.getText().toString(), currentFilter, date.getText().toString()
         ))) {
             Toast.makeText(getApplicationContext(), "Saved!", Toast.LENGTH_SHORT).show();
