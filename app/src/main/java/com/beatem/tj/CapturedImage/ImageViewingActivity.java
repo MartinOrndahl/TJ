@@ -175,7 +175,7 @@ public class ImageViewingActivity extends Activity implements OnClickListener, O
 
 
         mGPUImageView = (GPUImageView) findViewById(R.id.gpuimage);
-        mGPUImage= new GPUImage(this);
+        mGPUImage = new GPUImage(this);
         imageLL = (LinearLayout) findViewById(R.id.images_layout);
 
         DisplayMetrics displayMetrics = new DisplayMetrics();
@@ -207,12 +207,15 @@ Om vi kommer från kartan
             fileName = getIntent().getStringExtra("file_name");
 
         }
+
+
         if (fileName != null) {
             imgFile = new File(fileName);
             Log.e("marcusäger ", fileName);
             if (imgFile.exists()) {
                 path = imgFile.getAbsolutePath();
                 myBitmap = BitmapFactory.decodeFile(path);
+
                 if (!fromMain) {
                     cameraType = getIntent().getStringExtra("camera_type").toString();
                 } else {
@@ -542,6 +545,8 @@ ställer in vilket mode vi befinner oss i
                 break;
             case R.id.action_save:
                 saveImageAction();
+
+
                 break;
             case R.id.action_delete:
                 deleteImageAction();
@@ -579,6 +584,7 @@ ställer in vilket mode vi befinner oss i
         mGPUImageView.requestRender();
 
     }
+
 
     @Override
     public void onPictureSaved(final Uri uri) {
@@ -831,7 +837,7 @@ ställer in vilket mode vi befinner oss i
                             .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    File f = new File(getIntent().getStringExtra("file_name2"));
+                                    File f = new File(getIntent().getStringExtra("file_name"));
 
                                     Toast.makeText(getApplicationContext(), "Deleted", Toast.LENGTH_SHORT).show();
                                     f.delete();
@@ -874,7 +880,6 @@ ställer in vilket mode vi befinner oss i
 
 
         mGPUImageView.saveToPictures("haj", "haj", null);
-
 
 
         MySqLite sqLite = new MySqLite(getApplicationContext());

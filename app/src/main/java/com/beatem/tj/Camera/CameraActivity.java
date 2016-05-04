@@ -178,7 +178,7 @@ public class CameraActivity extends Activity implements OnClickListener {
     private void takePicture() {
         // TODO get a size that is about the size of the screen
         Camera.Parameters params = mCamera.mCameraInstance.getParameters();
-        params.setRotation(90);
+        //params.setRotation(90);
 
         mCamera.mCameraInstance.setParameters(params);
         for (Camera.Size size : params.getSupportedPictureSizes()) {
@@ -238,7 +238,8 @@ public class CameraActivity extends Activity implements OnClickListener {
 
                         Intent intent = new Intent(getApplicationContext(), ImageViewingActivity.class);
                         intent.putExtra("file_name", pictureFile.getAbsolutePath());
-                        intent.putExtra("file_name2", "/storage/emulated/0/Pictures/TJ/" + currentTrip + timeStamp +camType+ "%.jpg");
+                        intent.putExtra("captureTime", time);
+                        //intent.putExtra("file_name2", "/storage/emulated/0/Pictures/TJ/" + currentTrip + timeStamp +camType+ "%.jpg");
                         intent.putExtra("direction", direction.getText().toString());
                         if (frontCamera) {
                             intent.putExtra("camera_type", "front");
@@ -340,6 +341,7 @@ public class CameraActivity extends Activity implements OnClickListener {
 
             int orientation = mCameraHelper.getCameraDisplayOrientation(
                     CameraActivity.this, mCurrentCameraId);
+
             CameraHelper.CameraInfo2 cameraInfo = new CameraHelper.CameraInfo2();
             mCameraHelper.getCameraInfo(mCurrentCameraId, cameraInfo);
             boolean flipHorizontal = cameraInfo.facing == CameraInfo.CAMERA_FACING_FRONT;
