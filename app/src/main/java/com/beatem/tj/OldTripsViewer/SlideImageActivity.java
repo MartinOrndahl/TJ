@@ -36,6 +36,7 @@ public class SlideImageActivity extends AppCompatActivity {
     private ArrayList<String> CitiesArray = new ArrayList<String>();
     private ArrayList<String> DirectionsArray = new ArrayList<String>();
     private ArrayList<String> DescriptionsArray = new ArrayList<String>();
+    private ArrayList<String> FiltersArray = new ArrayList<String>();
 
     private MyLocation location;
     private MySqLite mySqLite;
@@ -64,6 +65,17 @@ Data från kartan
         DirectionsArray.add(location.getDirection());
         DatesArray.add(location.getDate());
         DescriptionsArray.add(location.getText());
+        FiltersArray.add(location.getFilter());
+
+        ImagesArray.add(location.getPicpath());
+        CitiesArray.add("Malmö");
+        DirectionsArray.add("N");
+        DatesArray.add(location.getDate());
+        DescriptionsArray.add(location.getText());
+        FiltersArray.add("filter_brannan");
+
+
+
 
 
 
@@ -79,14 +91,8 @@ Data från kartan
         }*/
 
 
-
-
-
         mPager = (ViewPager) findViewById(R.id.pager);
-        mPager.setAdapter(new SlideImageAdapter2(SlideImageActivity.this, ImagesArray, DatesArray, CitiesArray, DirectionsArray, DescriptionsArray, mPager, false, true, 0));
-        mPager.setPageTransformer(true, new ZoomOutPageTransformer());
-        mPager.setOffscreenPageLimit(IMAGES.length);
-        final float density = getResources().getDisplayMetrics().density;
+        mPager.setAdapter(new SlideImageAdapter2(SlideImageActivity.this, ImagesArray, DatesArray, CitiesArray, DirectionsArray, DescriptionsArray,FiltersArray, mPager, false, true, 0));
         NUM_PAGES = ImagesArray.size();
     }
 
@@ -112,27 +118,6 @@ Data från kartan
 
         return total[total.length - 1];
     }
-
-    public ArrayList<String> getImagesArray() {
-        return ImagesArray;
-    }
-
-    public ArrayList<String> getCitiesArray() {
-        return CitiesArray;
-    }
-
-    public ArrayList<String> getDirectionsArray() {
-        return DirectionsArray;
-    }
-
-    public ArrayList<String> getDatesArray() {
-        return DatesArray;
-    }
-
-    public ArrayList<String> getDescriptionsArray() {
-        return DescriptionsArray;
-    }
-
 
 
 }

@@ -31,7 +31,7 @@ import android.view.View;
 import android.view.WindowManager;
 
 import com.beatem.tj.Camera.CameraActivity;
-import com.beatem.tj.OldTripsViewer.OnlyOneImageAcitivity;
+import com.beatem.tj.OldTripsViewer.SlideImageActivity;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -270,9 +270,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             mMap.clear();
             ArrayList<LatLng> polylist = new ArrayList<LatLng>();
+            int i =0;
             for (MyLocation location : locations) {
                 mMap.addMarker(new MarkerOptions().position(location.getLatlng()));
                 polylist.add(location.getLatlng());
+
             }
             mMap.addPolyline(new PolylineOptions().addAll(polylist));
         }
@@ -392,7 +394,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 for (MyLocation location : locations) {
                     if (marker.getPosition().equals(location.getLatlng())) {
 
-                        Intent i = new Intent(getApplicationContext(), OnlyOneImageAcitivity.class);
+
+                        Intent i = new Intent(getApplicationContext(), SlideImageActivity.class);
                         i.putExtra("location", location);
                         startActivity(i);
 
