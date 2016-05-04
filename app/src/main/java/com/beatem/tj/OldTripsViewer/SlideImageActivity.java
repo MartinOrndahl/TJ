@@ -50,7 +50,7 @@ public class SlideImageActivity extends AppCompatActivity {
     }
 
     private void init() {
-
+//push
         mySqLite = new MySqLite(this);
 /*
 
