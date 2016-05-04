@@ -40,6 +40,7 @@ public class SlideImageActivity extends AppCompatActivity {
 
     private MyLocation location;
     private MySqLite mySqLite;
+    private int startIndex;
 
 
     @Override
@@ -59,40 +60,39 @@ Data från kartan
  */
         Bundle data = getIntent().getExtras();
         location = (MyLocation) data.getParcelable("location");
+        //TODO: Fortsätt fixa så man får alla locations
 
-        ImagesArray.add(location.getPicpath());
-        CitiesArray.add(getCity(location.getLatitude(), location.getLongditude()));
-        DirectionsArray.add(location.getDirection());
-        DatesArray.add(location.getDate());
-        DescriptionsArray.add(location.getText());
-        FiltersArray.add(location.getFilter());
+        String chosenTrip= location.getTrip();
+        ArrayList<MyLocation> locations= mySqLite.getLocations();
+        ArrayList<MyLocation> chosenTripLocations= new ArrayList<MyLocation>();
 
-        ImagesArray.add(location.getPicpath());
-        CitiesArray.add("Malmö");
-        DirectionsArray.add("N");
-        DatesArray.add(location.getDate());
-        DescriptionsArray.add(location.getText());
-        FiltersArray.add("filter_brannan");
+        for(MyLocation location: locations){
+            if(location.getTrip().equals(chosenTrip)){
+                chosenTripLocations.add(location);
+            }
+        }
+        int i=0;
+        for (MyLocation loc: chosenTripLocations){
+            if(loc.getLongditude()==location.getLongditude() && loc.getLatitude()== location.getLatitude()){
+                startIndex=i;
+            }
+            ImagesArray.add(loc.getPicpath());
+            CitiesArray.add(getCity(loc.getLatitude(), loc.getLongditude()));
+            DirectionsArray.add(loc.getDirection());
+            DatesArray.add(loc.getDate());
+            DescriptionsArray.add(loc.getText());
+            FiltersArray.add(loc.getFilter());
+            i++;
+        }
 
 
 
 
-
-
-        /*
-        ArrayList<MyLocation> locations = mySqLite.getLocations();
-        for (int i = 4; i < locations.size(); i++) {
-            ImagesArray.add(locations.get(i).getPicpath());
-            CitiesArray.add(getCity(locations.get(i).getLatitude(), locations.get(i).getLongditude()));
-            DirectionsArray.add(locations.get(i).getDirection());
-            DatesArray.add(locations.get(i).getDate());
-            DescriptionsArray.add(locations.get(i).getText());
-            FiltersArray.add(locations.get(i).getFilter());
-        }*/
 
 
         mPager = (ViewPager) findViewById(R.id.pager);
         mPager.setAdapter(new SlideImageAdapter2(SlideImageActivity.this, ImagesArray, DatesArray, CitiesArray, DirectionsArray, DescriptionsArray,FiltersArray, mPager, false, true, 0));
+        mPager.setCurrentItem(startIndex);
         NUM_PAGES = ImagesArray.size();
     }
 

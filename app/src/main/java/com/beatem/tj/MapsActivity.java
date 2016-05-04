@@ -412,6 +412,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
                         Intent i = new Intent(getApplicationContext(), SlideImageActivity.class);
+                        //TODO: Fixa så man kan kolla genom hela resan
+
                         i.putExtra("location", location);
                         startActivity(i);
 
