@@ -41,7 +41,10 @@ import jp.co.cyberagent.android.gpuimage.GPUImage.OnPictureSavedListener;
 
 public class CameraActivity extends Activity implements OnClickListener {
 
-    boolean frontCamera = false, autoFlashActivated = true;
+    private static String timeStamp;
+    private static String currentTrip;
+    static boolean frontCamera = false;
+    boolean autoFlashActivated = true;
     private TextView direction;
     private Compass compass;
     private ImageView flash;
@@ -50,6 +53,7 @@ public class CameraActivity extends Activity implements OnClickListener {
     private GPUImage mGPUImage;
     private CameraHelper mCameraHelper;
     private CameraLoader mCamera;
+
 
     LinearLayout ll;
     ViewGroup.LayoutParams lp;
@@ -73,6 +77,9 @@ public class CameraActivity extends Activity implements OnClickListener {
     }
 
     private void init() {
+
+        currentTrip = "JoelsResa";
+
         if (getIntent().getStringExtra("camType") != null && getIntent().getStringExtra("camType").equals("front")) {
             frontCamera = true;
         }
@@ -212,22 +219,26 @@ public class CameraActivity extends Activity implements OnClickListener {
                         Filnamnet
                          */
                         long time = System.currentTimeMillis();
-                        mGPUImage.saveToPictures(bitmap, "TJ",
-                                time + "%" + "Bildnamn" + ".jpg",
-                                new OnPictureSavedListener() {
+                        String camType = "back";
+                        if (frontCamera) {
+                            camType = "front";
+                        } else
+                            mGPUImage.saveToPictures(bitmap, "TJ",
+                                    currentTrip + timeStamp + camType + ".jpg",
+                                    new OnPictureSavedListener() {
 
-                                    @Override
-                                    public void onPictureSaved(final Uri
-                                                                       uri) {
-                                        pictureFile.delete();
-                                        view.setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
-                                    }
-                                });
+                                        @Override
+                                        public void onPictureSaved(final Uri
+                                                                           uri) {
+                                            //pictureFile.delete();
+                                            view.setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
+                                        }
+                                    });
 
 
                         Intent intent = new Intent(getApplicationContext(), ImageViewingActivity.class);
                         intent.putExtra("file_name", pictureFile.getAbsolutePath());
-                        intent.putExtra("file_name2", "/storage/emulated/0/Pictures/TJ/" + time + "%Bildnamn.jpg");
+                        intent.putExtra("file_name2", "/storage/emulated/0/Pictures/TJ/" + currentTrip + timeStamp +camType+ "%.jpg");
                         intent.putExtra("direction", direction.getText().toString());
                         if (frontCamera) {
                             intent.putExtra("camera_type", "front");
@@ -250,7 +261,7 @@ public class CameraActivity extends Activity implements OnClickListener {
         // using Environment.getExternalStorageState() before doing this.
 
         File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_PICTURES), "MyCameraApp");
+                Environment.DIRECTORY_PICTURES), "TJ");
         // This location works best if you want the created images to be shared
         // between applications and persist after your app has been uninstalled.
 
@@ -263,15 +274,25 @@ public class CameraActivity extends Activity implements OnClickListener {
         }
 
         // Create a media file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         File mediaFile;
         if (type == MEDIA_TYPE_IMAGE) {
+            String camType= "back";
+            if (frontCamera){
+                camType="front";
+            }
+
             mediaFile = new File(mediaStorageDir.getPath() + File.separator +
-                    "IMG_" + timeStamp + ".jpg");
-        } else if (type == MEDIA_TYPE_VIDEO) {
+                    currentTrip + timeStamp + camType + ".jpg");
+
+        } else if (type == MEDIA_TYPE_VIDEO)
+
+        {
             mediaFile = new File(mediaStorageDir.getPath() + File.separator +
                     "VID_" + timeStamp + ".mp4");
-        } else {
+        } else
+
+        {
             return null;
         }
 

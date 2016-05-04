@@ -36,7 +36,9 @@ public class SlideImageActivity extends AppCompatActivity {
     private ArrayList<String> CitiesArray = new ArrayList<String>();
     private ArrayList<String> DirectionsArray = new ArrayList<String>();
     private ArrayList<String> DescriptionsArray = new ArrayList<String>();
-    private ArrayList<String> FiltersArray = new ArrayList<String>();
+
+    private MyLocation location;
+    private MySqLite mySqLite;
 
 
     @Override
@@ -44,13 +46,28 @@ public class SlideImageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.old_trip_viewer);
-
         init();
     }
 
     private void init() {
 
-        MySqLite mySqLite = new MySqLite(this);
+        mySqLite = new MySqLite(this);
+/*
+
+Data från kartan
+ */
+        Bundle data = getIntent().getExtras();
+        location = (MyLocation) data.getParcelable("location");
+
+        ImagesArray.add(location.getPicpath());
+        CitiesArray.add(getCity(location.getLatitude(), location.getLongditude()));
+        DirectionsArray.add(location.getDirection());
+        DatesArray.add(location.getDate());
+        DescriptionsArray.add(location.getText());
+
+
+
+        /*
         ArrayList<MyLocation> locations = mySqLite.getLocations();
         for (int i = 4; i < locations.size(); i++) {
             ImagesArray.add(locations.get(i).getPicpath());
@@ -59,11 +76,14 @@ public class SlideImageActivity extends AppCompatActivity {
             DatesArray.add(locations.get(i).getDate());
             DescriptionsArray.add(locations.get(i).getText());
             FiltersArray.add(locations.get(i).getFilter());
-        }
+        }*/
+
+
+
 
 
         mPager = (ViewPager) findViewById(R.id.pager);
-        mPager.setAdapter(new SlideImageAdapter(SlideImageActivity.this, ImagesArray, DatesArray, CitiesArray, DirectionsArray, DescriptionsArray,FiltersArray, mPager, false, true, 0));
+        mPager.setAdapter(new SlideImageAdapter2(SlideImageActivity.this, ImagesArray, DatesArray, CitiesArray, DirectionsArray, DescriptionsArray, mPager, false, true, 0));
         mPager.setPageTransformer(true, new ZoomOutPageTransformer());
         mPager.setOffscreenPageLimit(IMAGES.length);
         final float density = getResources().getDisplayMetrics().density;
@@ -113,7 +133,6 @@ public class SlideImageActivity extends AppCompatActivity {
         return DescriptionsArray;
     }
 
-    public ArrayList<String> getFiltersArray() {
-        return FiltersArray;
-    }
+
+
 }

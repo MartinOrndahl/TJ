@@ -16,8 +16,10 @@
     string in this file.
     -->
     <!-- Marcus KEY: AIzaSyBWsrvnnVj593-hxzrgd7HBKhPAbe5eBvY google_maps_key -->
-    <!-- Joels KEY: AIzaSyCLGQz1IubNKidqVH1xw31YxZbfL1F3Fvk -->
+    <!-- Joels KEY: AIzaSyD5mLQjO6WOjnpleQWYZxDl0A_r0X4C1Dc -->
+    <!-- Ludvigs KEY: AIzaSyCgF-I6eohSZxlxVWRCDTrPmhWuQq9qG_8 -->
 
-    <!-- JoelKey AIzaSyAgNKUaGbUlbPeIJyTwR7rV5TfuAg-M9gk-->
-    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyCgF-I6eohSZxlxVWRCDTrPmhWuQq9qG_8</string>
+
+    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyD5mLQjO6WOjnpleQWYZxDl0A_r0X4C1Dc</string>
+
 </resources>

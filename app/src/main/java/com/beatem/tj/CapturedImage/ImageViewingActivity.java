@@ -116,14 +116,6 @@ public class ImageViewingActivity extends Activity implements OnClickListener, O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gallery);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        Bundle data = getIntent().getExtras();
-        location = (MyLocation) data.getParcelable("location");
-        if(location!=null){
-            fromMain = true;
-        }else{
-            fromMain = false;
-        }
-
 
         init();
         activateClickListeners();
@@ -179,12 +171,25 @@ public class ImageViewingActivity extends Activity implements OnClickListener, O
 
     private void init() {
 
+
         mGPUImageView = (GPUImageView) findViewById(R.id.gpuimage);
         imageLL = (LinearLayout) findViewById(R.id.images_layout);
 
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         int width = displayMetrics.widthPixels;
+
+
+/*
+Om vi kommer från kartan
+ */
+        Bundle data = getIntent().getExtras();
+        location = (MyLocation) data.getParcelable("location");
+        if(location!=null){
+            fromMain = true;
+        }else{
+            fromMain = false;
+        }
 
 
 
@@ -204,7 +209,6 @@ public class ImageViewingActivity extends Activity implements OnClickListener, O
             Log.e("marcusäger ", fileName);
             if (imgFile.exists()) {
                 path = imgFile.getAbsolutePath();
-                Toast.makeText(getApplicationContext(), path, Toast.LENGTH_LONG).show();
                 myBitmap = BitmapFactory.decodeFile(path);
                 if(!fromMain) {
                     cameraType = getIntent().getStringExtra("camera_type").toString();
