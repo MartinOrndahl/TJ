@@ -585,6 +585,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         SaveSharedPreferences.setCurrentTrip(getApplicationContext(), input.getText().toString());
                         MenuItem i = navigationView.getMenu().findItem(R.id.current_trip_button);
                         i.setTitle("Current trip");
+                        MenuItem j = navigationView.getMenu().findItem(R.id.end_trip_button);
+
+                        dialog.dismiss();
+                        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.floatingActionButton);
+                        fab.setImageResource(R.drawable.ic_menu_camera);
+
+                        j.setIcon(R.drawable.vector_drawable_ic_cancel_black___px);
                         dialog.dismiss();
                     }
 
