@@ -267,20 +267,33 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     public synchronized void uppdateMap() {
         if (mMapready) {
-
+            uppdateCurrentLocation();
             mMap.clear();
             ArrayList<LatLng> polylist = new ArrayList<LatLng>();
-            int i =0;
+            int i = 0;
+
+            String lastKnownTrip;
+            lastKnownTrip = locations.get(0).getTrip();
             for (MyLocation location : locations) {
-                mMap.addMarker(new MarkerOptions().position(location.getLatlng()));
-                polylist.add(location.getLatlng());
+
+                if (location.getTrip().equals(lastKnownTrip)) {
+                    mMap.addMarker(new MarkerOptions().position(location.getLatlng()));
+                    polylist.add(location.getLatlng());
+                } else {
+                    mMap.addPolyline(new PolylineOptions().addAll(polylist));
+                    mMap.addMarker(new MarkerOptions().position(location.getLatlng()));
+                    polylist.clear();
+                    polylist.add(location.getLatlng());
+                    lastKnownTrip = location.getTrip();
+                }
 
             }
             mMap.addPolyline(new PolylineOptions().addAll(polylist));
         }
     }
 
-    @Override
+
+        @Override
     public void onRequestPermissionsResult(int requestCode,
                                            String permissions[], int[] grantResults) {
         switch (requestCode) {
