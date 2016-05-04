@@ -1,22 +1,31 @@
 package com.beatem.tj;
 
+import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements Runnable  {
 
     CatLoadingView mView;
-
+    Thread mThread;
 
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main1);
 
-        mView = new CatLoadingView();
+        mThread = new Thread();
+
+        mThread.run();
+
+       mView = new CatLoadingView();
         mView.show(getSupportFragmentManager(), "");
+
+
         //findViewById(R.id.button).setOnClickListener(
         //      new View.OnClickListener() {
         //        @Override public void onClick(View v) {
@@ -24,11 +33,17 @@ public class MainActivity extends AppCompatActivity {
         //    }
         //});
     }
+    public void run(){
 
+        try {
+            wait(3000);
 
-    public void showDialog() {
-        mView.show(getSupportFragmentManager(), "");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        this.finish();
     }
+
 
 
     @Override public boolean onCreateOptionsMenu(Menu menu) {

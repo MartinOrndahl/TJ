@@ -29,9 +29,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import com.beatem.tj.Camera.CameraActivity;
-import com.beatem.tj.OldTripsViewer.SlideImageActivity;
+import com.beatem.tj.CapturedImage.ImageViewingActivity;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -50,6 +51,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Random;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, SensorEventListener, NavigationView.OnNavigationItemSelectedListener {
 
@@ -100,8 +102,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     Log.e("MyCameraApp", "failed to create directory");
                 }
             }
-
-
 
 
             boolean doIt = false;
@@ -393,7 +393,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             public boolean onMarkerClick(final Marker marker) {
                 for (MyLocation location : locations) {
                     if (marker.getPosition().equals(location.getLatlng())) {
-                        Intent i = new Intent(getApplicationContext(), SlideImageActivity.class);
+                        Toast.makeText(getApplicationContext(), location.getPicpath(), Toast.LENGTH_SHORT).show();
+
+                        Intent i = new Intent(getApplicationContext(), ImageViewingActivity.class);
                         i.putExtra("location", location);
                         startActivity(i);
 
