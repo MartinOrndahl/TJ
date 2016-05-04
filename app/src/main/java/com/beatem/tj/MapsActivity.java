@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -50,9 +51,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, SensorEventListener, NavigationView.OnNavigationItemSelectedListener {
 
@@ -73,6 +72,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private MapFragment mapFragment1;
     private android.support.v4.app.FragmentTransaction fragmentTransactionCat;
     private CatLoadingView cat;
+    private MySqLite db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,11 +88,18 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         if (!SaveSharedPreferences.getFirstStart(getApplicationContext())) {
 
-            MySqLite db = new MySqLite(getApplicationContext());
-            Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.adventure);
+            db = new MySqLite(getApplicationContext());
+            Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.bondibeachselfie);
+            bm=RotateBitmap(bm, 270);
+            Bitmap bm1 = BitmapFactory.decodeResource(getResources(), R.drawable.sydneyoperahouse);
+            bm1=RotateBitmap(bm1, 270);
+            Bitmap bm2 = BitmapFactory.decodeResource(getResources(), R.drawable.universityofsydney);
+            bm2=RotateBitmap(bm2, 270);
+            Bitmap bm3 = BitmapFactory.decodeResource(getResources(), R.drawable.sydneyharbourbridge);
+            bm3=RotateBitmap(bm3, 270);
 
             File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
-                    Environment.DIRECTORY_PICTURES), "MyCameraApp");
+                    Environment.DIRECTORY_PICTURES), "TJ");
             // This location works best if you want the created images to be shared
             // between applications and persist after your app has been uninstalled.
 
@@ -104,11 +111,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 }
             }
 
-
+            int i=0;
             boolean doIt = false;
-            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+            //String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
             File mediaFile = new File(mediaStorageDir.getPath() + File.separator +
-                    "IMG_" + timeStamp + ".jpg");
+                    "IMG_" + i + ".jpg");
             try {
                 FileOutputStream out = new FileOutputStream(mediaFile);
                 Log.e("marcusärcpbra", "Filen borde ha skrivits rätt här");
@@ -124,12 +131,69 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             } catch (IOException e) {
                 Log.e("ASDF", "Error accessing file: " + e.getMessage());
             }
+            i++;
+            File mediaFile1 = new File(mediaStorageDir.getPath() + File.separator +
+                    "IMG_" + i + ".jpg");
+            try {
+                FileOutputStream out = new FileOutputStream(mediaFile1);
+                Log.e("marcusärcpbra", "Filen borde ha skrivits rätt här");
+                bm1.compress(Bitmap.CompressFormat.JPEG, 90, out);
+                out.flush();
+                out.close();
+                bm1.recycle();
+                doIt = true;
+
+
+            } catch (FileNotFoundException e) {
+                Log.e("ASDF", "File not found: " + e.getMessage());
+            } catch (IOException e) {
+                Log.e("ASDF", "Error accessing file: " + e.getMessage());
+            }
+            i++;
+
+            File mediaFile2 = new File(mediaStorageDir.getPath() + File.separator +
+                    "IMG_" + i + ".jpg");
+            try {
+                FileOutputStream out = new FileOutputStream(mediaFile2);
+                Log.e("marcusärcpbra", "Filen borde ha skrivits rätt här");
+                bm2.compress(Bitmap.CompressFormat.JPEG, 90, out);
+                out.flush();
+                out.close();
+                bm2.recycle();
+                doIt = true;
+
+
+            } catch (FileNotFoundException e) {
+                Log.e("ASDF", "File not found: " + e.getMessage());
+            } catch (IOException e) {
+                Log.e("ASDF", "Error accessing file: " + e.getMessage());
+            }
+            i++;
+            File mediaFile3 = new File(mediaStorageDir.getPath() + File.separator +
+                    "IMG_" + i + ".jpg");
+            try {
+                FileOutputStream out = new FileOutputStream(mediaFile3);
+                Log.e("marcusärcpbra", "Filen borde ha skrivits rätt här");
+                bm3.compress(Bitmap.CompressFormat.JPEG, 90, out);
+                out.flush();
+                out.close();
+                bm3.recycle();
+                doIt = true;
+
+
+            } catch (FileNotFoundException e) {
+                Log.e("ASDF", "File not found: " + e.getMessage());
+            } catch (IOException e) {
+                Log.e("ASDF", "Error accessing file: " + e.getMessage());
+            }
+            i++;
 
             if (doIt) {
-                db.addLocation(new MyLocation(10, 20, "Australien", "t", mediaFile.getAbsolutePath(), "N", "NoFilter", "1 Jan 2016"));
-                db.addLocation(new MyLocation(10, 25, "Australien", "test1231", mediaFile.getAbsolutePath(), "N", "NoFilter", "1 Jan 2016"));
-                db.addLocation(new MyLocation(11, 26, "Australien", "testfgd", mediaFile.getAbsolutePath(), "N", "NoFilter", "1 Jan 2016"));
-                db.addLocation(new MyLocation(15, 18, "Australien", "testare", "fuck this shit", "N", "NoFilter", "1 Jan 2016"));
+
+                db.addLocation(new MyLocation((float)151.276613, (float)-33.892208, "Australien", "Selfie at Bondi!", mediaFile.getAbsolutePath(), "N", "filter_early_bird", "5 Jan 2016"));
+                db.addLocation(new MyLocation((float)151.215855,(float)-33.855893, "Australien", "Caught this awesome photo with the drone", mediaFile1.getAbsolutePath(), "S", "filter_early_bird", "9 Jan 2016"));
+                db.addLocation(new MyLocation((float) 151.18661811, (float)-33.888655, "Australien", "This is where my best friend in the entire world, Joel, studies :) He's the best.", mediaFile2.getAbsolutePath(), "W", "filter_rise", "10 Jan 2016"));
+                db.addLocation(new MyLocation((float)151.210701, (float)-33.852271, "Australien", "I made it to the top of the Sydney Harbout bridge!! :D", mediaFile3.getAbsolutePath(), "S", "filter_walden", "16 Jan 2016"));
                 SaveSharedPreferences.setStartBefore(getApplicationContext(), true);
             }
         }
@@ -208,8 +272,38 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         galleryFragment = new GalleryFragment();
         removeCat();
 
+
+       /* File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_PICTURES), "TJ");
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        File mediaFile = new File(mediaStorageDir.getPath() + File.separator +
+                "IMG_" + timeStamp + ".jpg");
+        Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.adventure);
+        try {
+            FileOutputStream out = new FileOutputStream(mediaFile);
+            Log.e("marcusärcpkass", "Filen borde ha skrivits rätt här");
+            bm.compress(Bitmap.CompressFormat.JPEG, 90, out);
+            out.flush();
+            out.close();
+            bm.recycle();
+
+        } catch (FileNotFoundException e) {
+            Log.e("ASDF", "File not found: " + e.getMessage());
+        } catch (IOException e) {
+            Log.e("ASDF", "Error accessing file: " + e.getMessage());
+        }
+
+
+        MySqLite sqLite = new MySqLite(getApplicationContext());
+        sqLite.addLocation(new MyLocation((float) -33.8922, (float)  151.277, "Sydney", "zup", "E", "filter_normal","1 May 2016"));
+*/
     }
 
+    public static Bitmap RotateBitmap(Bitmap source, float angle) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(angle);
+        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
+    }
 
     public void getTrips() {
         MySqLite db = new MySqLite(getApplicationContext());

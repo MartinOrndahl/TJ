@@ -95,7 +95,7 @@ Data från kartan
         mPager.setCurrentItem(startIndex);
         NUM_PAGES = ImagesArray.size();
     }
-
+//TODO: Fixa så denna returnerar rätt
     public String getCity(float latitude, float longitude) {
         Geocoder geoCoder = new Geocoder(this, Locale.getDefault());
         String[] total = new String[]{};
