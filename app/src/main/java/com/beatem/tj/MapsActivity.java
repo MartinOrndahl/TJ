@@ -31,7 +31,7 @@ import android.view.View;
 import android.view.WindowManager;
 
 import com.beatem.tj.Camera.CameraActivity;
-import com.beatem.tj.OldTripsViewer.SlideImageActivity;
+import com.beatem.tj.OldTripsViewer.OnlyOneImageAcitivity;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -392,7 +392,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 for (MyLocation location : locations) {
                     if (marker.getPosition().equals(location.getLatlng())) {
 
-                        Intent i = new Intent(getApplicationContext(), SlideImageActivity.class);
+                        Intent i = new Intent(getApplicationContext(), OnlyOneImageAcitivity.class);
                         i.putExtra("location", location);
                         startActivity(i);
 

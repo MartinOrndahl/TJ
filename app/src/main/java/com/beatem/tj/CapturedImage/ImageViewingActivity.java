@@ -69,6 +69,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import jp.co.cyberagent.android.gpuimage.GPUImage;
 import jp.co.cyberagent.android.gpuimage.GPUImage.OnPictureSavedListener;
 import jp.co.cyberagent.android.gpuimage.GPUImageFilter;
 import jp.co.cyberagent.android.gpuimage.GPUImageView;
@@ -85,6 +86,7 @@ public class ImageViewingActivity extends Activity implements OnClickListener, O
     private GPUImageFilter mFilter;
     private GPUImageFilterTools.FilterAdjuster mFilterAdjuster;
     private GPUImageView mGPUImageView;
+    private GPUImage mGPUImage;
     private LinearLayout imageLL;
     private Bitmap myBitmap;
     private String currentFilter = "filter_normal";
@@ -103,7 +105,7 @@ public class ImageViewingActivity extends Activity implements OnClickListener, O
 
     private FloatingActionsMenu menuMultipleActions;
     private FloatingActionButton penAction, filterAction, saveAction, deleteAction;
-    private  MyLocation location;
+    private MyLocation location;
     private boolean fromMain;
     private ImageButton mic, info;
     private EditText editText;
@@ -173,6 +175,7 @@ public class ImageViewingActivity extends Activity implements OnClickListener, O
 
 
         mGPUImageView = (GPUImageView) findViewById(R.id.gpuimage);
+        mGPUImage= new GPUImage(this);
         imageLL = (LinearLayout) findViewById(R.id.images_layout);
 
         DisplayMetrics displayMetrics = new DisplayMetrics();
@@ -185,9 +188,9 @@ Om vi kommer från kartan
  */
         Bundle data = getIntent().getExtras();
         location = (MyLocation) data.getParcelable("location");
-        if(location!=null){
+        if (location != null) {
             fromMain = true;
-        }else{
+        } else {
             fromMain = false;
         }
 
@@ -198,9 +201,9 @@ Om vi kommer från kartan
         Check om vi kommer från en nytagen bild
          */
         String fileName;
-        if(fromMain){
+        if (fromMain) {
             fileName = location.getPicpath();
-        }else{
+        } else {
             fileName = getIntent().getStringExtra("file_name");
 
         }
@@ -210,10 +213,10 @@ Om vi kommer från kartan
             if (imgFile.exists()) {
                 path = imgFile.getAbsolutePath();
                 myBitmap = BitmapFactory.decodeFile(path);
-                if(!fromMain) {
+                if (!fromMain) {
                     cameraType = getIntent().getStringExtra("camera_type").toString();
-                }else{
-                    cameraType ="back";
+                } else {
+                    cameraType = "back";
                 }
                 FrameLayout.LayoutParams imageParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
 
@@ -241,10 +244,11 @@ Om vi kommer från kartan
                     myBitmap = RotateBitmap(myBitmap, 90);
                 }
                 mGPUImageView.setImage(myBitmap);
+                mGPUImage.setImage(myBitmap);
 
 
             } else {
-                Toast.makeText(this, "Couldn't find image: "+ fileName, Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Couldn't find image: " + fileName, Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -292,9 +296,9 @@ ställer in vilket mode vi befinner oss i
         filterLayout = (RelativeLayout) findViewById(R.id.filterLayout);
 
 
-        if(!fromMain){
+        if (!fromMain) {
             direction.setText(getIntent().getStringExtra("direction").toString());
-        }else {
+        } else {
             direction.setText(location.getDirection());
         }
         date.setText(handleDate(new SimpleDateFormat("dd-MM-yyyy").format(new Date())));
@@ -554,7 +558,7 @@ ställer in vilket mode vi befinner oss i
                 cdcc.show();
                 break;
             case R.id.hide2:
-                InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
 
                 performExpandOrCollapseAction();
@@ -589,6 +593,7 @@ ställer in vilket mode vi befinner oss i
                 filter.getClass()))) {
             mFilter = filter;
             mGPUImageView.setFilter(mFilter);
+            mGPUImage.setFilter(mFilter);
             mFilterAdjuster = new GPUImageFilterTools.FilterAdjuster(mFilter);
         }
     }
@@ -866,6 +871,10 @@ ställer in vilket mode vi befinner oss i
         /*
         Spara till SQL
          */
+
+
+        mGPUImageView.saveToPictures("haj", "haj", null);
+
 
 
         MySqLite sqLite = new MySqLite(getApplicationContext());

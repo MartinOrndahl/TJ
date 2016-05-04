@@ -16,6 +16,7 @@
 
 package jp.co.cyberagent.android.gpuimage;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -54,6 +55,7 @@ public class GPUImageView extends FrameLayout {
         init(context, attrs);
     }
 
+    @TargetApi(Build.VERSION_CODES.CUPCAKE)
     private void init(Context context, AttributeSet attrs) {
         mGLSurfaceView = new GPUImageGLSurfaceView(context, attrs);
         addView(mGLSurfaceView);
@@ -167,6 +169,7 @@ public class GPUImageView extends FrameLayout {
         mGPUImage.setImage(file);
     }
 
+    @TargetApi(Build.VERSION_CODES.CUPCAKE)
     public void requestRender() {
         mGLSurfaceView.requestRender();
     }
@@ -182,6 +185,7 @@ public class GPUImageView extends FrameLayout {
      * @param fileName the file name
      * @param listener the listener
      */
+    @TargetApi(Build.VERSION_CODES.CUPCAKE)
     public void saveToPictures(final String folderName, final String fileName,
                                final OnPictureSavedListener listener) {
         new SaveTask(folderName, fileName, listener).execute();
@@ -200,6 +204,7 @@ public class GPUImageView extends FrameLayout {
      * @param height     requested output height
      * @param listener   the listener
      */
+    @TargetApi(Build.VERSION_CODES.CUPCAKE)
     public void saveToPictures(final String folderName, final String fileName,
                                int width, int height,
                                final OnPictureSavedListener listener) {
@@ -284,6 +289,7 @@ public class GPUImageView extends FrameLayout {
      * @return current output as Bitmap
      * @throws InterruptedException
      */
+    @TargetApi(Build.VERSION_CODES.CUPCAKE)
     public Bitmap capture() throws InterruptedException {
         final Semaphore waiter = new Semaphore(0);
 
@@ -293,6 +299,7 @@ public class GPUImageView extends FrameLayout {
         // Take picture on OpenGL thread
         final int[] pixelMirroredArray = new int[width * height];
         mGPUImage.runOnGLThread(new Runnable() {
+            @TargetApi(Build.VERSION_CODES.FROYO)
             @Override
             public void run() {
                 final IntBuffer pixelBuffer = IntBuffer.allocate(width * height);
@@ -319,6 +326,7 @@ public class GPUImageView extends FrameLayout {
     /**
      * Pauses the GLSurfaceView.
      */
+    @TargetApi(Build.VERSION_CODES.CUPCAKE)
     public void onPause() {
         mGLSurfaceView.onPause();
     }
@@ -326,6 +334,7 @@ public class GPUImageView extends FrameLayout {
     /**
      * Resumes the GLSurfaceView.
      */
+    @TargetApi(Build.VERSION_CODES.CUPCAKE)
     public void onResume() {
         mGLSurfaceView.onResume();
     }
@@ -340,6 +349,7 @@ public class GPUImageView extends FrameLayout {
         }
     }
 
+    @TargetApi(Build.VERSION_CODES.CUPCAKE)
     private class GPUImageGLSurfaceView extends GLSurfaceView {
         public GPUImageGLSurfaceView(Context context) {
             super(context);
@@ -385,6 +395,7 @@ public class GPUImageView extends FrameLayout {
         }
     }
 
+    @TargetApi(Build.VERSION_CODES.CUPCAKE)
     private class SaveTask extends AsyncTask<Void, Void, Void> {
         private final String mFolderName;
         private final String mFileName;
@@ -419,6 +430,7 @@ public class GPUImageView extends FrameLayout {
             return null;
         }
 
+        @TargetApi(Build.VERSION_CODES.FROYO)
         private void saveImage(final String folderName, final String fileName, final Bitmap image) {
             File path = Environment
                     .getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);

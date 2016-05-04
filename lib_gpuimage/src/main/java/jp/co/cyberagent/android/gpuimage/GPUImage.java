@@ -39,10 +39,13 @@ import android.provider.MediaStore;
 import android.view.Display;
 import android.view.WindowManager;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.List;
-import java.util.concurrent.Semaphore;
 
 /**
  * The main accessor for GPUImage functionality. This class helps to do common
@@ -77,6 +80,7 @@ public class GPUImage {
      * @param context the context
      * @return true, if successful
      */
+    @TargetApi(Build.VERSION_CODES.CUPCAKE)
     private boolean supportsOpenGLES2(final Context context) {
         final ActivityManager activityManager = (ActivityManager)
                 context.getSystemService(Context.ACTIVITY_SERVICE);
@@ -90,6 +94,7 @@ public class GPUImage {
      *
      * @param view the GLSurfaceView
      */
+    @TargetApi(Build.VERSION_CODES.FROYO)
     public void setGLSurfaceView(final GLSurfaceView view) {
         mGlSurfaceView = view;
         mGlSurfaceView.setEGLContextClientVersion(2);
@@ -103,6 +108,7 @@ public class GPUImage {
     /**
      * Request the preview to be rendered again.
      */
+    @TargetApi(Build.VERSION_CODES.CUPCAKE)
     public void requestRender() {
         if (mGlSurfaceView != null) {
             mGlSurfaceView.requestRender();
@@ -126,8 +132,9 @@ public class GPUImage {
      * @param flipHorizontal if the image should be flipped horizontally
      * @param flipVertical if the image should be flipped vertically
      */
+    @TargetApi(Build.VERSION_CODES.CUPCAKE)
     public void setUpCamera(final Camera camera, final int degrees, final boolean flipHorizontal,
-            final boolean flipVertical) {
+                            final boolean flipVertical) {
         mGlSurfaceView.setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.GINGERBREAD_MR1) {
             setUpCameraGingerbread(camera);
@@ -215,6 +222,7 @@ public class GPUImage {
      *
      * @param uri the uri of the new image
      */
+    @TargetApi(Build.VERSION_CODES.CUPCAKE)
     public void setImage(final Uri uri) {
         new LoadImageUriTask(this, uri).execute();
     }
@@ -224,6 +232,7 @@ public class GPUImage {
      *
      * @param file the file of the new image
      */
+    @TargetApi(Build.VERSION_CODES.CUPCAKE)
     public void setImage(final File file) {
         new LoadImageFileTask(this, file).execute();
     }
@@ -367,6 +376,7 @@ public class GPUImage {
      * @param fileName the file name
      * @param listener the listener
      */
+    @TargetApi(Build.VERSION_CODES.CUPCAKE)
     @Deprecated
     public void saveToPictures(final Bitmap bitmap, final String folderName, final String fileName,
             final OnPictureSavedListener listener) {
@@ -408,6 +418,7 @@ public class GPUImage {
         }
     }
 
+    @TargetApi(Build.VERSION_CODES.CUPCAKE)
     @Deprecated
     private class SaveTask extends AsyncTask<Void, Void, Void> {
 
@@ -433,6 +444,7 @@ public class GPUImage {
             return null;
         }
 
+        @TargetApi(Build.VERSION_CODES.FROYO)
         private void saveImage(final String folderName, final String fileName, final Bitmap image) {
             File path = Environment
                     .getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
@@ -523,6 +535,7 @@ public class GPUImage {
             return BitmapFactory.decodeFile(mImageFile.getAbsolutePath(), options);
         }
 
+        @TargetApi(Build.VERSION_CODES.ECLAIR)
         @Override
         protected int getImageOrientation() throws IOException {
             ExifInterface exif = new ExifInterface(mImageFile.getAbsolutePath());
@@ -542,6 +555,7 @@ public class GPUImage {
         }
     }
 
+    @TargetApi(Build.VERSION_CODES.CUPCAKE)
     private abstract class LoadImageTask extends AsyncTask<Void, Void, Bitmap> {
 
         private final GPUImage mGPUImage;
