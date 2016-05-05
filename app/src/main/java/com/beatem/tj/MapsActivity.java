@@ -442,6 +442,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         double smalestLong = 0;
         int log = 0;
         double largestlog;
+        ArrayList<MyLocation> locations = new ArrayList<MyLocation>();
+        for(MyLocation location:this.locations){
+            if(location.getTrip().equals(SaveSharedPreferences.getCurrentTrip(getApplicationContext()))){
+                locations.add(location);
+            }
+        }
         if (locations != null && locations.size() > 0) {
             largestLat = locations.get(0).getLatitude();
             smalestLat = locations.get(0).getLatitude();
