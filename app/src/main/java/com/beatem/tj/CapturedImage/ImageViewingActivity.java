@@ -306,7 +306,11 @@ ställer in vilket mode vi befinner oss i
             direction.setText(location.getDirection());
         }
         date.setText(handleDate(new SimpleDateFormat("dd-MM-yyyy").format(new Date())));
-        cityName.setText(getCity());
+
+
+        cityName.setText(getCity((float) MapsActivity.currentlocation.latitude,
+                (float) MapsActivity.currentlocation.longitude));
+
 
 
              /*
@@ -761,33 +765,24 @@ ställer in vilket mode vi befinner oss i
         }
     }
 
-    public String getCity() {
-        Geocoder geoCoder = new Geocoder(this, Locale.getDefault());
-        String[] total = new String[]{};
-        StringBuilder builder = new StringBuilder();
+
+    public String getCity(float latitude, float longitude) {
+
+
+        Geocoder gcd = new Geocoder(getApplicationContext(), Locale.getDefault());
+        List<Address> addresses = null;
         try {
-            List<Address> address = geoCoder.getFromLocation(MapsActivity.currentlocation.latitude,
-                    MapsActivity.currentlocation.longitude, 1);
-            int maxLines = address.get(0).getMaxAddressLineIndex();
-            for (int i = 0; i < maxLines; i++) {
-                String addressStr = address.get(0).getAddressLine(i);
-                builder.append(addressStr);
-                builder.append(" ");
-            }
-
-            String fnialAddress = builder.toString(); //This is the complete address.
-            total = fnialAddress.split(" ");
-
+            addresses = gcd.getFromLocation(latitude, longitude, 1);
         } catch (IOException e) {
-        } catch (NullPointerException e) {
+            e.printStackTrace();
         }
-
-        if (total.length > 0) {
-            return total[total.length - 1];
-        } else {
-            return "";
+        if (addresses.size() > 0) {
+            return addresses.get(0).getLocality();
         }
+        return "";
     }
+
+
 
     private class ResizeAnimation extends Animation {
         final int targetHeight;

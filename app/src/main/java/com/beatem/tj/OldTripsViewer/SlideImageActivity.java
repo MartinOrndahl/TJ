@@ -60,21 +60,20 @@ Data från kartan
  */
         Bundle data = getIntent().getExtras();
         location = (MyLocation) data.getParcelable("location");
-        //TODO: Fortsätt fixa så man får alla locations
 
-        String chosenTrip= location.getTrip();
-        ArrayList<MyLocation> locations= mySqLite.getLocations();
-        ArrayList<MyLocation> chosenTripLocations= new ArrayList<MyLocation>();
+        String chosenTrip = location.getTrip();
+        ArrayList<MyLocation> locations = mySqLite.getLocations();
+        ArrayList<MyLocation> chosenTripLocations = new ArrayList<MyLocation>();
 
-        for(MyLocation location: locations){
-            if(location.getTrip().equals(chosenTrip)){
+        for (MyLocation location : locations) {
+            if (location.getTrip().equals(chosenTrip)) {
                 chosenTripLocations.add(location);
             }
         }
-        int i=0;
-        for (MyLocation loc: chosenTripLocations){
-            if(loc.getLongditude()==location.getLongditude() && loc.getLatitude()== location.getLatitude()){
-                startIndex=i;
+        int i = 0;
+        for (MyLocation loc : chosenTripLocations) {
+            if (loc.getLongditude() == location.getLongditude() && loc.getLatitude() == location.getLatitude()) {
+                startIndex = i;
             }
             ImagesArray.add(loc.getPicpath());
             CitiesArray.add(getCity(loc.getLatitude(), loc.getLongditude()));
@@ -86,37 +85,26 @@ Data från kartan
         }
 
 
-
-
-
-
         mPager = (ViewPager) findViewById(R.id.pager);
-        mPager.setAdapter(new SlideImageAdapter2(SlideImageActivity.this, ImagesArray, DatesArray, CitiesArray, DirectionsArray, DescriptionsArray,FiltersArray, mPager, false, true, 0));
+        mPager.setAdapter(new SlideImageAdapter2(SlideImageActivity.this, ImagesArray, DatesArray, CitiesArray, DirectionsArray, DescriptionsArray, FiltersArray, mPager, false, true, 0));
         mPager.setCurrentItem(startIndex);
         NUM_PAGES = ImagesArray.size();
     }
-//TODO: Fixa så denna returnerar rätt
+
     public String getCity(float latitude, float longitude) {
-        Geocoder geoCoder = new Geocoder(this, Locale.getDefault());
-        String[] total = new String[]{};
-        StringBuilder builder = new StringBuilder();
+
+
+        Geocoder gcd = new Geocoder(getApplicationContext(), Locale.getDefault());
+        List<Address> addresses = null;
         try {
-            List<Address> address = geoCoder.getFromLocation(latitude, longitude, 1);
-            int maxLines = address.get(0).getMaxAddressLineIndex();
-            for (int i = 0; i < maxLines; i++) {
-                String addressStr = address.get(0).getAddressLine(i);
-                builder.append(addressStr);
-                builder.append(" ");
-            }
-
-            String fnialAddress = builder.toString(); //This is the complete address.
-            total = fnialAddress.split(" ");
-
+            addresses = gcd.getFromLocation(latitude, longitude, 1);
         } catch (IOException e) {
-        } catch (NullPointerException e) {
+            e.printStackTrace();
         }
-
-        return total[total.length - 1];
+        if (addresses.size() > 0) {
+            return addresses.get(0).getLocality();
+        }
+        return "";
     }
 
 
