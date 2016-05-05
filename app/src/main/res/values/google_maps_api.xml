@@ -20,6 +20,6 @@
     <!-- Ludvigs KEY: AIzaSyCgF-I6eohSZxlxVWRCDTrPmhWuQq9qG_8 -->
 
 
-    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyD5mLQjO6WOjnpleQWYZxDl0A_r0X4C1Dc</string>
+    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyCgF-I6eohSZxlxVWRCDTrPmhWuQq9qG_8</string>
 
 </resources>
