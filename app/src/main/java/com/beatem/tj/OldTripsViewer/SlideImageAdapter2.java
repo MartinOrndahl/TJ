@@ -144,6 +144,7 @@ public class SlideImageAdapter2 extends PagerAdapter implements View.OnClickList
         }
 
 
+        //TODO: Fixa även här så att get endast roteras om width>height
         File file = new File(IMAGES.get(position));
         int rotation = 90;
         Bitmap myBitmap = BitmapFactory.decodeFile(file.getAbsolutePath());

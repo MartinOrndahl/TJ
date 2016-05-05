@@ -58,7 +58,6 @@
 
         </activity>
 
-        <activity android:name=".OldTripsViewer.OnlyOneImageAcitivity" android:screenOrientation="portrait"></activity>
         <activity android:name=".AndroidDatabaseManager"
             android:theme="@style/Theme.AppCompat.Light"/>
 

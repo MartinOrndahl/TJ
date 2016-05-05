@@ -212,10 +212,17 @@ Om vi kommer från kartan
 
         if (fileName != null) {
             imgFile = new File(fileName);
+            boolean rotate = false;
             Log.e("marcusäger ", fileName);
             if (imgFile.exists()) {
                 path = imgFile.getAbsolutePath();
                 myBitmap = BitmapFactory.decodeFile(path);
+                if (myBitmap.getWidth() > myBitmap.getHeight()) {
+                    rotate = true;
+                }
+
+
+                //TODO: Rotera bitmap om height<width istället för att kolla cameratype
 
                 if (!fromMain) {
                     cameraType = getIntent().getStringExtra("camera_type").toString();
@@ -223,7 +230,9 @@ Om vi kommer från kartan
                     cameraType = "back";
                 }
                 FrameLayout.LayoutParams imageParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-
+                if (rotate) {
+                    myBitmap = RotateBitmap(myBitmap, 90);
+                }
                 if (cameraType.equals("front")) {
                     Matrix m = new Matrix();
                     m.setScale(-1, 1);
@@ -233,8 +242,9 @@ Om vi kommer från kartan
 
 
                     myBitmap = Bitmap.createBitmap(myBitmap, 0, 0, myBitmap.getWidth(), myBitmap.getHeight(), m, false);
-                    myBitmap.setDensity(DisplayMetrics.DENSITY_DEFAULT);
-                    myBitmap = RotateBitmap(myBitmap, 90);
+                    myBitmap=RotateBitmap(myBitmap, 180);
+                    //myBitmap.setDensity(DisplayMetrics.DENSITY_DEFAULT);
+
                     myBitmap = Bitmap.createBitmap(
                             myBitmap, 230
                             ,
@@ -244,8 +254,6 @@ Om vi kommer från kartan
                     );
 
 
-                } else {
-                    myBitmap = RotateBitmap(myBitmap, 90);
                 }
                 mGPUImageView.setImage(myBitmap);
                 mGPUImage.setImage(myBitmap);
@@ -781,7 +789,6 @@ ställer in vilket mode vi befinner oss i
         }
         return "";
     }
-
 
 
     private class ResizeAnimation extends Animation {
