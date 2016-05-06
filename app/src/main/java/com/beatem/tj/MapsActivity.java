@@ -623,7 +623,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     protected void onResume() {
         super.onResume();
-
+        GpsListniner(true);
         // for the system's orientation sensor registered listeners
         if (mSensorManager != null) {
             mSensorManager.registerListener(this, mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
