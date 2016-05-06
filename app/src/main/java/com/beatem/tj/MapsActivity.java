@@ -524,12 +524,21 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             if(location.getTrip().equals(SaveSharedPreferences.getCurrentTrip(getApplicationContext()))){
                 locations.add(location);
             }
+
         }
         if (locations != null && locations.size() > 0) {
-            largestLat = locations.get(0).getLatitude();
-            smalestLat = locations.get(0).getLatitude();
-            smalestLong = locations.get(0).getLongditude();
-            largestLong = locations.get(0).getLongditude();
+            if(currentlocation == null) {
+                largestLat = locations.get(0).getLatitude();
+                smalestLat = locations.get(0).getLatitude();
+                smalestLong = locations.get(0).getLongditude();
+                largestLong = locations.get(0).getLongditude();
+            }else{
+                largestLat = currentlocation.latitude;
+                smalestLat = currentlocation.latitude;
+                smalestLong = currentlocation.longitude;
+                largestLong = currentlocation.longitude;
+
+            }
 
             for (int i = 0; i < locations.size(); i++) {
                 if (largestLat < locations.get(i).getLatitude()) {
