@@ -3,19 +3,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.beatem.tj.GalleryFragment"
-    android:paddingTop="55dp"
     android:background="#FFFFFF">
 
     <!-- TODO: Update blank fragment layout -->
     <GridView
         android:id="@+id/view_gallery"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:verticalSpacing="16dp"
-        android:horizontalSpacing="16dp"
-        android:stretchMode="columnWidth"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
         android:numColumns="3"
-        android:gravity="center"
         >
     </GridView>
 
