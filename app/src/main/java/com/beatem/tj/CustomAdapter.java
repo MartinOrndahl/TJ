@@ -18,20 +18,30 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class CustomAdapter extends BaseAdapter {
+import java.util.ArrayList;
+import java.util.HashMap;
 
+public class CustomAdapter extends BaseAdapter {
+    Holder holder;
     String[] result;
     Context context;
-    String[] imageId = new String[3];
-    int amountOfPicturesExtra;
+    String[] imageId;
+    int amountOfPicturesExtra = 0;
     private static LayoutInflater inflater = null;
 
-    public CustomAdapter(Context context, String[] prgmNameList, String[] prgmImages) {
+    HashMap<String, ArrayList<String>> picpaths;
+    private ArrayList<String> acceptedPicPaths;
+    private ArrayList<Integer> amountExtras = new ArrayList<Integer>();
+
+
+    public CustomAdapter(Context context, String[] prgmNameList, HashMap<String, ArrayList<String>> prgmImages) {
         // TODO Auto-generated constructor stub
         result = prgmNameList;
         this.context = context;
-        amountOfPicturesExtra= prgmImages.length-3;
-        addImages(prgmImages);
+        picpaths = prgmImages;
+        acceptedPicPaths = new ArrayList<String>();
+
+        addImages(picpaths);
 
         //imageId=prgmImages;
         inflater = (LayoutInflater) context.
@@ -39,17 +49,27 @@ public class CustomAdapter extends BaseAdapter {
 
     }
 
-    private void addImages(String[] prgmImages) {
-        if (prgmImages.length >= 3) {
-            for (int i = 0; i < 3; i++) {
-                imageId[i] = prgmImages[i];
+    private void addImages(HashMap<String, ArrayList<String>> hmap) {
+
+
+        for (int i = 0; i < result.length; i++) {
+            ArrayList<String> pics = hmap.get(result[i]);
+            if (pics.size() >= 3) {
+                amountExtras.add(i, pics.size()-3);
+                for (int j = 0; j < 3; j++) {
+                    acceptedPicPaths.add(pics.get(j));
+                }
+            } else {
+                for (int j = 0; j < 3; j++) {
+                    acceptedPicPaths.add(pics.get(0));
+                    amountExtras.add(i, 0);
+                }
+
             }
-        }
-        else{
-            //TODO: Fixa detta fallet
         }
 
     }
+
 
     @Override
     public int getCount() {
@@ -77,35 +97,40 @@ public class CustomAdapter extends BaseAdapter {
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         // TODO Auto-generated method stub
-        Holder holder = new Holder();
+        holder = new Holder();
         View rowView;
 
         rowView = inflater.inflate(R.layout.custom_grid_component, null);
 
 
+
+        /*
+        Hämta alla komponenter
+         */
         holder.title = (TextView) rowView.findViewById(R.id.textView1);
         holder.number = (TextView) rowView.findViewById(R.id.custom_grid_plusNumber);
 
         holder.img1 = (ImageView) rowView.findViewById(R.id.imageView1);
         holder.img2 = (ImageView) rowView.findViewById(R.id.imageView2);
         holder.img3 = (ImageView) rowView.findViewById(R.id.imageView3);
-        holder.blankImage= (ImageView)rowView.findViewById(R.id.blankImage);
-
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+        holder.blankImage = (ImageView) rowView.findViewById(R.id.blankImage);
 
 
+        /*
+        Hanterar vår blankImage till rätt storlek
+         */
         Bitmap blankImage = BitmapFactory.decodeResource(context.getResources(), R.drawable.transparent);
-        blankImage= Bitmap.createScaledBitmap(blankImage, 128, 128, false);
+        blankImage = Bitmap.createScaledBitmap(blankImage, 128, 128, false);
 
 
 
+        /*
+        Tillsätter komponenterna sina värden
+         */
         holder.title.setText(result[position]);
-        holder.number.setText("+"+ amountOfPicturesExtra);
+        holder.number.setText("+" + amountExtras.get(position));
 
-        holder.img1.setImageBitmap(getThumbNail(imageId[position * 3]));
-        holder.img2.setImageBitmap(getThumbNail(imageId[position * 3 + 1]));
-        holder.img3.setImageBitmap(getThumbNail(imageId[position * 3 + 2]));
+        handleImages(position);
         holder.blankImage.setImageBitmap(blankImage);
 
 
@@ -115,10 +140,19 @@ public class CustomAdapter extends BaseAdapter {
             public void onClick(View v) {
                 // TODO Auto-generated method stub
                 Toast.makeText(context, "You Clicked " + result[position], Toast.LENGTH_LONG).show();
+
+
             }
         });
 
         return rowView;
+    }
+
+    private void handleImages(int position) {
+        imageId = (String[]) acceptedPicPaths.toArray(new String[0]);
+        holder.img1.setImageBitmap(getThumbNail(imageId[position * 3]));
+        holder.img2.setImageBitmap(getThumbNail(imageId[position * 3 + 1]));
+        holder.img3.setImageBitmap(getThumbNail(imageId[position * 3 + 2]));
     }
 
     private Bitmap getThumbNail(String s) {
@@ -129,7 +163,7 @@ public class CustomAdapter extends BaseAdapter {
                 THUMBSIZE,
                 THUMBSIZE);
 
-        ThumbImage= RotateBitmap(ThumbImage, 90);
+        ThumbImage = RotateBitmap(ThumbImage, 90);
         Bitmap.createScaledBitmap(ThumbImage, 128, 128, false);
         return ThumbImage;
     }
