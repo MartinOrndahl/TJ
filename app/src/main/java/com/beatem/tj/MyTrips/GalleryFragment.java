@@ -1,15 +1,21 @@
-package com.beatem.tj;
+package com.beatem.tj.MyTrips;
 
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.Toast;
+
+import com.beatem.tj.MyLocation;
+import com.beatem.tj.MySqLite;
+import com.beatem.tj.R;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -65,7 +71,7 @@ public class GalleryFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_gallery, container, false);
+        final View view = inflater.inflate(R.layout.fragment_gallery, container, false);
         mySqlLite = new MySqLite(getActivity().getApplicationContext());
         locations = mySqlLite.getLocations();
 
@@ -97,10 +103,19 @@ public class GalleryFragment extends Fragment {
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent,
                                     View v, int position, long id) {
-                /*Toast.makeText(getContext(),
+                Toast.makeText(getContext(),
                         "pic" + (position + 1) + " selected",
-                        Toast.LENGTH_SHORT).show();*/
+                        Toast.LENGTH_SHORT).show();
+                Fragment newFragment = new ChosenTripFragment();
+                FragmentTransaction transaction = getFragmentManager().beginTransaction();
 
+// Replace whatever is in the fragment_container view with this fragment,
+// and add the transaction to the back stack if needed
+                transaction.replace(R.id.fragment_container, newFragment);
+                transaction.addToBackStack(null);
+
+// Commit the transaction
+                transaction.commit();
             }
         });
 
@@ -125,6 +140,7 @@ public class GalleryFragment extends Fragment {
         // Inflate the layout for this fragment
         return view;
     }
+
 
     private Bitmap loadImageFromStorage(String path) {
         Bitmap b = null;

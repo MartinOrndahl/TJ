@@ -33,9 +33,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.beatem.tj.Camera.CameraActivity;
+import com.beatem.tj.MyTrips.GalleryFragment;
 import com.beatem.tj.OldTripsViewer.SlideImageActivity;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;

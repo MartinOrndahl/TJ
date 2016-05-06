@@ -1,4 +1,4 @@
-package com.beatem.tj;
+package com.beatem.tj.MyTrips;
 
 /**
  * Created by JoelBuhrman on 16-05-06.
@@ -11,12 +11,12 @@ import android.graphics.Matrix;
 import android.media.ThumbnailUtils;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.beatem.tj.R;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -49,6 +49,9 @@ public class CustomAdapter extends BaseAdapter {
 
     }
 
+    /*
+    Hämtar alla bilder, med resenamn som key
+     */
     private void addImages(HashMap<String, ArrayList<String>> hmap) {
 
 
@@ -134,7 +137,7 @@ public class CustomAdapter extends BaseAdapter {
         holder.blankImage.setImageBitmap(blankImage);
 
 
-        rowView.setOnClickListener(new OnClickListener() {
+        /*rowView.setOnClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -144,7 +147,7 @@ public class CustomAdapter extends BaseAdapter {
 
             }
         });
-
+*/
         return rowView;
     }
 
