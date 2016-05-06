@@ -498,7 +498,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mMap.getUiSettings().setMyLocationButtonEnabled(true);
         zoomEnabled = true;
         //Todo: hämta alla markeringar från SQLLite databas och sätt ut på karta
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(0, 0)));
+        if(currentlocation != null){
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentlocation,3));
+        }else {
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(10, 10),3));
+        }
 
 
     }
@@ -718,7 +722,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
         if (id == R.id.current_trip_button) {
-            Toast.makeText(getApplicationContext(),mMap.getMyLocation().getLatitude()+":"+mMap.getMyLocation().getLongitude() + "jämnfört med current: " + currentlocation.latitude+":"+currentlocation.longitude,Toast.LENGTH_LONG).show();
+           // Toast.makeText(getApplicationContext(),mMap.getMyLocation().getLatitude()+":"+mMap.getMyLocation().getLongitude() + "jämnfört med current: " + currentlocation.latitude+":"+currentlocation.longitude,Toast.LENGTH_LONG).show();
             if(SaveSharedPreferences.getCurrentTrip(getApplicationContext()).equals("none")){
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(currentlocation));
             }else {
