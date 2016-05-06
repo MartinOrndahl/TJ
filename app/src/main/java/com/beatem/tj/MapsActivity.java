@@ -33,6 +33,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.beatem.tj.Camera.CameraActivity;
 import com.beatem.tj.OldTripsViewer.SlideImageActivity;
@@ -73,10 +74,26 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private android.support.v4.app.FragmentTransaction fragmentTransactionCat;
     private CatLoadingView cat;
     private MySqLite db;
+    private static final int TWO_MINUTES = 1000 * 60 * 2;
+    private Location currentloc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA}, MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+            return;
+        }
+
         zoomEnabled = false;
         permission = false;
 
@@ -87,6 +104,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         cat.show(fragmentTransactionCat, "");
 
         if (!SaveSharedPreferences.getFirstStart(getApplicationContext())) {
+
 
             db = new MySqLite(getApplicationContext());
             Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.bondibeachselfie);
@@ -128,8 +146,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             } catch (FileNotFoundException e) {
                 Log.e("ASDF", "File not found: " + e.getMessage());
+                doIt = false;
             } catch (IOException e) {
                 Log.e("ASDF", "Error accessing file: " + e.getMessage());
+                doIt = false;
             }
             i++;
             File mediaFile1 = new File(mediaStorageDir.getPath() + File.separator +
@@ -146,8 +166,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             } catch (FileNotFoundException e) {
                 Log.e("ASDF", "File not found: " + e.getMessage());
+                doIt = false;
             } catch (IOException e) {
                 Log.e("ASDF", "Error accessing file: " + e.getMessage());
+                doIt = false;
             }
             i++;
 
@@ -165,8 +187,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             } catch (FileNotFoundException e) {
                 Log.e("ASDF", "File not found: " + e.getMessage());
+                doIt = false;
             } catch (IOException e) {
                 Log.e("ASDF", "Error accessing file: " + e.getMessage());
+                doIt = false;
             }
             i++;
             File mediaFile3 = new File(mediaStorageDir.getPath() + File.separator +
@@ -183,8 +207,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             } catch (FileNotFoundException e) {
                 Log.e("ASDF", "File not found: " + e.getMessage());
+                doIt = false;
             } catch (IOException e) {
                 Log.e("ASDF", "Error accessing file: " + e.getMessage());
+                doIt = false;
             }
             i++;
 
@@ -199,19 +225,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
         getTrips();
 
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
-                            Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA}, MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
-            return;
-        }
 
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -226,7 +239,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         locationListener = new LocationListener() {
             public void onLocationChanged(Location location) {
                 // Called when a new location is found by the network location provider.
-                currentlocation = new LatLng(location.getLatitude(), location.getLongitude());
+                if(isBetterLocation(location,new Location(currentloc))){
+                    currentloc = location;
+                }
+
+                currentlocation = new LatLng(currentloc.getLatitude(), currentloc.getLongitude());
                 //uppdateCurrentLocation();
             }
 
@@ -315,14 +332,73 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     }
 
+
+
+    /** Determines whether one Location reading is better than the current Location fix
+     * @param location  The new Location that you want to evaluate
+     * @param currentBestLocation  The current Location fix, to which you want to compare the new one
+     */
+    protected boolean isBetterLocation(Location location, Location currentBestLocation) {
+        if (currentBestLocation == null) {
+            // A new location is always better than no location
+            return true;
+        }
+
+        // Check whether the new location fix is newer or older
+        long timeDelta = location.getTime() - currentBestLocation.getTime();
+        boolean isSignificantlyNewer = timeDelta > TWO_MINUTES;
+        boolean isSignificantlyOlder = timeDelta < -TWO_MINUTES;
+        boolean isNewer = timeDelta > 0;
+
+        // If it's been more than two minutes since the current location, use the new location
+        // because the user has likely moved
+        if (isSignificantlyNewer) {
+            return true;
+            // If the new location is more than two minutes older, it must be worse
+        } else if (isSignificantlyOlder) {
+            return false;
+        }
+
+        // Check whether the new location fix is more or less accurate
+        int accuracyDelta = (int) (location.getAccuracy() - currentBestLocation.getAccuracy());
+        boolean isLessAccurate = accuracyDelta > 0;
+        boolean isMoreAccurate = accuracyDelta < 0;
+        boolean isSignificantlyLessAccurate = accuracyDelta > 200;
+
+        // Check if the old and new location are from the same provider
+        boolean isFromSameProvider = isSameProvider(location.getProvider(),
+                currentBestLocation.getProvider());
+
+        // Determine location quality using a combination of timeliness and accuracy
+        if (isMoreAccurate) {
+            return true;
+        } else if (isNewer && !isLessAccurate) {
+            return true;
+        } else if (isNewer && !isSignificantlyLessAccurate && isFromSameProvider) {
+            return true;
+        }
+        return false;
+    }
+
+    /** Checks whether two providers are the same */
+    private boolean isSameProvider(String provider1, String provider2) {
+        if (provider1 == null) {
+            return provider2 == null;
+        }
+        return provider1.equals(provider2);
+    }
+
+
     public synchronized void GpsListniner(boolean onoff) {
         try {
             if (onoff && locationManager != null) {
 
                 locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
 
             } else {
                 //TODO:sluta lyssna efter gps signal.
+
             }
         } catch (SecurityException e) {
 
@@ -334,6 +410,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         if (currentlocation != null && mMapready) {
             try {
                 mMap.setMyLocationEnabled(true);
+
 
 
             } catch (SecurityException e) {
@@ -632,7 +709,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
         if (id == R.id.current_trip_button) {
-
+            Toast.makeText(getApplicationContext(),mMap.getMyLocation().getLatitude()+":"+mMap.getMyLocation().getLongitude() + "jämnfört med current: " + currentlocation.latitude+":"+currentlocation.longitude,Toast.LENGTH_LONG).show();
             if(SaveSharedPreferences.getCurrentTrip(getApplicationContext()).equals("none")){
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(currentlocation));
             }else {
