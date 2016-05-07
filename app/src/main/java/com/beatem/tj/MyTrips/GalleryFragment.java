@@ -103,10 +103,11 @@ public class GalleryFragment extends Fragment {
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent,
                                     View v, int position, long id) {
+
                 Toast.makeText(getContext(),
                         "pic" + (position + 1) + " selected",
                         Toast.LENGTH_SHORT).show();
-                Fragment newFragment = new ChosenTripFragment();
+                Fragment newFragment = new ChosenTripFragment(trips.get(position));
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
 
 // Replace whatever is in the fragment_container view with this fragment,

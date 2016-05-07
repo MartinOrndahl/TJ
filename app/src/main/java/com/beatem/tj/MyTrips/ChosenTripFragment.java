@@ -21,6 +21,11 @@ public class ChosenTripFragment extends Fragment {
     private MySqLite mySqlLite;
     private ArrayList<MyLocation> locations;
     private ArrayList<String> paths;
+    private String trip;
+
+    public ChosenTripFragment(String trip) {
+        this.trip=trip;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -32,7 +37,7 @@ public class ChosenTripFragment extends Fragment {
         locations = mySqlLite.getLocations();
 
         for(MyLocation location: locations){
-            if(location.getTrip().equals("Australien")){
+            if(location.getTrip().equals(trip)){
                 paths.add(location.getPicpath());
             }
         }

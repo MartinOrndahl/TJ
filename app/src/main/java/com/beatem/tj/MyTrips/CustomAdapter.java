@@ -31,7 +31,7 @@ public class CustomAdapter extends BaseAdapter {
 
     HashMap<String, ArrayList<String>> picpaths;
     private ArrayList<String> acceptedPicPaths;
-    private ArrayList<Integer> amountExtras = new ArrayList<Integer>();
+    private ArrayList<Integer> amountExtras;
 
 
     public CustomAdapter(Context context, String[] prgmNameList, HashMap<String, ArrayList<String>> prgmImages) {
@@ -40,6 +40,7 @@ public class CustomAdapter extends BaseAdapter {
         this.context = context;
         picpaths = prgmImages;
         acceptedPicPaths = new ArrayList<String>();
+        amountExtras=  new ArrayList<Integer>();
 
         addImages(picpaths);
 
@@ -167,7 +168,7 @@ public class CustomAdapter extends BaseAdapter {
                 THUMBSIZE);
 
         ThumbImage = RotateBitmap(ThumbImage, 90);
-        Bitmap.createScaledBitmap(ThumbImage, 128, 128, false);
+        Bitmap.createScaledBitmap(ThumbImage, THUMBSIZE, THUMBSIZE, false);
         return ThumbImage;
     }
 

@@ -100,12 +100,13 @@ public class CustomChosenTripAdapter extends BaseAdapter {
     }
 
     private void handleImages(int position) {
-        holder.img.setImageBitmap( RotateBitmap(BitmapFactory.decodeFile(result[position]),90));
+        //RotateBitmap(BitmapFactory.decodeFile(result[position]),90)
+        holder.img.setImageBitmap(RotateBitmap(BitmapFactory.decodeFile(result[position]),90));
 
     }
 
     private Bitmap getThumbNail(String s) {
-        final int THUMBSIZE = 128;
+        final int THUMBSIZE = 256;
 
         Bitmap ThumbImage = ThumbnailUtils.extractThumbnail(
                 BitmapFactory.decodeFile(s),
@@ -113,7 +114,7 @@ public class CustomChosenTripAdapter extends BaseAdapter {
                 THUMBSIZE);
 
         ThumbImage = RotateBitmap(ThumbImage, 90);
-        Bitmap.createScaledBitmap(ThumbImage, 500, 500, false);
+        Bitmap.createScaledBitmap(ThumbImage, THUMBSIZE, THUMBSIZE, false);
         return ThumbImage;
     }
 
@@ -123,4 +124,10 @@ public class CustomChosenTripAdapter extends BaseAdapter {
         matrix.postRotate(angle);
         return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
     }
+
+
+
+
+
+
 }

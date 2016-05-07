@@ -10,7 +10,7 @@
         android:id="@+id/my_trip_chosen_trip_grid"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:numColumns="3">
+        android:numColumns="2">
 
     </GridView>
 
