@@ -1,29 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/custom_grid_component_layout"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:padding="16dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_centerInParent="true"
+    android:padding="5dp"
 
     >
 
-
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:orientation="vertical"
-        android:weightSum="2">
+        android:weightSum="2"
+        android:layout_centerInParent="true"
+        >
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:orientation="horizontal"
             android:weightSum="2">
 
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+
             <ImageView
                 android:id="@+id/imageView1"
                 android:layout_width="wrap_content"
@@ -32,8 +33,6 @@
                 android:adjustViewBounds="true"
                 android:scaleType="fitXY"
                 android:src="@drawable/ic_launcher" />
-
-            </RelativeLayout>
 
             <ImageView
                 android:id="@+id/imageView2"
@@ -46,7 +45,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:orientation="horizontal"
@@ -63,7 +62,7 @@
 
             <RelativeLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:background="#aaa"
                 android:layout_weight="1"
                 >
@@ -96,6 +95,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
+                android:layout_marginTop="5dp"
                 android:text="TEXT"
                 android:textColor="#000" />
 
