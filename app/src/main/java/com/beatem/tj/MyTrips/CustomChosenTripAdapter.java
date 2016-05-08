@@ -30,7 +30,7 @@ public class CustomChosenTripAdapter extends BaseAdapter {
 
     HashMap<String, ArrayList<String>> picpaths;
     private ArrayList<String> acceptedPicPaths;
-    private ArrayList<Integer> amountExtras = new ArrayList<Integer>();
+    private ArrayList<Integer> amountExtras;
 
 
     public CustomChosenTripAdapter(Context context, String[] paths) {
@@ -74,6 +74,7 @@ public class CustomChosenTripAdapter extends BaseAdapter {
         View rowView;
 
         rowView = inflater.inflate(R.layout.my_trips_chosen_trip_custom_component, null);
+        amountExtras = new ArrayList<Integer>();
 
 
 

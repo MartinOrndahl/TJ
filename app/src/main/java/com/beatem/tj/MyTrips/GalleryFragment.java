@@ -33,10 +33,10 @@ public class GalleryFragment extends Fragment {
 
     private MySqLite mySqlLite;
     ArrayList<MyLocation> locations;
-    private ArrayList<String> trips = new ArrayList<String>();
-    private ArrayList<String> picPaths = new ArrayList<String>();
-    private ArrayList<String> picPathsTrips = new ArrayList<String>();
-    HashMap<String, ArrayList<String>> hmap = new HashMap<String, ArrayList<String>>();
+    private ArrayList<String> trips ;
+    private ArrayList<String> picPaths ;
+    private ArrayList<String> picPathsTrips ;
+    HashMap<String, ArrayList<String>> hmap ;
 
 
     public GalleryFragment() {
@@ -74,6 +74,10 @@ public class GalleryFragment extends Fragment {
         final View view = inflater.inflate(R.layout.fragment_gallery, container, false);
         mySqlLite = new MySqLite(getActivity().getApplicationContext());
         locations = mySqlLite.getLocations();
+        hmap= new HashMap<String, ArrayList<String>>();
+        picPathsTrips= new ArrayList<String>();
+        picPaths= new ArrayList<String>();
+        trips= new ArrayList<String>();
 
         //Läser in alla bilder från internminnet till en vektor
         //Bitmap[] images = {loadImageFromStorage("/storage/emulated/0/Pictures/GPUImage/1461422081611.jpg"), loadImageFromStorage("/storage/emulated/0/Snapchat/Snapchat-8253945721256595138.jpg")};
