@@ -729,6 +729,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
                 if (galleryCreated) {
+                    if(GalleryFragment.galleryStarted){
+                        android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                        fragmentTransaction.remove(GalleryFragment.newFragment);
+                        fragmentTransaction.commit();
+                        GalleryFragment.galleryStarted =false;
+
+                    }
 
                     android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
                     fragmentTransaction.remove(galleryFragment);
@@ -751,6 +758,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             worldMapmode();
             if (galleryCreated) {
+                if(GalleryFragment.galleryStarted){
+                    android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                    fragmentTransaction.remove(GalleryFragment.newFragment);
+                    fragmentTransaction.commit();
+                    GalleryFragment.galleryStarted =false;
+
+                }
                 android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.remove(galleryFragment);
                 fragmentTransaction.commit();

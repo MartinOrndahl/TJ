@@ -37,6 +37,9 @@ public class GalleryFragment extends Fragment {
     private ArrayList<String> picPaths ;
     private ArrayList<String> picPathsTrips ;
     HashMap<String, ArrayList<String>> hmap ;
+    public static boolean galleryStarted;
+    public static ChosenTripFragment newFragment;
+
 
 
     public GalleryFragment() {
@@ -111,12 +114,13 @@ public class GalleryFragment extends Fragment {
                 Toast.makeText(getContext(),
                         "pic" + (position + 1) + " selected",
                         Toast.LENGTH_SHORT).show();
-                Fragment newFragment = new ChosenTripFragment(trips.get(position));
+                newFragment = new ChosenTripFragment(trips.get(position));
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
 
 // Replace whatever is in the fragment_container view with this fragment,
 // and add the transaction to the back stack if needed
-                transaction.replace(R.id.fragment_container, newFragment);
+                transaction.add(R.id.fragment_container, newFragment);
+
                 transaction.addToBackStack(null);
 
 // Commit the transaction
