@@ -107,13 +107,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
             db = new MySqLite(getApplicationContext());
-            Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.bondibeachselfie);
+            Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.joel);
             bm=RotateBitmap(bm, 270);
-            Bitmap bm1 = BitmapFactory.decodeResource(getResources(), R.drawable.sydneyoperahouse);
+            Bitmap bm1 = BitmapFactory.decodeResource(getResources(), R.drawable.bali);
             bm1=RotateBitmap(bm1, 270);
-            Bitmap bm2 = BitmapFactory.decodeResource(getResources(), R.drawable.universityofsydney);
+            Bitmap bm2 = BitmapFactory.decodeResource(getResources(), R.drawable.martin);
             bm2=RotateBitmap(bm2, 270);
-            Bitmap bm3 = BitmapFactory.decodeResource(getResources(), R.drawable.sydneyharbourbridge);
+            Bitmap bm3 = BitmapFactory.decodeResource(getResources(), R.drawable.ludde);
             bm3=RotateBitmap(bm3, 270);
 
             File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
@@ -216,10 +216,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             if (doIt) {
 
-                db.addLocation(new MyLocation((float)151.276613, (float)-33.892208, "Australien", "Selfie at Bondi!", mediaFile.getAbsolutePath(), "N", "filter_early_bird", "5 Jan 2016"));
-                db.addLocation(new MyLocation((float)151.215855,(float)-33.855893, "Australien", "Caught this awesome photo with the drone", mediaFile1.getAbsolutePath(), "S", "filter_early_bird", "9 Jan 2016"));
-                db.addLocation(new MyLocation((float) 151.18661811, (float)-33.888655, "Australien", "This is where my best friend in the entire world, Joel, studies :) He's the best.", mediaFile2.getAbsolutePath(), "W", "filter_rise", "10 Jan 2016"));
-                db.addLocation(new MyLocation((float)151.210701, (float)-33.852271, "Australien", "I made it to the top of the Sydney Harbout bridge!! :D", mediaFile3.getAbsolutePath(), "S", "filter_walden", "16 Jan 2016"));
+
+                db.addLocation(new MyLocation((float)31.554837, (float)-23.988179, "WorldTrip", "Look at these awesome hippos!", mediaFile3.getAbsolutePath(), "S", "filter_early_bird", "16 Jan 2016"));
+                db.addLocation(new MyLocation((float)115.188919,(float)-8.409518, "WorldTrip", "Did not drown this time!", mediaFile1.getAbsolutePath(), "S", "filter_early_bird", "9 Jan 2016"));
+                db.addLocation(new MyLocation((float)103.866943 , (float)13.412448, "WorldTrip", "I think im lost", mediaFile2.getAbsolutePath(), "W", "filter_early_bird", "10 Jan 2016"));
+                db.addLocation(new MyLocation((float)38.15, (float)36.25, "WorldTrip", "Wonder if i left the stove on...!", mediaFile.getAbsolutePath(), "N", "filter_early_bird", "5 Jan 2016"));
+
                 SaveSharedPreferences.setStartBefore(getApplicationContext(), true);
             }
         }
