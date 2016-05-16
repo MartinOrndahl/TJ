@@ -11,12 +11,13 @@
             android:id="@+id/my_trips_button"
             android:icon="@drawable/ic_menu_gallery"
             android:title="My trips" />
+        <item
+            android:id="@+id/current_trip_button"
+            android:icon="@drawable/vector_drawable_ic_place_black___px"
+            android:title="Me" />
 
     </group>
-    <item
-        android:id="@+id/current_trip_button"
-        android:icon="@drawable/vector_drawable_ic_place_black___px"
-        android:title="Current trip" />
+
 
     <item android:title="Actions">
         <menu>

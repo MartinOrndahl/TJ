@@ -291,6 +291,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         navigationView.getMenu().getItem(0).setChecked(true);
 
         galleryFragment = new GalleryFragment();
+        tripFragment = new CurrentTripFragment();
         removeCat();
 
 
@@ -502,13 +503,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mMap.getUiSettings().setMyLocationButtonEnabled(true);
         zoomEnabled = true;
         moveToCurrentTrip();
-        //Todo: hämta alla markeringar från SQLLite databas och sätt ut på karta
-        if(currentlocation != null){
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentlocation,3));
-        }else {
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(10, 10),3));
-        }
-
 
     }
 
@@ -769,13 +763,18 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             worldMapmode();
             if (galleryCreated) {
-                if (GalleryFragment.galleryStarted) {
+                if (galleryFragment.galleryStarted) {
                     android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
                     fragmentTransaction.remove(GalleryFragment.newFragment);
                     fragmentTransaction.commit();
-                    GalleryFragment.galleryStarted = false;
+                    galleryFragment.galleryStarted = false;
 
                 }
+                android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.remove(galleryFragment);
+                fragmentTransaction.commit();
+                galleryCreated = false;
+
             }
                 if (currentTripStarted) {
                     android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
