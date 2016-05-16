@@ -499,6 +499,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         mMap.getUiSettings().setAllGesturesEnabled(true);
         mMap.getUiSettings().setMyLocationButtonEnabled(true);
         zoomEnabled = true;
+        moveToCurrentTrip();
         //Todo: hämta alla markeringar från SQLLite databas och sätt ut på karta
         if(currentlocation != null){
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentlocation,3));

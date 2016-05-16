@@ -3,18 +3,20 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/current_trip_button"
-            android:icon="@drawable/vector_drawable_ic_place_black___px"
-            android:title="Current trip" />
+            android:id="@+id/map_button"
+            android:icon="@drawable/vector_drawable_ic_map_black___px"
+            android:title="Map" />
+
         <item
             android:id="@+id/my_trips_button"
             android:icon="@drawable/ic_menu_gallery"
             android:title="My trips" />
-        <item
-            android:id="@+id/map_button"
-            android:icon="@drawable/vector_drawable_ic_map_black___px"
-            android:title="Map" />
+
     </group>
+    <item
+        android:id="@+id/current_trip_button"
+        android:icon="@drawable/vector_drawable_ic_place_black___px"
+        android:title="Current trip" />
 
     <item android:title="Actions">
         <menu>
