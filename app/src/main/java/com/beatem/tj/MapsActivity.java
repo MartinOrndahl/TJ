@@ -818,7 +818,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     startNewTrip.show();
 
 
-                currentTripMode();
+                worldMapmode();
 
             } else {
 
