@@ -629,7 +629,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             public void onMapLoaded() {
                 uppdateMap();
                 uppdateCurrentLocation();
-                currentTripMode();
+                worldMapmode();
                 removeCat();
 
             }
