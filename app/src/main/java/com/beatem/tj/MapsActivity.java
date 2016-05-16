@@ -33,6 +33,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.beatem.tj.Camera.CameraActivity;
 import com.beatem.tj.MyTrips.GalleryFragment;
@@ -809,7 +810,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
                 currentTripMode();
-            } else {
+            }else if(id==R.id.share_button){
+                Toast toast = Toast.makeText(getApplicationContext(), "Not available in the version", Toast.LENGTH_LONG);
+                toast.show();
+            }
+            else {
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
