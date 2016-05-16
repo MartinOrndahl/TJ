@@ -819,11 +819,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
                 currentTripMode();
-            }else if(id==R.id.share_button){
-                Toast toast = Toast.makeText(getApplicationContext(), "Not available in the version", Toast.LENGTH_LONG);
-                toast.show();
-            }
-            else {
+
+            } else {
 
                     AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
@@ -873,7 +870,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
                 }
-            }
+        }else if(id==R.id.share_button) {
+            Toast toast = Toast.makeText(getApplicationContext(), "Not available in the version", Toast.LENGTH_LONG);
+            toast.show();
+        }
 
             DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
             drawer.closeDrawer(GravityCompat.START);
