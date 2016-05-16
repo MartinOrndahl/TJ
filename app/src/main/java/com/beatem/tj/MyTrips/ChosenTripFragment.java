@@ -44,6 +44,7 @@ public class ChosenTripFragment extends Fragment {
 
 
 
+
         gridView2.setAdapter(new CustomChosenTripAdapter(getActivity().getApplicationContext(), paths.toArray(new String[0])));
 
 
