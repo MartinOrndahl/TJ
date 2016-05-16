@@ -61,7 +61,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private GoogleMap mMap;
     private LocationManager locationManager;
     public static LatLng currentlocation;
-    private boolean mMapready, permission, zoomEnabled, galleryCreated;
+    private boolean mMapready, permission, zoomEnabled, galleryCreated,currentTripStarted;
     private final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 36;
     private PolygonOptions polygon;
     private ArrayList<MyLocation> locations;
@@ -69,6 +69,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private SensorManager mSensorManager;
     private boolean moveWithSensor = true;
     private GalleryFragment galleryFragment;
+    private CurrentTripFragment tripFragment;
     private SupportMapFragment mapFragment;
     private MapFragment mapFragment1;
     private android.support.v4.app.FragmentTransaction fragmentTransactionCat;
@@ -725,31 +726,37 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
         if (id == R.id.current_trip_button) {
-           // Toast.makeText(getApplicationContext(),mMap.getMyLocation().getLatitude()+":"+mMap.getMyLocation().getLongitude() + "jämnfört med current: " + currentlocation.latitude+":"+currentlocation.longitude,Toast.LENGTH_LONG).show();
-            if(SaveSharedPreferences.getCurrentTrip(getApplicationContext()).equals("none")){
-                mMap.moveCamera(CameraUpdateFactory.newLatLng(currentlocation));
-            }else {
+            // Toast.makeText(getApplicationContext(),mMap.getMyLocation().getLatitude()+":"+mMap.getMyLocation().getLongitude() + "jämnfört med current: " + currentlocation.latitude+":"+currentlocation.longitude,Toast.LENGTH_LONG).show();
 
-
-                if (galleryCreated) {
-                    if(GalleryFragment.galleryStarted){
-                        android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                        fragmentTransaction.remove(GalleryFragment.newFragment);
-                        fragmentTransaction.commit();
-                        GalleryFragment.galleryStarted =false;
-
-                    }
-
+            if (galleryCreated) {
+                if (GalleryFragment.galleryStarted) {
                     android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                    fragmentTransaction.remove(galleryFragment);
+                    fragmentTransaction.remove(GalleryFragment.newFragment);
                     fragmentTransaction.commit();
-                    galleryCreated = false;
+                    GalleryFragment.galleryStarted = false;
+
                 }
+
+                android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.remove(galleryFragment);
+                fragmentTransaction.commit();
+                galleryCreated = false;
+
             }
-            currentTripMode();
+            currentTripStarted = true;
+            android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.add(R.id.fragment_container, tripFragment);
+            fragmentTransaction.commit();
 
 
         } else if (id == R.id.my_trips_button) {
+
+            if (currentTripStarted) {
+                android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                fragmentTransaction.remove(tripFragment);
+                fragmentTransaction.commit();
+                currentTripStarted = false;
+            }
 
             galleryCreated = true;
             android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
@@ -761,110 +768,114 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             worldMapmode();
             if (galleryCreated) {
-                if(GalleryFragment.galleryStarted){
+                if (GalleryFragment.galleryStarted) {
                     android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
                     fragmentTransaction.remove(GalleryFragment.newFragment);
                     fragmentTransaction.commit();
-                    GalleryFragment.galleryStarted =false;
+                    GalleryFragment.galleryStarted = false;
 
                 }
-                android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.remove(galleryFragment);
-                fragmentTransaction.commit();
-                galleryCreated = false;
+            }
+                if (currentTripStarted) {
+                    android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                    fragmentTransaction.remove(tripFragment);
+                    fragmentTransaction.commit();
+                    currentTripStarted = false;
+                }
+
+
+            } else if (id == R.id.end_trip_button) {
+
+                if (navigationView.getMenu().findItem(R.id.end_trip_button).getTitle().toString().equals("Start new trip")) {
+                    MenuItem i = navigationView.getMenu().findItem(R.id.end_trip_button);
+                    i.setTitle("End trip");
+                    AlertDialog.Builder startNewTrip = new AlertDialog.Builder(this);
+                    startNewTrip.setTitle("Tripname");
+                    startNewTrip.setIcon(getDrawable(R.drawable.worldmap));
+                    final EditText input = new EditText(this);
+                    input.setHint("Name of your trip");
+                    input.setInputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
+                    input.setSingleLine(true);
+                    startNewTrip.setView(input, 64, 0, 0, 0);
+                    startNewTrip.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+                        public void onClick(DialogInterface dialog, int which) {
+                            SaveSharedPreferences.setCurrentTrip(getApplicationContext(), input.getText().toString());
+                            MenuItem i = navigationView.getMenu().findItem(R.id.current_trip_button);
+                            i.setTitle("Current trip");
+                            MenuItem j = navigationView.getMenu().findItem(R.id.end_trip_button);
+
+                            dialog.dismiss();
+                            FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.floatingActionButton);
+                            fab.setImageResource(R.drawable.ic_menu_camera);
+
+                            j.setIcon(R.drawable.vector_drawable_ic_cancel_black___px);
+                            dialog.dismiss();
+                        }
+
+                    });
+                    startNewTrip.show();
+
+
+                    currentTripMode();
+                } else {
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+                    builder.setTitle("Confirm");
+                    builder.setIcon(getDrawable(R.drawable.worldmap));
+                    builder.setMessage("Are you sure you want to end this trip?");
+
+
+                    builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                            // Do nothing but close the dialog
+                            dialog.dismiss();
+                        }
+                    });
+
+                    builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+
+                        public void onClick(DialogInterface dialog, int which) {
+                            MenuItem i = navigationView.getMenu().findItem(R.id.end_trip_button);
+                            i.setTitle("Start new trip");
+                            MenuItem j = navigationView.getMenu().findItem(R.id.current_trip_button);
+                            j.setTitle("Current location");
+                            SaveSharedPreferences.setCurrentTrip(getApplicationContext(), "none");
+                            worldMapmode();
+
+                            FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.floatingActionButton);
+                            fab.setImageResource(R.drawable.vector_drawable_ic_add_black___px);
+
+                            i.setIcon(R.drawable.vector_drawable_ic_add_black___px);
+                            dialog.dismiss();
+                        }
+
+                    });
+                    builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+
+                    });
+
+                    AlertDialog alert = builder.create();
+                    alert.show();
+
+
+                }
             }
 
-
-        } else if (id == R.id.end_trip_button) {
-
-            if (navigationView.getMenu().findItem(R.id.end_trip_button).getTitle().toString().equals("Start new trip")) {
-                MenuItem i = navigationView.getMenu().findItem(R.id.end_trip_button);
-                i.setTitle("End trip");
-                AlertDialog.Builder startNewTrip = new AlertDialog.Builder(this);
-                startNewTrip.setTitle("Tripname");
-                startNewTrip.setIcon(getDrawable(R.drawable.worldmap));
-                final EditText input = new EditText(this);
-                input.setHint("Name of your trip");
-                input.setInputType(InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
-                input.setSingleLine(true);
-                startNewTrip.setView(input, 64, 0, 0, 0);
-                startNewTrip.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-
-                    public void onClick(DialogInterface dialog, int which) {
-                        SaveSharedPreferences.setCurrentTrip(getApplicationContext(), input.getText().toString());
-                        MenuItem i = navigationView.getMenu().findItem(R.id.current_trip_button);
-                        i.setTitle("Current trip");
-                        MenuItem j = navigationView.getMenu().findItem(R.id.end_trip_button);
-
-                        dialog.dismiss();
-                        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.floatingActionButton);
-                        fab.setImageResource(R.drawable.ic_menu_camera);
-
-                        j.setIcon(R.drawable.vector_drawable_ic_cancel_black___px);
-                        dialog.dismiss();
-                    }
-
-                });
-                startNewTrip.show();
-
-
-                currentTripMode();
-            } else {
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-                builder.setTitle("Confirm");
-                builder.setIcon(getDrawable(R.drawable.worldmap));
-                builder.setMessage("Are you sure you want to end this trip?");
-
-
-                builder.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
-
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                        // Do nothing but close the dialog
-                        dialog.dismiss();
-                    }
-                });
-
-                builder.setPositiveButton("YES", new DialogInterface.OnClickListener() {
-
-                    public void onClick(DialogInterface dialog, int which) {
-                        MenuItem i = navigationView.getMenu().findItem(R.id.end_trip_button);
-                        i.setTitle("Start new trip");
-                        MenuItem j = navigationView.getMenu().findItem(R.id.current_trip_button);
-                        j.setTitle("Current location");
-                        SaveSharedPreferences.setCurrentTrip(getApplicationContext(), "none");
-                        worldMapmode();
-
-                        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.floatingActionButton);
-                        fab.setImageResource(R.drawable.vector_drawable_ic_add_black___px);
-
-                        i.setIcon(R.drawable.vector_drawable_ic_add_black___px);
-                        dialog.dismiss();
-                    }
-
-                });
-                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-
-                });
-
-                AlertDialog alert = builder.create();
-                alert.show();
-
-
-            }
+            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+            drawer.closeDrawer(GravityCompat.START);
+            return true;
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
-    }
+
 
 
     public void startCameraActivity(View view) {

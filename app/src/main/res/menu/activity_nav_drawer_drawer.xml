@@ -5,7 +5,7 @@
         <item
             android:id="@+id/map_button"
             android:icon="@drawable/vector_drawable_ic_map_black___px"
-            android:title="Map" />
+            android:title="Journey" />
 
         <item
             android:id="@+id/my_trips_button"
