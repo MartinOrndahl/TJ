@@ -120,7 +120,7 @@ public class GalleryFragment extends Fragment {
                 b.putString("trip",trips.get(position));
                 newFragment.setArguments(b);
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
-
+//hej
 // Replace whatever is in the fragment_container view with this fragment,
 // and add the transaction to the back stack if needed
                 transaction.add(R.id.fragment_container, newFragment,"gallery");
