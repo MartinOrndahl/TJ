@@ -1,14 +1,17 @@
 package com.beatem.tj.MyTrips;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.GridView;
 
 import com.beatem.tj.MyLocation;
 import com.beatem.tj.MySqLite;
+import com.beatem.tj.OldTripsViewer.SlideImageActivity;
 import com.beatem.tj.R;
 
 import java.util.ArrayList;
@@ -19,7 +22,7 @@ import java.util.ArrayList;
 public class ChosenTripFragment extends Fragment {
     private static GridView gridView2;
     private MySqLite mySqlLite;
-    private ArrayList<MyLocation> locations;
+    private ArrayList<MyLocation> locations, selectedLocations;
     private ArrayList<String> paths;
     private String trip;
 
@@ -36,10 +39,13 @@ public class ChosenTripFragment extends Fragment {
         paths = new ArrayList<String>();
         mySqlLite = new MySqLite(getActivity().getApplicationContext());
         locations = mySqlLite.getLocations();
+        selectedLocations= new ArrayList<MyLocation>();
+
 
         for(MyLocation location: locations){
             if(location.getTrip().equals(trip)){
                 paths.add(location.getPicpath());
+                selectedLocations.add(location);
             }
         }
 
@@ -48,8 +54,15 @@ public class ChosenTripFragment extends Fragment {
 
         gridView2.setAdapter(new CustomChosenTripAdapter(getActivity().getApplicationContext(), paths.toArray(new String[0])));
 
+       gridView2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+           @Override
+           public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+               Intent intent = new Intent(getActivity(), SlideImageActivity.class);
 
-
+               intent.putExtra("location", selectedLocations.get(i));
+               startActivity(intent);
+           }
+       });
 
         return view;
     }

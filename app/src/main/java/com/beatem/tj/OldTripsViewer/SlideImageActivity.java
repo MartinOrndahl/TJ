@@ -91,6 +91,12 @@ Data från kartan
         NUM_PAGES = ImagesArray.size();
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
+
     public String getCity(float latitude, float longitude) {
 
 

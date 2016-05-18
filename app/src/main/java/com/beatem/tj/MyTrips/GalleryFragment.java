@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.Toast;
 
 import com.beatem.tj.MyLocation;
 import com.beatem.tj.MySqLite;
@@ -111,9 +110,7 @@ public class GalleryFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent,
                                     View v, int position, long id) {
 
-                Toast.makeText(getContext(),
-                        "pic" + (position + 1) + " selected",
-                        Toast.LENGTH_SHORT).show();
+
                 galleryStarted = true;
                 newFragment = new ChosenTripFragment();
                 Bundle b = new Bundle();
