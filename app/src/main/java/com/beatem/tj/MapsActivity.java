@@ -100,10 +100,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         permission = false;
 
         polygon = new PolygonOptions().geodesic(true);
-        cat = new CatLoadingView();
+        //cat = new CatLoadingView();
         setContentView(R.layout.activity_nav_drawer);
-        fragmentTransactionCat = getSupportFragmentManager().beginTransaction();
-        cat.show(fragmentTransactionCat, "");
+        //fragmentTransactionCat = getSupportFragmentManager().beginTransaction();
+        //cat.show(fragmentTransactionCat, "");
 
         if (!SaveSharedPreferences.getFirstStart(getApplicationContext())) {
 
@@ -872,7 +872,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                 }
         }else if(id==R.id.share_button) {
-            Toast toast = Toast.makeText(getApplicationContext(), "Not available in the version", Toast.LENGTH_LONG);
+            Toast toast = Toast.makeText(getApplicationContext(), "Not available in this version", Toast.LENGTH_LONG);
             toast.show();
         }
 
