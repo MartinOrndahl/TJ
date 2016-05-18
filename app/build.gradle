@@ -34,5 +34,6 @@ dependencies {
 
     compile 'com.android.support:cardview-v7:23.0.+'
     compile 'jp.co.cyberagent.android.gpuimage:gpuimage-library:+@aar'
+    compile 'com.osama.firecrasher:firecrasher:1.0'
     
 }

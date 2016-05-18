@@ -23,8 +23,6 @@
         android:required="true" />
 
 
-
-
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -43,9 +41,9 @@
         android:label="@string/app_name"
         android:largeHeap="true"
         android:supportsRtl="true"
-
+        android:name=".App"
         android:theme="@style/AppTheme">
-<activity android:name=".Camera.DisplayTry"></activity>
+        <activity android:name=".Camera.DisplayTry"></activity>
 
         <activity
             android:name=".Intro.MyIntro"
@@ -61,18 +59,18 @@
 
         </activity>
 
-        <activity android:name=".AndroidDatabaseManager"
-            android:theme="@style/Theme.AppCompat.Light"/>
+        <activity
+            android:name=".AndroidDatabaseManager"
+            android:theme="@style/Theme.AppCompat.Light" />
 
-        <activity android:name=".SlideShow.SlideShowActivity"
+        <activity
+            android:name=".SlideShow.SlideShowActivity"
             android:screenOrientation="portrait"></activity>
 
         <activity
             android:name=".OldTripsViewer.SlideImageActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
-
-
 
 
         </activity>
@@ -82,7 +80,6 @@
             android:screenOrientation="portrait">
 
 
-
         </activity>
 
 
@@ -90,8 +87,6 @@
             android:name=".Camera.CameraActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
-
-
 
 
         </activity>
@@ -106,9 +101,6 @@
             android:label="@string/title_activity_maps"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
-
-
-
 
 
         </activity>
