@@ -722,13 +722,15 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         if (id == R.id.current_trip_button) {
             // Toast.makeText(getApplicationContext(),mMap.getMyLocation().getLatitude()+":"+mMap.getMyLocation().getLongitude() + "jämnfört med current: " + currentlocation.latitude+":"+currentlocation.longitude,Toast.LENGTH_LONG).show();
-
+            Log.e("galleryproblemet","steg0");
             if (galleryCreated) {
-                if (GalleryFragment.galleryStarted) {
+                Log.e("galleryproblemet","steg1");
+                if (galleryFragment.galleryStarted) {
+                    Log.e("galleryproblemet","steg2");
                     android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                    fragmentTransaction.remove(GalleryFragment.newFragment);
+                    fragmentTransaction.remove(getSupportFragmentManager().findFragmentByTag("gallery"));
                     fragmentTransaction.commit();
-                    GalleryFragment.galleryStarted = false;
+                    galleryFragment.galleryStarted = false;
 
                 }
 
@@ -755,7 +757,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             galleryCreated = true;
             android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.add(R.id.fragment_container, galleryFragment);
+            fragmentTransaction.add(R.id.fragment_container, galleryFragment,"mytrips");
             fragmentTransaction.commit();
 
 
@@ -765,7 +767,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             if (galleryCreated) {
                 if (galleryFragment.galleryStarted) {
                     android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                    fragmentTransaction.remove(GalleryFragment.newFragment);
+                    fragmentTransaction.remove(getSupportFragmentManager().findFragmentByTag("gallery"));
                     fragmentTransaction.commit();
                     galleryFragment.galleryStarted = false;
 

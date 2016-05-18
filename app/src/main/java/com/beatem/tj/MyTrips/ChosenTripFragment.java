@@ -23,13 +23,14 @@ public class ChosenTripFragment extends Fragment {
     private ArrayList<String> paths;
     private String trip;
 
-    public ChosenTripFragment(String trip) {
-        this.trip=trip;
+    public ChosenTripFragment() {
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        trip= this.getArguments().getString("trip");
         final View view = inflater.inflate(R.layout.my_trips_chosen_trip, container, false);
         gridView2= (GridView)view.findViewById(R.id.my_trip_chosen_trip_grid);
         paths = new ArrayList<String>();

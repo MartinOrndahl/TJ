@@ -37,8 +37,8 @@ public class GalleryFragment extends Fragment {
     private ArrayList<String> picPaths ;
     private ArrayList<String> picPathsTrips ;
     HashMap<String, ArrayList<String>> hmap ;
-    public static boolean galleryStarted;
-    public static ChosenTripFragment newFragment;
+    public boolean galleryStarted;
+    public ChosenTripFragment newFragment;
 
 
 
@@ -114,12 +114,16 @@ public class GalleryFragment extends Fragment {
                 Toast.makeText(getContext(),
                         "pic" + (position + 1) + " selected",
                         Toast.LENGTH_SHORT).show();
-                newFragment = new ChosenTripFragment(trips.get(position));
+                galleryStarted = true;
+                newFragment = new ChosenTripFragment();
+                Bundle b = new Bundle();
+                b.putString("trip",trips.get(position));
+                newFragment.setArguments(b);
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
 
 // Replace whatever is in the fragment_container view with this fragment,
 // and add the transaction to the back stack if needed
-                transaction.add(R.id.fragment_container, newFragment);
+                transaction.add(R.id.fragment_container, newFragment,"gallery");
 
                 transaction.addToBackStack(null);
 
@@ -127,6 +131,8 @@ public class GalleryFragment extends Fragment {
                 transaction.commit();
             }
         });
+
+
 
         /*
 
@@ -149,6 +155,7 @@ public class GalleryFragment extends Fragment {
         // Inflate the layout for this fragment
         return view;
     }
+
 
 
     private Bitmap loadImageFromStorage(String path) {
