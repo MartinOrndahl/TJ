@@ -292,7 +292,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         galleryFragment = new GalleryFragment();
         tripFragment = new CurrentTripFragment();
-        removeCat();
+
 
 
        /* File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
@@ -332,10 +332,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         locations = db.getLocations();
     }
 
-    public void removeCat() {
-        fragmentTransactionCat.remove(cat);
 
-    }
 
 
 
@@ -624,7 +621,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 uppdateMap();
                 uppdateCurrentLocation();
                 worldMapmode();
-                removeCat();
+
 
             }
         });

@@ -22,13 +22,14 @@
     <item android:title="Actions">
         <menu>
             <item
+                android:id="@+id/share_button"
+                android:icon="@drawable/ic_menu_share"
+                android:title="Share trip"/>
+            <item
                 android:id="@+id/end_trip_button"
                 android:icon="@drawable/vector_drawable_ic_cancel_black___px"
                 android:title="End trip" />
-            <item
-                android:id="@+id/share_button"
-                android:icon="@drawable/vector_drawable_ic_map_black___px"
-                android:title="Share trip"/>
+
         </menu>
     </item>
 
