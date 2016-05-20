@@ -60,6 +60,7 @@ public class ChosenTripFragment extends Fragment {
                Intent intent = new Intent(getActivity(), SlideImageActivity.class);
 
                intent.putExtra("location", selectedLocations.get(i));
+
                startActivity(intent);
            }
        });
