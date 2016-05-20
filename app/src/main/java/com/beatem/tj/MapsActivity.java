@@ -7,7 +7,13 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Matrix;
+import android.graphics.Paint;
+import android.graphics.Rect;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -42,6 +48,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
@@ -76,6 +83,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private android.support.v4.app.FragmentTransaction fragmentTransactionCat;
     private CatLoadingView cat;
     private MySqLite db;
+    private int prevValue= 0,colorval = 0;
     private static final int TWO_MINUTES = 1000 * 60 * 2;
     private Location currentloc;
 
@@ -437,10 +445,59 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
-    public synchronized void addLocationMarker(LatLng pos) {
+    public synchronized void addLocationMarker(MyLocation location) {
         //TODO:fixa, alternativt ta bort.
         getTrips();
-        mMap.addMarker(new MarkerOptions().position(pos));
+       // mMap.addMarker(new MarkerOptions().position(pos));
+        Bitmap.Config conf = Bitmap.Config.ARGB_8888;
+        Bitmap bmp = Bitmap.createBitmap(100, 100, conf);
+        Canvas canvas1 = new Canvas(bmp);
+
+// paint defines the text color,
+// stroke width, size
+        Paint color = new Paint();
+
+        color.setColor(Color.BLUE);
+
+//modify canvas
+        //canvas1.drawBitmap(BitmapFactory.decodeFile(location.getPicpath()),0,0,color);
+
+
+//add marker to Map
+        Bitmap bm2 = BitmapFactory.decodeFile(location.getPicpath());
+        Matrix matrix = new Matrix();
+
+        int backgroundHight = 150;
+        int backgroundWidth = (int) (0.75*backgroundHight);
+
+        matrix.postRotate(90);
+        int pichight = ((int)(backgroundHight * 0.7));
+        int picwidth = ((int)(backgroundWidth * 0.7));
+        Bitmap bm3 = Bitmap.createScaledBitmap(bm2,pichight,picwidth,false);
+        Bitmap bm4 = Bitmap.createBitmap(bm3,0,0,bm3.getWidth(),bm3.getHeight(),matrix,true);
+        Bitmap background;
+        if(colorval == 0) {
+             background = BitmapFactory.decodeResource(getResources(), R.drawable.markerred);
+            colorval++;
+        }else if(colorval == 1){
+            background = BitmapFactory.decodeResource(getResources(), R.drawable.markerblue);
+            colorval++;
+        }else{
+            colorval = 0;
+            background = BitmapFactory.decodeResource(getResources(), R.drawable.markerdarkblue);
+        }
+        Bitmap scaledBitmap = Bitmap.createScaledBitmap(background,backgroundWidth,backgroundHight,false);
+
+        Bitmap bitmap = Bitmap.createBitmap(backgroundWidth, backgroundHight, Bitmap.Config.ARGB_8888);
+        Canvas c = new Canvas(bitmap);
+        c.drawBitmap(scaledBitmap,0,0,null);
+        c.drawBitmap(bm4,15,15,null);
+
+
+        mMap.addMarker(new MarkerOptions().position(location.getLatlng())
+                .icon(BitmapDescriptorFactory.fromBitmap(bitmap))
+                // Specifies the anchor to be at a particular point in the marker image.
+                .anchor(0.5f, 1));
 
 
     }
@@ -457,11 +514,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             for (MyLocation location : locations) {
 
                 if (location.getTrip().equals(lastKnownTrip)) {
-                    mMap.addMarker(new MarkerOptions().position(location.getLatlng()));
+                    //mMap.addMarker(new MarkerOptions().position(location.getLatlng()));
+                    addLocationMarker(location);
                     polylist.add(location.getLatlng());
                 } else {
                     mMap.addPolyline(new PolylineOptions().addAll(polylist));
-                    mMap.addMarker(new MarkerOptions().position(location.getLatlng()));
+                    addLocationMarker(location);
+                    //mMap.addMarker(new MarkerOptions().position(location.getLatlng()));
                     polylist.clear();
                     polylist.add(location.getLatlng());
                     lastKnownTrip = location.getTrip();
@@ -721,7 +780,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         int id = item.getItemId();
 
 
-        if (id == R.id.current_trip_button) {
+        if (id == R.id.current_trip_button && prevValue != R.id.current_trip_button) {
+            prevValue = R.id.current_trip_button;
             // Toast.makeText(getApplicationContext(),mMap.getMyLocation().getLatitude()+":"+mMap.getMyLocation().getLongitude() + "jämnfört med current: " + currentlocation.latitude+":"+currentlocation.longitude,Toast.LENGTH_LONG).show();
             Log.e("galleryproblemet","steg0");
             if (galleryCreated) {
@@ -747,7 +807,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             fragmentTransaction.commit();
 
 
-        } else if (id == R.id.my_trips_button) {
+        } else if (id == R.id.my_trips_button&& prevValue != R.id.my_trips_button) {
+                prevValue = R.id.my_trips_button;
 
             if (currentTripStarted) {
                 android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
@@ -762,7 +823,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             fragmentTransaction.commit();
 
 
-        } else if (id == R.id.map_button) {
+        } else if (id == R.id.map_button && prevValue != R.id.map_button) {
+            prevValue = R.id.map_button;
 
             worldMapmode();
             if (galleryCreated) {
@@ -787,7 +849,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 }
 
 
-            } else if (id == R.id.end_trip_button) {
+            } else if (id == R.id.end_trip_button ) {
+
 
                 if (navigationView.getMenu().findItem(R.id.end_trip_button).getTitle().toString().equals("Start new trip")) {
                     MenuItem i = navigationView.getMenu().findItem(R.id.end_trip_button);
