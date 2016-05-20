@@ -223,10 +223,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             if (doIt) {
 
 
-                db.addLocation(new MyLocation((float)31.554837, (float)-23.988179, "WorldTrip", "Look at these awesome hippos!", mediaFile3.getAbsolutePath(), "S", "filter_early_bird", "16 Jan 2016"));
-                db.addLocation(new MyLocation((float)115.188919,(float)-8.409518, "WorldTrip", "Did not drown this time!", mediaFile1.getAbsolutePath(), "S", "filter_early_bird", "9 Jan 2016"));
-                db.addLocation(new MyLocation((float)103.866943 , (float)13.412448, "WorldTrip", "I think im lost", mediaFile2.getAbsolutePath(), "W", "filter_early_bird", "10 Jan 2016"));
-                db.addLocation(new MyLocation((float)38.15, (float)36.25, "WorldTrip", "Wonder if i left the stove on...!", mediaFile.getAbsolutePath(), "N", "filter_early_bird", "5 Jan 2016"));
+                db.addLocation(new MyLocation(mediaFile3.getAbsolutePath(),(float)31.554837, (float)-23.988179, "WorldTrip", "Look at these awesome hippos!",  "S", "filter_early_bird", "16 Jan 2016"));
+                db.addLocation(new MyLocation(mediaFile1.getAbsolutePath(), (float)115.188919,(float)-8.409518, "WorldTrip", "Did not drown this time!", "S", "filter_early_bird", "9 Jan 2016"));
+                db.addLocation(new MyLocation(mediaFile2.getAbsolutePath(), (float)103.866943 , (float)13.412448, "WorldTrip", "I think im lost", "W", "filter_early_bird", "10 Jan 2016"));
+                db.addLocation(new MyLocation( mediaFile.getAbsolutePath(), (float)38.15, (float)36.25, "WorldTrip", "Wonder if i left the stove on...!","N", "filter_early_bird", "5 Jan 2016"));
 
                 SaveSharedPreferences.setStartBefore(getApplicationContext(), true);
             }

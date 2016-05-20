@@ -13,7 +13,7 @@ public class MyLocation implements Parcelable{
     private String text,picpath,trip, direction, filter, date;
     private LatLng latlng;
 
-    public MyLocation(float londitude ,float latitude,String trip,String text, String picpath, String direction, String filter, String date){
+    public MyLocation(String picpath,float londitude ,float latitude,String trip,String text,  String direction, String filter, String date){
         this.latitude = latitude;
         this.longditude = londitude;
         this.text =text;
@@ -65,12 +65,12 @@ public class MyLocation implements Parcelable{
     //-------Parcable delen-----------
 
     public MyLocation(Parcel in){
-
+        this.picpath = in.readString();
         this.longditude = in.readFloat();
         this.latitude = in.readFloat();
         this.trip = in.readString();
         this.text = in.readString();
-        this.picpath = in.readString();
+
         this.direction= in.readString();
         this.filter=in.readString();
         this.date=in.readString();
@@ -86,11 +86,12 @@ public class MyLocation implements Parcelable{
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(picpath);
        dest.writeFloat(longditude);
         dest.writeFloat(latitude);
         dest.writeString(trip);
         dest.writeString(text);
-        dest.writeString(picpath);
+
         dest.writeString(direction);
         dest.writeString(filter);
         dest.writeString(date);

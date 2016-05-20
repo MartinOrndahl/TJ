@@ -886,11 +886,11 @@ ställer in vilket mode vi befinner oss i
 
 
         MySqLite sqLite = new MySqLite(getApplicationContext());
-        if (sqLite.addLocation(new MyLocation((float) MapsActivity.currentlocation.longitude,
+        if (sqLite.addLocation(new MyLocation(path, (float) MapsActivity.currentlocation.longitude,
                 (float) MapsActivity.currentlocation.latitude, SaveSharedPreferences.getCurrentTrip(getApplicationContext()), editText.getText().toString(),
-                path, direction.getText().toString(), currentFilter, date.getText().toString()
+                direction.getText().toString(), currentFilter, date.getText().toString()
         ))) {
-            Toast.makeText(getApplicationContext(), currentFilter, Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Saved!", Toast.LENGTH_SHORT).show();
 
             startActivity(new Intent(getApplicationContext(), MapsActivity.class));
         } else {
