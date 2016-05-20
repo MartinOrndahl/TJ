@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import com.beatem.tj.CapturedImage.filter.IF1977Filter;
 import com.beatem.tj.CapturedImage.filter.IFAmaroFilter;
+import com.beatem.tj.CapturedImage.filter.IFBrannanFilter;
 import com.beatem.tj.CapturedImage.filter.IFEarlybirdFilter;
 import com.beatem.tj.CapturedImage.filter.IFHefeFilter;
 import com.beatem.tj.CapturedImage.filter.IFHudsonFilter;
@@ -248,7 +249,7 @@ public class SlideImageAdapter2 extends PagerAdapter implements View.OnClickList
                 imageView.setFilter(new IFAmaroFilter(slideImageActivity.getApplicationContext()));
                 break;
             case "filter_brannan":
-                imageView.setFilter(new IF1977Filter(slideImageActivity.getApplicationContext()));
+                imageView.setFilter(new IFBrannanFilter(slideImageActivity.getApplicationContext()));
                 break;
             case "filter_early_bird":
                 imageView.setFilter(new IFEarlybirdFilter(slideImageActivity.getApplicationContext()));

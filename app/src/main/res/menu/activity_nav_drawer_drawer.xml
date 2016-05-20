@@ -13,7 +13,7 @@
             android:title="My trips" />
         <item
             android:id="@+id/current_trip_button"
-            android:icon="@drawable/vector_drawable_ic_place_black___px"
+            android:icon="@drawable/vector_drawable_ic_person_black___px"
             android:title="Me" />
 
     </group>

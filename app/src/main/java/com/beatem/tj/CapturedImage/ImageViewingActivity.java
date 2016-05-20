@@ -890,7 +890,8 @@ ställer in vilket mode vi befinner oss i
                 (float) MapsActivity.currentlocation.latitude, SaveSharedPreferences.getCurrentTrip(getApplicationContext()), editText.getText().toString(),
                 path, direction.getText().toString(), currentFilter, date.getText().toString()
         ))) {
-            Toast.makeText(getApplicationContext(), "Saved!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), currentFilter, Toast.LENGTH_SHORT).show();
+
             startActivity(new Intent(getApplicationContext(), MapsActivity.class));
         } else {
             Toast.makeText(getApplicationContext(), "You've already taken a photo here", Toast.LENGTH_SHORT).show();
