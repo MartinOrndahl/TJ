@@ -123,8 +123,6 @@ public class ImageViewingActivity extends Activity implements OnClickListener, O
         init();
         activateClickListeners();
 
-        mGPUImageView.setImage(BitmapFactory.decodeResource(getResources(),
-                R.drawable.adventure2));
 
 
     }
@@ -216,6 +214,7 @@ Om vi kommer från kartan
             Log.e("marcusäger ", fileName);
             if (imgFile.exists()) {
                 path = imgFile.getAbsolutePath();
+                mGPUImageView.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED), View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
                 myBitmap = BitmapFactory.decodeFile(path);
                 if (myBitmap.getWidth() > myBitmap.getHeight()) {
                     rotate = true;

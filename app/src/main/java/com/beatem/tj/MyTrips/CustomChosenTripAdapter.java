@@ -5,10 +5,12 @@ package com.beatem.tj.MyTrips;
  */
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.media.ThumbnailUtils;
+import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,7 +44,6 @@ public class CustomChosenTripAdapter extends BaseAdapter {
                 getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
     }
-
 
 
     @Override
@@ -83,8 +84,9 @@ public class CustomChosenTripAdapter extends BaseAdapter {
          */
 
         holder.img = (ImageView) rowView.findViewById(R.id.imageView1);
-        handleImages(position);
 
+
+        new AsyncTaskLoadFiles(holder.img).execute(position);
 
         /*rowView.setOnClickListener(new OnClickListener() {
 
@@ -100,35 +102,62 @@ public class CustomChosenTripAdapter extends BaseAdapter {
         return rowView;
     }
 
-    private void handleImages(int position) {
-        //RotateBitmap(BitmapFactory.decodeFile(result[position]),90)
-        holder.img.setImageBitmap(RotateBitmap(BitmapFactory.decodeFile(result[position]),90));
 
+    public class AsyncTaskLoadFiles extends AsyncTask<Integer, Intent, String> {
+        ImageView IMG;
+        int pos;
+
+        public AsyncTaskLoadFiles(ImageView IMG) {
+            this.IMG = IMG;
+
+        }
+
+        @Override
+        protected String doInBackground(Integer... integers) {
+            pos = integers[0];
+            return "some string";
+
+        }
+
+        private void handleImages(int pos) {
+            IMG.setImageBitmap(getThumbNail(result[pos]));
+
+        }
+
+        private Bitmap getThumbNail(String s) {
+            final int THUMBSIZE = 256;
+
+            Bitmap ThumbImage = ThumbnailUtils.extractThumbnail(
+                    BitmapFactory.decodeFile(s),
+                    THUMBSIZE,
+                    THUMBSIZE);
+
+            ThumbImage = RotateBitmap(ThumbImage, 90);
+            Bitmap.createScaledBitmap(ThumbImage, THUMBSIZE, THUMBSIZE, false);
+            return ThumbImage;
+
+
+        }
+
+        public Bitmap RotateBitmap(Bitmap source, float angle) {
+            Matrix matrix = new Matrix();
+            matrix.postRotate(angle);
+            return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
+        }
+
+
+        @Override
+        protected void onProgressUpdate(Intent... values) {
+            super.onProgressUpdate(values);
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            handleImages(pos);
+
+            super.onPostExecute(s);
+        }
     }
-
-    private Bitmap getThumbNail(String s) {
-        final int THUMBSIZE = 256;
-
-        Bitmap ThumbImage = ThumbnailUtils.extractThumbnail(
-                BitmapFactory.decodeFile(s),
-                THUMBSIZE,
-                THUMBSIZE);
-
-        ThumbImage = RotateBitmap(ThumbImage, 90);
-        Bitmap.createScaledBitmap(ThumbImage, THUMBSIZE, THUMBSIZE, false);
-        return ThumbImage;
-    }
-
-
-    public static Bitmap RotateBitmap(Bitmap source, float angle) {
-        Matrix matrix = new Matrix();
-        matrix.postRotate(angle);
-        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
-    }
-
-
-
-
 
 
 }

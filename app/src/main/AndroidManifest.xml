@@ -40,6 +40,7 @@
         android:icon="@drawable/worldmap"
         android:label="@string/app_name"
         android:largeHeap="true"
+        android:hardwareAccelerated="false"
         android:supportsRtl="true"
         android:name=".App"
         android:theme="@style/AppTheme">

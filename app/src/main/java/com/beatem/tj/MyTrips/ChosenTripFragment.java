@@ -33,37 +33,35 @@ public class ChosenTripFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        trip= this.getArguments().getString("trip");
+        trip = this.getArguments().getString("trip");
         final View view = inflater.inflate(R.layout.my_trips_chosen_trip, container, false);
-        gridView2= (GridView)view.findViewById(R.id.my_trip_chosen_trip_grid);
+        gridView2 = (GridView) view.findViewById(R.id.my_trip_chosen_trip_grid);
         paths = new ArrayList<String>();
         mySqlLite = new MySqLite(getActivity().getApplicationContext());
+
+        selectedLocations = new ArrayList<MyLocation>();
         locations = mySqlLite.getLocations();
-        selectedLocations= new ArrayList<MyLocation>();
 
-
-        for(MyLocation location: locations){
-            if(location.getTrip().equals(trip)){
+        for (MyLocation location : locations) {
+            if (location.getTrip().equals(trip)) {
                 paths.add(location.getPicpath());
                 selectedLocations.add(location);
             }
         }
 
 
-
-
         gridView2.setAdapter(new CustomChosenTripAdapter(getActivity().getApplicationContext(), paths.toArray(new String[0])));
 
-       gridView2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-           @Override
-           public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-               Intent intent = new Intent(getActivity(), SlideImageActivity.class);
+        gridView2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent(getActivity(), SlideImageActivity.class);
 
-               intent.putExtra("location", selectedLocations.get(i));
+                intent.putExtra("location", selectedLocations.get(i));
 
-               startActivity(intent);
-           }
-       });
+                startActivity(intent);
+            }
+        });
 
         return view;
     }

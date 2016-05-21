@@ -593,7 +593,6 @@
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:background="#00000000"
-            android:focusable="false"
             android:hint="Add your description here"
             android:imeOptions="actionDone"
             android:textColorHint="#fff"

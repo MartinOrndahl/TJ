@@ -56,6 +56,7 @@
                         android:layout_alignParentLeft="true"
                         android:layout_margin="16dp"
                         android:gravity="right"
+                        android:id="@+id/current_trip_fragment_picNumber"
                         android:text="4"
                         android:textColor="#000"
                         android:textSize="16sp" />
@@ -120,6 +121,7 @@
                         android:layout_margin="16dp"
                         android:gravity="right"
                         android:text="16"
+                        android:id="@+id/current_trip_fragment_daysNumber"
                         android:textColor="#000"
                         android:textSize="16sp" />
                 </RelativeLayout>
@@ -152,7 +154,8 @@
                         android:gravity="right"
                         android:text="4"
                         android:textColor="#000"
-                        android:textSize="16sp" />
+                        android:textSize="16sp"
+                        android:id="@+id/current_trip_fragment_countriesNumber"/>
                 </RelativeLayout>
             </LinearLayout>
 

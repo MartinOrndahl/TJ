@@ -11,9 +11,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
-import android.graphics.Rect;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -659,7 +656,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 for (MyLocation location : locations) {
                     if (marker.getPosition().equals(location.getLatlng())) {
 
-
+                        
                         Intent i = new Intent(getApplicationContext(), SlideImageActivity.class);
                         //TODO: Fixa så man kan kolla genom hela resan
 

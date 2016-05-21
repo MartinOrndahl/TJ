@@ -122,35 +122,8 @@ public class CustomAdapter extends BaseAdapter {
         holder.blankImage = (ImageView) rowView.findViewById(R.id.blankImage);
 
 
-        /*
-        Hanterar vår blankImage till rätt storlek
-         */
-
-
-
-
-        /*
-        Tillsätter komponenterna sina värden
-         */
-        //holder.title.setText(result[position]);
-        //holder.number.setText("+" + amountExtras.get(position));
-
-        //handleImages(position);
-        //holder.blankImage.setImageBitmap(blankImage);
-
         new AsyncTaskLoadFiles(holder.img1, holder.img2, holder.img3,holder.blankImage, holder.title, holder.number, amountExtras, (String[]) acceptedPicPaths.toArray(new String[0])).execute(position);
 
-        /*rowView.setOnClickListener(new OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                // TODO Auto-generated method stub
-                Toast.makeText(context, "You Clicked " + result[position], Toast.LENGTH_LONG).show();
-
-
-            }
-        });
-*/
         return rowView;
     }
 
@@ -177,6 +150,7 @@ public class CustomAdapter extends BaseAdapter {
         @Override
         protected String doInBackground(Integer... integers) {
             pos = integers[0];
+
 
             return "some string";
 
