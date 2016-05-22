@@ -252,12 +252,23 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         locationListener = new LocationListener() {
             public void onLocationChanged(Location location) {
                 // Called when a new location is found by the network location provider.
-                if(isBetterLocation(location,new Location(currentloc))){
-                    currentloc = location;
+
+                try{
+                   currentlocation = new LatLng(mMap.getMyLocation().getLatitude(),mMap.getMyLocation().getLongitude());
+                }catch(Exception e){
+                    Log.e("fel",e.getMessage());
+
+                    if(isBetterLocation(location,currentloc)){
+                        currentloc = location;
+
+                        currentlocation = new LatLng(currentloc.getLatitude(), currentloc.getLongitude());
+                    }
                 }
 
-                currentlocation = new LatLng(currentloc.getLatitude(), currentloc.getLongitude());
-                //uppdateCurrentLocation();
+                if(currentlocation == null) {
+                    currentlocation = new LatLng(currentloc.getLatitude(), currentloc.getLongitude());
+                    //uppdateCurrentLocation();
+                }
             }
 
             public void onStatusChanged(String provider, int status, Bundle extras) {
@@ -472,19 +483,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         int picwidth = ((int)(backgroundWidth * 0.7));
         Bitmap bm3 = Bitmap.createScaledBitmap(bm2,pichight,picwidth,false);
         Bitmap bm4 = Bitmap.createBitmap(bm3,0,0,bm3.getWidth(),bm3.getHeight(),matrix,true);
-        Bitmap background;
-        if(colorval == 0) {
-             background = BitmapFactory.decodeResource(getResources(), R.drawable.markerred);
-            colorval++;
-        }else if(colorval == 1){
-            background = BitmapFactory.decodeResource(getResources(), R.drawable.markerblue);
-            colorval++;
-        }else{
-            colorval = 0;
-            background = BitmapFactory.decodeResource(getResources(), R.drawable.markerdarkblue);
-        }
+        Bitmap background = BitmapFactory.decodeResource(getResources(), R.drawable.markerlightorange);
         Bitmap scaledBitmap = Bitmap.createScaledBitmap(background,backgroundWidth,backgroundHight,false);
-
         Bitmap bitmap = Bitmap.createBitmap(backgroundWidth, backgroundHight, Bitmap.Config.ARGB_8888);
         Canvas c = new Canvas(bitmap);
         c.drawBitmap(scaledBitmap,0,0,null);
@@ -656,7 +656,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 for (MyLocation location : locations) {
                     if (marker.getPosition().equals(location.getLatlng())) {
 
-                        
+
+
+
                         Intent i = new Intent(getApplicationContext(), SlideImageActivity.class);
                         //TODO: Fixa så man kan kolla genom hela resan
 
@@ -944,6 +946,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
     public void startCameraActivity(View view) {
+        LatLng curr = currentlocation;
+        try{
+            currentlocation = new LatLng(mMap.getMyLocation().getLatitude(),mMap.getMyLocation().getLongitude());
+        }catch(Exception e){
+            currentlocation = curr;
+        }
         if (!SaveSharedPreferences.getCurrentTrip(getApplicationContext()).equals("none")) {
             startActivity(new Intent(this, CameraActivity.class).putExtra("camType", "back"));
         }
