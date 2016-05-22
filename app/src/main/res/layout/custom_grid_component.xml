@@ -32,7 +32,7 @@
                 android:layout_weight="1"
                 android:adjustViewBounds="true"
                 android:scaleType="fitXY"
-                android:src="@drawable/ic_launcher" />
+                android:src="@drawable/transparent" />
 
             <ImageView
                 android:id="@+id/imageView2"
@@ -41,7 +41,7 @@
                 android:layout_weight="1"
                 android:adjustViewBounds="true"
                 android:scaleType="fitXY"
-                android:src="@drawable/ic_launcher" />
+                android:src="@drawable/transparent" />
         </LinearLayout>
 
         <LinearLayout
@@ -58,12 +58,13 @@
                 android:layout_weight="1"
                 android:adjustViewBounds="true"
                 android:scaleType="fitXY"
-                android:src="@drawable/ic_launcher" />
+                android:src="@drawable/transparent" />
 
             <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:background="#aaa"
+                android:id="@+id/grayLayout"
                 android:layout_weight="1"
                 >
 
@@ -80,7 +81,7 @@
                     android:id="@+id/custom_grid_plusNumber"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="+8"
+                    android:text=""
                     android:layout_centerInParent="true"
                     />
             </RelativeLayout>
@@ -96,7 +97,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="5dp"
-                android:text="TEXT"
+                android:text=""
                 android:textColor="#000" />
 
         </RelativeLayout>

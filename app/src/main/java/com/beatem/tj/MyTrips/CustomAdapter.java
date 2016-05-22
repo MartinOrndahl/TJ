@@ -122,7 +122,7 @@ public class CustomAdapter extends BaseAdapter {
         holder.blankImage = (ImageView) rowView.findViewById(R.id.blankImage);
 
 
-        new AsyncTaskLoadFiles(holder.img1, holder.img2, holder.img3,holder.blankImage, holder.title, holder.number, amountExtras, (String[]) acceptedPicPaths.toArray(new String[0])).execute(position);
+        new AsyncTaskLoadFiles(holder.img1, holder.img2, holder.img3, holder.blankImage, holder.title, holder.number, amountExtras, (String[]) acceptedPicPaths.toArray(new String[0])).execute(position);
 
         return rowView;
     }
@@ -134,15 +134,16 @@ public class CustomAdapter extends BaseAdapter {
         String[] ImageId;
         TextView hTitle, hNumber;
         ArrayList<Integer> AmountExtras;
+        Bitmap blankImage;
 
-        public AsyncTaskLoadFiles(ImageView IMG1, ImageView IMG2, ImageView IMG3, ImageView BLANK, TextView hTitle, TextView hNumber,ArrayList<Integer> amount, String[] ImageId) {
+        public AsyncTaskLoadFiles(ImageView IMG1, ImageView IMG2, ImageView IMG3, ImageView BLANK, TextView hTitle, TextView hNumber, ArrayList<Integer> amount, String[] ImageId) {
             this.IMG1 = IMG1;
             this.IMG2 = IMG2;
             this.IMG3 = IMG3;
-            this.BLANK=BLANK;
-            this.hTitle=hTitle;
-            this.hNumber=hNumber;
-            this.AmountExtras= amount;
+            this.BLANK = BLANK;
+            this.hTitle = hTitle;
+            this.hNumber = hNumber;
+            this.AmountExtras = amount;
 
             this.ImageId = ImageId;
         }
@@ -150,7 +151,8 @@ public class CustomAdapter extends BaseAdapter {
         @Override
         protected String doInBackground(Integer... integers) {
             pos = integers[0];
-
+            blankImage = BitmapFactory.decodeResource(context.getResources(), R.drawable.transparent);
+            blankImage = Bitmap.createScaledBitmap(blankImage, 128, 128, false);
 
             return "some string";
 
@@ -187,13 +189,13 @@ public class CustomAdapter extends BaseAdapter {
 
         @Override
         protected void onProgressUpdate(Intent... values) {
+
             super.onProgressUpdate(values);
         }
 
         @Override
         protected void onPostExecute(String s) {
-            Bitmap blankImage = BitmapFactory.decodeResource(context.getResources(), R.drawable.transparent);
-            blankImage = Bitmap.createScaledBitmap(blankImage, 128, 128, false);
+
             BLANK.setImageBitmap(blankImage);
             hTitle.setText(result[pos]);
             hNumber.setText("+" + AmountExtras.get(pos));
