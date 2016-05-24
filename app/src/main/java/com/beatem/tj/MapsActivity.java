@@ -313,33 +313,24 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         galleryFragment = new GalleryFragment();
         tripFragment = new CurrentTripFragment();
 
+        MenuItem i = navigationView.getMenu().findItem(R.id.end_trip_button);
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.floatingActionButton);
+       if(SaveSharedPreferences.getCurrentTrip(getApplicationContext()).equals("none")){
+           fab.setImageResource(R.drawable.vector_drawable_ic_add_black___px);
+           i.setTitle("Start new trip");
+           i.setIcon(R.drawable.vector_drawable_ic_add_black___px);
+
+       }else {
+           fab.setImageResource(R.drawable.ic_menu_camera);
+           i.setTitle("End trip");
+           i.setIcon(R.drawable.vector_drawable_ic_cancel_black___px);
 
 
-       /* File mediaStorageDir = new File(Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_PICTURES), "TJ");
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        File mediaFile = new File(mediaStorageDir.getPath() + File.separator +
-                "IMG_" + timeStamp + ".jpg");
-        Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.adventure);
-        try {
-            FileOutputStream out = new FileOutputStream(mediaFile);
-            Log.e("marcusärcpkass", "Filen borde ha skrivits rätt här");
-            bm.compress(Bitmap.CompressFormat.JPEG, 90, out);
-            out.flush();
-            out.close();
-            bm.recycle();
-
-        } catch (FileNotFoundException e) {
-            Log.e("ASDF", "File not found: " + e.getMessage());
-        } catch (IOException e) {
-            Log.e("ASDF", "Error accessing file: " + e.getMessage());
-        }
-
-
-        MySqLite sqLite = new MySqLite(getApplicationContext());
-        sqLite.addLocation(new MyLocation((float) -33.8922, (float)  151.277, "Sydney", "zup", "E", "filter_normal","1 May 2016"));
-*/
+       }
     }
+
+    //********** SLUT PÅ MAIN ACTIVITY****************
 
     public static Bitmap RotateBitmap(Bitmap source, float angle) {
         Matrix matrix = new Matrix();
@@ -749,13 +740,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        //getMenuInflater().inflate(R.menu.nav_drawer, menu);
+        getMenuInflater().inflate(R.menu.nav_drawer, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
+        // Handle action bar item clicks here. The action bar willon
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
@@ -763,8 +754,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
 
-            Intent dbmanager = new Intent(getApplicationContext(), AndroidDatabaseManager.class);
-            startActivity(dbmanager);
+            //Intent dbmanager = new Intent(getApplicationContext(), AndroidDatabaseManager.class);
+            //startActivity(dbmanager);
 
             return true;
         }
@@ -871,7 +862,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                             dialog.dismiss();
                             FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.floatingActionButton);
-                            fab.setImageResource(R.drawable.ic_menu_camera);
+
+                                fab.setImageResource(R.drawable.ic_menu_camera);
 
                             j.setIcon(R.drawable.vector_drawable_ic_cancel_black___px);
                             dialog.dismiss();
@@ -914,7 +906,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                             FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.floatingActionButton);
                             fab.setImageResource(R.drawable.vector_drawable_ic_add_black___px);
 
-                            i.setIcon(R.drawable.vector_drawable_ic_add_black___px);
+
                             dialog.dismiss();
                         }
 
