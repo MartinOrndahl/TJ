@@ -227,11 +227,14 @@ public class CameraActivity extends Activity implements OnClickListener {
         // TODO get a size that is about the size of the screen
         Camera.Parameters params = mCamera.mCameraInstance.getParameters();
         //params.setRotation(90);
+        Log.e("ASDF", "Här under borde det skrivas!:");
 
         mCamera.mCameraInstance.setParameters(params);
         for (Camera.Size size : params.getSupportedPictureSizes()) {
-            Log.i("ASDF", "Supported: " + size.width + "x" + size.height);
+            Log.e("ASDF", "Supported: " + size.width + "x" + size.height);
         }
+
+
         mCamera.mCameraInstance.takePicture(null, null,
                 new Camera.PictureCallback() {
 

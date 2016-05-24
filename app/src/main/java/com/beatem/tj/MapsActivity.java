@@ -669,7 +669,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     }
 
                 }
-                return false;
+                return true;
             }
 
 
@@ -749,7 +749,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.nav_drawer, menu);
+        //getMenuInflater().inflate(R.menu.nav_drawer, menu);
         return true;
     }
 
