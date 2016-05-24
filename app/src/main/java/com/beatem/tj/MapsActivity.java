@@ -749,7 +749,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.nav_drawer, menu);
+       // getMenuInflater().inflate(R.menu.nav_drawer, menu);
         return true;
     }
 
@@ -763,8 +763,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
 
-            Intent dbmanager = new Intent(getApplicationContext(), AndroidDatabaseManager.class);
-            startActivity(dbmanager);
 
             return true;
         }

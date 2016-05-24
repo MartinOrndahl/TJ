@@ -230,7 +230,7 @@ public class CameraActivity extends Activity implements OnClickListener {
 
         mCamera.mCameraInstance.setParameters(params);
         for (Camera.Size size : params.getSupportedPictureSizes()) {
-            Log.i("ASDF", "Supported: " + size.width + "x" + size.height);
+            Log.e("ASDF", "Supported: " + size.width + "x" + size.height);
         }
         mCamera.mCameraInstance.takePicture(null, null,
                 new Camera.PictureCallback() {
@@ -372,6 +372,7 @@ public class CameraActivity extends Activity implements OnClickListener {
             mCurrentCameraId = (mCurrentCameraId + 1) % mCameraHelper.getNumberOfCameras();
             setUpCamera(mCurrentCameraId);
             compass.changeCam();
+
 
         }
 

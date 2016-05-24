@@ -42,12 +42,15 @@ public class SlideImageActivity extends AppCompatActivity {
     private MySqLite mySqLite;
     private int startIndex;
 
+    private int i;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.old_trip_viewer);
+        i = -1;
         init();
     }
 
@@ -60,7 +63,7 @@ Data från kartan
  */
         Bundle data = getIntent().getExtras();
         location = (MyLocation) data.getParcelable("location");
-
+        i = getIntent().getIntExtra("index", -1);
         String chosenTrip = location.getTrip();
         ArrayList<MyLocation> locations = mySqLite.getLocations();
         ArrayList<MyLocation> chosenTripLocations = new ArrayList<MyLocation>();
@@ -70,23 +73,45 @@ Data från kartan
                 chosenTripLocations.add(location);
             }
         }
-        int i = 0;
-        for (MyLocation loc : chosenTripLocations) {
-            if (loc.getLongditude() == location.getLongditude() && loc.getLatitude() == location.getLatitude()) {
-                startIndex = i;
+        //
+        if (i == -1) {
+            int i = 0;
+            for (MyLocation loc : chosenTripLocations) {
+                if (loc.getLongditude() == location.getLongditude() && loc.getLatitude() == location.getLatitude()) {
+                    startIndex = i;
+                }
+                ImagesArray.add(loc.getPicpath());
+                CitiesArray.add(getCity(loc.getLatitude(), loc.getLongditude()));
+                DirectionsArray.add(loc.getDirection());
+                DatesArray.add(loc.getDate());
+                DescriptionsArray.add(loc.getText());
+                FiltersArray.add(loc.getFilter());
+                i++;
             }
-            ImagesArray.add(loc.getPicpath());
-            CitiesArray.add(getCity(loc.getLatitude(), loc.getLongditude()));
-            DirectionsArray.add(loc.getDirection());
-            DatesArray.add(loc.getDate());
-            DescriptionsArray.add(loc.getText());
-            FiltersArray.add(loc.getFilter());
-            i++;
+
+        } else {
+            startIndex=i;
+            for(MyLocation loc: chosenTripLocations){
+                ImagesArray.add(loc.getPicpath());
+                CitiesArray.add(getCity(loc.getLatitude(), loc.getLongditude()));
+                DirectionsArray.add(loc.getDirection());
+                DatesArray.add(loc.getDate());
+                DescriptionsArray.add(loc.getText());
+                FiltersArray.add(loc.getFilter());
+            }
+
         }
 
 
-        mPager = (ViewPager) findViewById(R.id.pager);
-        mPager.setAdapter(new SlideImageAdapter2(SlideImageActivity.this, ImagesArray, DatesArray, CitiesArray, DirectionsArray, DescriptionsArray, FiltersArray, mPager, false, true, 0));
+        mPager = (ViewPager)
+
+                findViewById(R.id.pager);
+
+        mPager.setAdapter(new
+
+                SlideImageAdapter2(SlideImageActivity.this, ImagesArray, DatesArray, CitiesArray, DirectionsArray, DescriptionsArray, FiltersArray, mPager, false, true, 0)
+
+        );
         mPager.setCurrentItem(startIndex);
         NUM_PAGES = ImagesArray.size();
     }
