@@ -234,7 +234,7 @@ public class CameraActivity extends Activity implements OnClickListener {
             Log.e("ASDF", "Supported: " + size.width + "x" + size.height);
         }
 
-
+//Test
         mCamera.mCameraInstance.takePicture(null, null,
                 new Camera.PictureCallback() {
 
