@@ -235,6 +235,7 @@ public class CameraActivity extends Activity implements OnClickListener {
         }
 
 //Test
+        //Funkar mergen?
         mCamera.mCameraInstance.takePicture(null, null,
                 new Camera.PictureCallback() {
 
